@@ -12,6 +12,7 @@ namespace Ticket_to_ride.Model
         int _weight;
         int _risk;
         bool selected = false;
+        public Player _owner;
 
         public bool Selected
         {
@@ -19,6 +20,12 @@ namespace Ticket_to_ride.Model
             set { selected = value; }
         }
 
+
+        public Player Owner
+        {
+            get { return _owner; }
+            set { _owner = value; }
+        }
 
         public Connection(Location a, Location b, int weight)
         {

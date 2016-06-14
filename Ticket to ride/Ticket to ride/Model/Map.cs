@@ -25,6 +25,18 @@ namespace Ticket_to_ride.Model
             });
         }
 
+        public void setOwner(Connection connectionToSet, Player owner)
+        {
+            getAssociatedConnection(connectionToSet).ForEach((connection) =>
+            {
+                if (connection.Owner != null)
+                {
+                    throw new InvalidOperationException();
+                }
+                connection.Owner = owner;
+            });
+        }
+
         public List<Connection> getAssociatedConnection(Connection connectionToCheck)
         {
             List<Connection> associatedConnections = new List<Connection>();

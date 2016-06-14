@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Ticket_to_ride.Model
 {
-    class RouteTask
+    public class RouteTask
     {
         Location _startLocation;
         Location _endLocation;

@@ -50,9 +50,14 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Model\BrushBuilder.cs" />
     <Compile Include="Model\GuiLocation.cs" />
+    <Compile Include="Model\Human.cs" />
     <Compile Include="Model\MapGenerator.cs" />
+    <Compile Include="Model\Player.cs" />
+    <Compile Include="Model\PlayerType.cs" />
     <Compile Include="Model\TrainPlacementDecider.cs" />
+    <Compile Include="Model\TurnCoordinator.cs" />
     <Compile Include="Services\Ai.cs" />
     <Compile Include="Model\Location.cs" />
     <Compile Include="Model\Map.cs" />

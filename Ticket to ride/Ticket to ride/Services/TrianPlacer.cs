@@ -10,10 +10,18 @@ namespace Ticket_to_ride.Services
 {
     static class TrianPlacer
     {
-        public const int inf = 9999;
+        public const int inf = 10000;
 
-        public static void placeTrain(Connection connection, Map map){
-            map.setWeight(connection, 0);
+        public static void placeTrain(Connection connection, Map map, Player owner){
+            try
+            {
+                map.setWeight(connection, 0);
+                map.setOwner(connection, owner);
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.Write("Tried to place train in invalid locaiton");
+            }
         }
     }
 }
