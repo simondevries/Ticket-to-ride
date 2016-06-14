@@ -22,12 +22,13 @@ namespace Ticket_to_ride.Services
 
         public void performTurn(Map map)
         {
+
             ShortestPathGenerator shortestPath = new ShortestPathGenerator(map.getLocations(), map.getConnections());
-            Dictionary<Location, Route> _shortestLocations = shortestPath.CalculateMinCost(this._task.getStartLocation());
+            Dictionary<Location, Route> _shortestLocations = shortestPath.CalculateMinCost(this._task.getStartLocation(), this._id);
             Route chosenRoute = _shortestLocations[this._task.getEndLocation()];
 
             RiskMapGenerator riskMapGenerator = new RiskMapGenerator(map);
-            riskMapGenerator.getConnectionWithGreatestRisk(chosenRoute, this._task);
+            riskMapGenerator.getConnectionWithGreatestRisk(chosenRoute, this._task, this._id);
 
             //does this update the risk here ?
             Connection trainPlacement = TrainPlacementDecider.placeTrain(map);

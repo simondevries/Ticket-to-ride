@@ -42,7 +42,7 @@ namespace Ticket_to_ride.Services
         /// </summary>
         /// <param name="_startLocation"></param>
         /// <returns>List of all locations and their shortest route</returns>
-        public Dictionary<Location, Route> CalculateMinCost(Location _startLocation)
+        public Dictionary<Location, Route> CalculateMinCost(Location _startLocation, int currentUserId)
         {
             //Initialise a new empty route list
             Dictionary<Location, Route> _shortestPaths = new Dictionary<Location, Route>();            
@@ -91,7 +91,7 @@ namespace Ticket_to_ride.Services
                 //Iterate through all connections and search for a connection which is shorter
                 foreach (Connection conn in _selectedConnections)
                 {
-                    if (_shortestPaths[conn.B].Cost > conn.Weight + _shortestPaths[conn.A].Cost)
+                    if (_shortestPaths[conn.B].Cost > conn.Weight + _shortestPaths[conn.A].Cost && ((conn.Owner == null) || (conn.Owner != null && conn.Owner._id == currentUserId)))
                     {
                         _shortestPaths[conn.B].Connections = _shortestPaths[conn.A].Connections.ToList();
                         _shortestPaths[conn.B].Connections.Add(conn);

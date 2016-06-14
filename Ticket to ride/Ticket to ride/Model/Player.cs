@@ -13,10 +13,10 @@ namespace Ticket_to_ride.Model
         public PlayerType _playerType;
         public int _id;
         public Brush _colour;
-
+        public Hand _hand;
         public Player()
         {
-
+            _hand = new Hand();
         }
 
         public Player(PlayerType playerType, int id, Brush colour)
@@ -25,6 +25,7 @@ namespace Ticket_to_ride.Model
             _id = id;
             _colour = colour;
         }
+
 
     }
 }

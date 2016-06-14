@@ -127,5 +127,10 @@ namespace Ticket_to_ride
             }
             return null;
         }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
