@@ -24,8 +24,8 @@ namespace Ticket_to_ride.Services
 
             map = new MapGenerator().CreateMap();
             players = new List<Player>();
-            players.Add(new Ai(map.getLocation(0), map.getLocation(4), 0, BrushBuilder.playerOne()));
-            players.Add(new Ai(map.getLocation(1), map.getLocation(3), 1, BrushBuilder.playerTwo()));
+            players.Add(new Ai(map.getLocation(8), map.getLocation(18), 0, BrushBuilder.playerOne()));
+            players.Add(new Ai(map.getLocation(10), map.getLocation(16), 1, BrushBuilder.playerTwo()));
           //  players.Add(new Ai(map.getLocation(18), map.getLocation(22), 1, BrushBuilder.playerTwo()));
           //  humanOne = new Human(map.getLocation(11), map.getLocation(5), 1, BrushBuilder.playerFive());
           //  players.Add(humanOne);
