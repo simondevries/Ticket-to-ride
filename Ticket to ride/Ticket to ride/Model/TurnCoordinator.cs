@@ -14,19 +14,21 @@ namespace Ticket_to_ride.Model
         List<PlayerType> _playertypes;
         int turn = 0;
         Map _map;
+        private int _movesLeft;
+
 
         public TurnCoordinator(List<Player> players, Map map)
         {
             _players = players;
+            _currentTurn = players[0]._playerType;
             _map = map;
+            _movesLeft = 2;
         }
 
-        public void nextTurn()
+        public void NextTurn()
         {
-            if (turn >= _players.Count)
-            {
-                turn = 0;
-            }
+            IncrementTurn();
+            _movesLeft = 2;
             _currentTurn = _players[turn]._playerType;
             if (_currentTurn == PlayerType.Human)
             {
@@ -36,18 +38,48 @@ namespace Ticket_to_ride.Model
             else
             {
                 Ai a = (Ai)_players[turn];
-                a.performTurn(_map);
-                progressTurn();
+                a.PerformTurn(_map);
             }
         }
 
-        public void progressTurn(){
+        public void DecrementMove()
+        {
+            _movesLeft--;
+        }
+
+        private void IncrementTurn()
+        {
+            if (turn + 1 >= _players.Count)
+            {
+                turn = 0;
+            }
+            else
+            {
+                ProgressTurn();
+            }
+        }
+
+        public void ProgressTurn(){
             turn++;
         }
 
-        public PlayerType getCurrentTurn()
+        public PlayerType GetCurrentTurnPlayerType()
         {
             return _currentTurn;
+        }
+
+        public bool IsTurnOver()
+        {
+            return _movesLeft <= 0;
+        }
+
+        public Player GetCurrentTurnPlayer()
+        {
+            if (turn < _players.Count)
+            {
+                return _players[turn];
+            }
+            return null;
         }
     }
 }

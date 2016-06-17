@@ -13,6 +13,7 @@ namespace Ticket_to_ride.Model
         int _risk;
         bool selected = false;
         public Player _owner;
+        public ConnectionColour _colour;
 
         public bool Selected
         {
@@ -27,11 +28,14 @@ namespace Ticket_to_ride.Model
             set { _owner = value; }
         }
 
-        public Connection(Location a, Location b, int weight)
+        public Connection(Location a, Location b, int weight, ConnectionColour colour)
         {
-            this._a = a;
-            this._b = b;
-            this._weight = weight;
+            _a = a;
+            _b = b;
+            _weight = weight;
+            _colour = colour; 
+        
+
         }
 
         public int Risk

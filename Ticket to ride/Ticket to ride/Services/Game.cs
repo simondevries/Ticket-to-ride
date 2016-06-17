@@ -8,64 +8,99 @@ namespace Ticket_to_ride.Services
 {
     class Game
     {
-        TurnCoordinator turn;
-        Map map;
-        Ai computerOne;
-        Ai computerTwo;
-        Human humanOne;
-        List<Player> players;
+        TurnCoordinator _turn;
+        Map _map;
+        Ai _computerOne;
+        Ai _computerTwo;
+        Human _humanOne;
+        List<Hand> _hands;
+        List<Player> _players;
         Deck _deck;
 
         public void start()
         {
+            InitializeHands();
+
             _deck = new Deck();
-            _deck.ToString();
+            _map = new MapGenerator().CreateMap();
+            _players = new List<Player>();
+           // _players.Add(new Ai(_map.getLocation(8), _map.getLocation(18), 0, BrushBuilder.playerOne(), _hands[0]));
+          //  _players.Add(new Ai(_map.getLocation(10), _map.getLocation(16), 1, BrushBuilder.playerTwo(), _hands[1]));
+          //  _players.Add(new Ai(_map.getLocation(18), _map.getLocation(22), 1, BrushBuilder.playerTwo()));
+            _players.Add(new Human(_map.getLocation(11), _map.getLocation(5), 0, BrushBuilder.PlayerFive(), _hands[0]));
+            _players.Add(new Human(_map.getLocation(3), _map.getLocation(10), 1, BrushBuilder.PlayerFour(), _hands[1]));
+          //  _players.Add(_humanOne);
+            
 
 
-            map = new MapGenerator().CreateMap();
-            players = new List<Player>();
-            players.Add(new Ai(map.getLocation(8), map.getLocation(18), 0, BrushBuilder.playerOne()));
-            players.Add(new Ai(map.getLocation(10), map.getLocation(16), 1, BrushBuilder.playerTwo()));
-          //  players.Add(new Ai(map.getLocation(18), map.getLocation(22), 1, BrushBuilder.playerTwo()));
-          //  humanOne = new Human(map.getLocation(11), map.getLocation(5), 1, BrushBuilder.playerFive());
-          //  players.Add(humanOne);
+            _deck.DealNewBoard();
+            _deck.DealHands(_players);
 
-            _deck.dealHands(players);
-
-            turn = new TurnCoordinator(players, map);
+            _turn = new TurnCoordinator(_players, _map);
         }
 
-
-
-
-        public void sendTrainPlacement(Connection connection)
+        private void InitializeHands()
         {
-            humanOne.performTurn(map, connection);
-            turn.progressTurn();
-            //if (turn == 0)
-            //{
-
-            //}
-            //else
-            //{
-
-            //}
+            _hands = new List<Hand>();
+            for (int i = 0; i < 100; i++)
+            {
+                _hands.Add(new Hand());
+            }
         }
 
-        public Map getMap()
+
+        public void SendTrainPlacement(Connection connection)
         {
-            return map;
+            Human currentTurnPlayer = (Human) _turn.GetCurrentTurnPlayer();
+            currentTurnPlayer.PerformTurn(_map, connection);
         }
 
-        public void nextTurn()
+        public Map GetMap()
         {
-            turn.nextTurn();
+            return _map;
         }
 
-        public PlayerType getTurn()
+        public Deck GetDeck()
         {
-            return turn.getCurrentTurn();
+            return _deck;
         }
 
+        public Hand GetPlayersHand(int playerId)
+        {
+            return _players
+                .Where(player => player._id == playerId)
+                .Select(player => player._hand)
+                .FirstOrDefault();
+        }
+
+        public void NextTurn()
+        {
+            _turn.NextTurn();
+        }
+
+        public PlayerType GetTurn()
+        {
+            return _turn.GetCurrentTurnPlayerType();
+        }
+
+        public PlayerType GetTurnPlayerType()
+        {
+            return _turn.GetCurrentTurnPlayerType();
+        }
+
+
+        public int GetPlayerId()
+        {
+            return _turn.GetCurrentTurnPlayer()._id;
+        }
+
+        public void PlayerPickedFromTop()
+        {
+            if (_turn.IsTurnOver() == false)
+            {
+                _turn.GetCurrentTurnPlayer()._hand.PickFromTop(_deck);
+                _turn.DecrementMove();
+            }
+        }
     }
 }

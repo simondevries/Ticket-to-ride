@@ -12,15 +12,16 @@ namespace Ticket_to_ride.Services
     {
 
 
-        public Ai(Location startLocation, Location endLocation, int id, Brush colour)
+        public Ai(Location startLocation, Location endLocation, int id, Brush colour, Hand hand)
         {
-            this._task = new RouteTask(startLocation, endLocation);
-            this._playerType = PlayerType.Ai;
-            this._id = id;
-            this._colour = colour;
+            _task = new RouteTask(startLocation, endLocation);
+            _playerType = PlayerType.Ai;
+            _id = id;
+            _colour = colour;
+            _hand = hand;
         }
 
-        public void performTurn(Map map)
+        public void PerformTurn(Map map)
         {
 
             ShortestPathGenerator shortestPath = new ShortestPathGenerator(map.getLocations(), map.getConnections());
@@ -31,8 +32,8 @@ namespace Ticket_to_ride.Services
             riskMapGenerator.getConnectionWithGreatestRisk(chosenRoute, this._task, this._id);
 
             //does this update the risk here ?
-            Connection trainPlacement = TrainPlacementDecider.placeTrain(map);
-            TrianPlacer.placeTrain(trainPlacement, map, this);
+            Connection trainPlacement = TrainPlacementDecider.PlaceTrain(map);
+            TrianPlacer.PlaceTrain(trainPlacement, map, this);
 
         }
     }

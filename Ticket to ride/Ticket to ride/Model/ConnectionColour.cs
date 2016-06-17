@@ -1,6 +1,6 @@
 ﻿namespace Ticket_to_ride.Model
 {
-    public enum CardType 
+    public enum ConnectionColour 
     {
         Black,
 
@@ -12,6 +12,6 @@
 
         White,
 
-        Wildcard
+        Undefined
     }
 }

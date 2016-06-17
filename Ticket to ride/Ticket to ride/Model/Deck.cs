@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Ticket_to_ride.Services;
 namespace Ticket_to_ride.Model
 {
-    class Deck
+    public class Deck
     {
         private List<CardType> _deck = new List<CardType>();
         private List<CardType> _cardTypes = new List<CardType>();
@@ -31,30 +31,55 @@ namespace Ticket_to_ride.Model
             }
 
             _deck.Shuffle();
+        }
 
-            for (int i = 0; i < 5; i++)
+        public void CheckIfNeedToDealNewBoard()
+        {
+            int numberOfWildCards = _onBoard.Count(card => card == CardType.Wildcard);
+            if (numberOfWildCards >= 3)
             {
-                _onBoard.Add(pickCard());
+                DealNewBoard();
             }
         }
 
-        public void dealHands(List<Player> players)
+        public void DealNewBoard()
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                _onBoard.Add(PickCard());
+            }
+            CheckIfNeedToDealNewBoard();
+        }
+
+        public void FillBoard()
+        {
+            while (_onBoard.Count < 5)
+            {
+             _onBoard.Add(PickCard());
+                CheckIfNeedToDealNewBoard();
+            }
+        }
+
+        public void DealHands(List<Player> players)
         {
             foreach (var player in players)
             {
                 for(int i =0;i<4;i++){
-                    player._hand.addCard(pickCard());
+                    player._hand.AddCard(PickCard());
 
                 }
             }
-
         }
 
-        public CardType pickCard()
+        public CardType PickCard()
         {
-            CardType cardToReturn = _deck[0];
-            _deck.RemoveAt(0);
-            return cardToReturn;
+            if (_deck.Count > 0)
+            {
+                CardType cardToReturn = _deck[0];
+                _deck.RemoveAt(0);
+                return cardToReturn;
+            }
+            throw new InvalidOperationException();
         }
 
         public override string ToString()
@@ -68,10 +93,14 @@ namespace Ticket_to_ride.Model
             return output;
         }
 
+        public List<CardType> OnBoard {
+            get { return _onBoard; }
+        }
 
-
+        public int CardsRemaining
+        {
+            get { return _deck.Count; }
+        }
     }
-
-
 }
 

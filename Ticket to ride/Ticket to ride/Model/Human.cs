@@ -1,32 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 using Ticket_to_ride.Services;
 
 namespace Ticket_to_ride.Model
 {
-    class Human: Player
+    class Human : Player
     {
-
-
-        public Human(Location startLocation, Location endLocation, int id, Brush colour)
+        public Human(Location startLocation, Location endLocation, int id, Brush colour, Hand hand)
         {
-            this._task = new RouteTask(startLocation, endLocation);
-            this._playerType = PlayerType.Human;
-            this._id = id;
-            this._colour = colour;
+            _task = new RouteTask(startLocation, endLocation);
+            _playerType = PlayerType.Human;
+            _id = id;
+            _colour = colour;
+            _hand = hand;
         }
 
-
-        public void performTurn(Map map, Connection trainPlacement)
+        public void PerformTurn(Map map, Connection trainPlacement)
         {
-            //validate cards
-
-
-            TrianPlacer.placeTrain(trainPlacement, map, this);
+            //TODO sdv validate cards here instead
+            TrianPlacer.PlaceTrain(trainPlacement, map, this);
         }
     }
 }

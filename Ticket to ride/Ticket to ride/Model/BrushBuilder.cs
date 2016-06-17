@@ -9,31 +9,31 @@ namespace Ticket_to_ride.Model
 {
     static class BrushBuilder
     {
-        public static Brush playerOne()
+        public static Brush PlayerOne()
         {
             return new SolidBrush(Color.Blue);
         }
-        public static Brush playerTwo()
+        public static Brush PlayerTwo()
         {
             return new SolidBrush(Color.Green);
         }
-        public static Brush playerThree()
+        public static Brush PlayerThree()
         {
             return new SolidBrush(Color.Red);
         }
-        public static Brush playerFour()
+        public static Brush PlayerFour()
         {
             return new SolidBrush(Color.Pink);
         }
-        public static Brush playerFive()
+        public static Brush PlayerFive()
         {
             return new SolidBrush(Color.Maroon);
         }
-        public static Brush playerSix()
+        public static Brush PlayerSix()
         {
             return new SolidBrush(Color.LimeGreen);
         }
-        public static Brush playerSeven()
+        public static Brush PlayerSeven()
         {
             return new SolidBrush(Color.Gold);
         }

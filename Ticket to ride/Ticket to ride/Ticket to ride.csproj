@@ -60,7 +60,9 @@
       <DependentUpon>MainFrame.xaml</DependentUpon>
     </Compile>
     <Compile Include="Model\BrushBuilder.cs" />
+    <Compile Include="Model\ConnectionColour.cs" />
     <Compile Include="Model\CardType.cs" />
+    <Compile Include="Model\ConnectionColourComparer.cs" />
     <Compile Include="Model\Deck.cs" />
     <Compile Include="Model\GuiLocation.cs" />
     <Compile Include="Model\Hand.cs" />

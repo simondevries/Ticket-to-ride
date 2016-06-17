@@ -31,20 +31,40 @@ namespace Ticket_to_ride
 
         void PaintGui()
         {
-            Map map  = _game.getMap();
+            Map map  = _game.GetMap();
+
+            Deck deck = _game.GetDeck();
+            if (deck.OnBoard.Count > 0)
+            {
+                boardCardOne.Text = deck.OnBoard[0].ToString();
+                boardCardTwo.Text = deck.OnBoard[1].ToString();
+                boardCardThree.Text = deck.OnBoard[2].ToString();
+                boardCardFour.Text = deck.OnBoard[3].ToString();
+                boardCardFive.Text = deck.OnBoard[4].ToString();
+            }
+
+            deckSize.Text = "Cards left: " + deck.CardsRemaining;
+
+            _game.GetTurnPlayerType();
+            Hand hand = _game.GetPlayersHand(_game.GetPlayerId());
+            playersCards.Items.Clear();
+            foreach (var card in hand._cards)
+            {
+                playersCards.Items.Add(card);
+            }
+
 
             Brush _brushGray = new SolidBrush(Color.Gray);
             Brush _brushBlack = new SolidBrush(Color.Black);
             Brush _brushWhite = new SolidBrush(Color.White);
             Brush _brushBlue = new SolidBrush(Color.Blue);
             Font _font = new Font(FontFamily.GenericSansSerif, 15);
-            Pen _penGray = new Pen(_brushGray, 10);
 
 
 
-            string turnText = _game.getTurn() == PlayerType.Ai ? "Ai's turn" : "Your turn";
-            this.Text = turnText;
-
+            string turnText = _game.GetTurnPlayerType() == PlayerType.Ai ? "Ai's turn" : "Your turn";
+            Text = turnText;
+            
 
             foreach (Location _location in map.getLocations())
             {
@@ -85,7 +105,10 @@ namespace Ticket_to_ride
                 }
                 else
                 {
-                    pnlView.CreateGraphics().DrawLine(_penGray, new Point(newx, newy), new Point(newx2, newy2));
+                    Brush connectorColourForPrint = ConnectionColourComparer.ConnectorColourForPrint(_connection._colour);
+
+                    Pen pen = new Pen(connectorColourForPrint, 5);
+                    pnlView.CreateGraphics().DrawLine(pen, new Point(newx, newy), new Point(newx2, newy2));
                 }
                 //pnlView.CreateGraphics().FillEllipse(_brushRed, newx - 4, newy - 4, 8, 8);
                 //pnlView.CreateGraphics().DrawString(_connection.Weight.ToString(), _font, _brushBlue, newx - 4, newy - 4);
@@ -94,16 +117,16 @@ namespace Ticket_to_ride
 
         private void button1_Click(object sender, EventArgs e)
         {
-            _game.nextTurn();
+            _game.NextTurn();
             PaintGui();
         }
 
         private void pnlView_MouseDown(object sender, MouseEventArgs e)
         {
             Connection connection;
-            if ((connection = getConnectionAtPoint(e.X, e.Y)) != null && _game.getTurn() == PlayerType.Human)
+            if ((connection = getConnectionAtPoint(e.X, e.Y)) != null && _game.GetTurnPlayerType() == PlayerType.Human)
             {
-                _game.sendTrainPlacement(connection);
+                _game.SendTrainPlacement(connection);
               //  _game.nextTurn();
                 PaintGui();
             }
@@ -111,7 +134,7 @@ namespace Ticket_to_ride
 
         Connection getConnectionAtPoint(int x, int y)
         {
-            Map map = _game.getMap();
+            Map map = _game.GetMap();
             foreach (Connection connection in map.getConnections())
             {
                int aX = connection.A.X * size;
@@ -128,9 +151,9 @@ namespace Ticket_to_ride
             return null;
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private void fromTop_Click(object sender, EventArgs e)
         {
-
+            _game.PlayerPickedFromTop();
         }
     }
 }
