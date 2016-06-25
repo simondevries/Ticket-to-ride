@@ -1,9 +1,4 @@
-﻿    using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 
 namespace Ticket_to_ride.Model
 {
@@ -11,7 +6,7 @@ namespace Ticket_to_ride.Model
    {
        private const int NumberOfTrainsAtStart = 30;
 
-       public RouteTask _task;
+       public RoutesTasks _task;
         public PlayerType _playerType;
         public int _id;
         public Brush _colour;
@@ -30,8 +25,5 @@ namespace Ticket_to_ride.Model
             _id = id;
             _colour = colour;
         }
-
-
-
     }
 }

@@ -16,7 +16,7 @@ namespace Ticket_to_ride.Model
             _riskMap = riskMap;
         }
 
-        public void getConnectionWithGreatestRisk(Route chosenRoute, RouteTask aiTask, int playerId)
+        public void getConnectionWithGreatestRisk(Route chosenRoute, RouteCard aiCard, int playerId)
         {
             clearRisk();
             foreach (Connection connection in chosenRoute.Connections)
@@ -28,11 +28,26 @@ namespace Ticket_to_ride.Model
                 int originalWeight = connection.Weight;
                 _riskMap.setWeight(connection, 9999);
                 ShortestPathGenerator shortestPath = new ShortestPathGenerator(_riskMap.getLocations(), _riskMap.getConnections());
-                Dictionary<Location, Route> _shortestLocations = shortestPath.CalculateMinCost(aiTask.getStartLocation(), playerId);
-                int routeCost = _shortestLocations[aiTask.getEndLocation()].Cost;
+                Dictionary<Location, Route> _shortestLocations = shortestPath.CalculateMinCost(aiCard.GetStartLocation(), playerId);
+                int routeCost = _shortestLocations[aiCard.GetEndLocation()].Cost;
                 setRisk(connection, routeCost);
                 _riskMap.setWeight(connection, originalWeight);
             }
+
+//            foreach (Connection connection in chosenRoute.Connections)
+//            {
+//                if (connection.Weight == 0)
+//                {
+//                    continue;
+//                }
+//                int originalWeight = connection.Weight;
+//                _riskMap.setWeight(connection, 9999);
+//                ShortestPathGenerator shortestPath = new ShortestPathGenerator(_riskMap.getLocations(), _riskMap.getConnections());
+//                Dictionary<Location, Route> _shortestLocations = shortestPath.CalculateMinCost(aiCard.GetEndLocation(), playerId);
+//                int routeCost = _shortestLocations[aiCard.GetThirdLocation()].Cost;
+//                setRisk(connection, routeCost);
+//                _riskMap.setWeight(connection, originalWeight);
+//            }
         }
 
 

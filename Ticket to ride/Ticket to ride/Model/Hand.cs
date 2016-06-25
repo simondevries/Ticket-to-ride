@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -43,39 +45,23 @@ namespace Ticket_to_ride.Model
 
         public bool SpendCardsIfPossible(Connection connection)
         {
-            //todo (sdv) What if the user builds on an undefined connection?
-            if (CanAffordConnection(connection))
+            //todo this is only temoporary for testing
+            //            if (_owner._playerType == PlayerType.Ai)
+            //            {
+            //                return true;
+            //            }
+            List<CardType> compadableCards = _cards.Where(card => ConnectionColourComparer.AreCompadable(connection._colour, card)).ToList();
+
+            if (compadableCards.Count >= connection.Weight)
             {
-                //This is bad because it assumes the user can afford
-                int numberRemoved = 0;
-                foreach (var card in _cards)
+                List<CardType> sortedCard = compadableCards.OrderBy(card => card).ToList();
+                for(int i = 0; i < connection.Weight; i++)
                 {
-
-
-                    if (ConnectionColourComparer.AreCompadable(connection._colour, card))
-                    {
-                        numberRemoved++;
-                        _cards.Remove(card);
-
-                        if (numberRemoved >= connection.Weight)
-                        {
-                            break;
-                        }
-                    }
-                }
-
-                if (numberRemoved == 0)
-                {
-                    for (int i = 0; i < connection.Weight; i++)
-                    {
-                        if (_cards[i] == CardType.Wildcard)
-                        {
-                            _cards.Remove(_cards[i]);
-                        }
-                    }
+                    _cards.Remove(sortedCard[i]);
                 }
                 return true;
             }
+
             return false;
         }
     }

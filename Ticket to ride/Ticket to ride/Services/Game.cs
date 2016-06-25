@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Ticket_to_ride.Model;
 namespace Ticket_to_ride.Services
 {
-    class Game
+    public class Game
     {
         TurnCoordinator _turn;
         Map _map;
@@ -17,18 +14,24 @@ namespace Ticket_to_ride.Services
         List<Player> _players;
         Deck _deck;
 
+        public Game(Map map)
+        {
+            _map = map;
+        }
+
         public void start()
         {
             InitializeHands();
 
             _deck = new Deck();
-            _map = new MapGenerator().CreateMap();
+
             _players = new List<Player>();
+            RouteTasksGenerator routeTasksGenerator = new RouteTasksGenerator();
            // _players.Add(new Ai(_map.getLocation(8), _map.getLocation(18), 0, BrushBuilder.playerOne(), _hands[0]));
           //  _players.Add(new Ai(_map.getLocation(10), _map.getLocation(16), 1, BrushBuilder.playerTwo(), _hands[1]));
-          //  _players.Add(new Ai(_map.getLocation(18), _map.getLocation(22), 1, BrushBuilder.playerTwo()));
-            _players.Add(new Human(_map.getLocation(11), _map.getLocation(5), 0, BrushBuilder.PlayerFive(), _hands[0]));
-            _players.Add(new Human(_map.getLocation(3), _map.getLocation(10), 1, BrushBuilder.PlayerFour(), _hands[1]));
+            _players.Add(new Human(routeTasksGenerator.GenerateRouteTasks(_map, 2), 1, BrushBuilder.PlayerOne(), _hands[0]));
+            _players.Add(new Ai(routeTasksGenerator.GenerateRouteTasks(_map, 2), 0, BrushBuilder.PlayerTwo(), _hands[1]));
+           // _players.Add(new Ai(_map.getLocation(3), _map.getLocation(10), _map.getLocation(7), 1, BrushBuilder.PlayerFour(), _hands[1]));
           //  _players.Add(_humanOne);
             
 

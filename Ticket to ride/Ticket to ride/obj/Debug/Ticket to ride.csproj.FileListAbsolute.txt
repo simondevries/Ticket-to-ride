@@ -1,13 +1,13 @@
 C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\bin\Debug\Ticket to ride.exe.config
+C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\obj\Debug\Ticket to ride.exe
+C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\obj\Debug\Ticket to ride.pdb
+C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\obj\Debug\Ticket to ride.csprojResolveAssemblyReference.cache
+C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\obj\Debug\MainFrame.baml
+C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\obj\Debug\MainFrame.g.cs
+C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\obj\Debug\Ticket to ride_MarkupCompile.cache
+C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\obj\Debug\Ticket to ride.g.resources
 C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\obj\Debug\Ticket_to_ride.Form1.resources
 C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\obj\Debug\Ticket_to_ride.Properties.Resources.resources
 C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\obj\Debug\Ticket to ride.csproj.GenerateResource.Cache
 C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\bin\Debug\Ticket to ride.exe
 C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\bin\Debug\Ticket to ride.pdb
-C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\obj\Debug\Ticket to ride.exe
-C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\obj\Debug\Ticket to ride.pdb
-C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\obj\Debug\MainFrame.baml
-C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\obj\Debug\MainFrame.g.cs
-C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\obj\Debug\Ticket to ride_MarkupCompile.cache
-C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\obj\Debug\Ticket to ride.g.resources
-C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\obj\Debug\Ticket to ride.csprojResolveAssemblyReference.cache

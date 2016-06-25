@@ -15,12 +15,13 @@ namespace Ticket_to_ride
     public partial class Form1 : Form
     {
 
-        const int size = 1;
+        const double size = 1.3;
         Game _game;
         public Form1()
         {
             InitializeComponent();
-            _game = new Game();
+            Map map = new MapGenerator().CreateMap();
+            _game = new Game(map);
             _game.start();
         }
 
@@ -68,8 +69,8 @@ namespace Ticket_to_ride
 
             foreach (Location _location in map.getLocations())
             {
-                int _x = _location.X * size - _location.Width / 2;
-                int _y = _location.Y * size - _location.Width / 2;
+                int _x = (int)(_location.X * size - _location.Width / 2);
+                int _y = (int)(_location.Y * size - _location.Width / 2);
 
                 pnlView.CreateGraphics().FillEllipse(_brushBlack, _x, _y, _location.Width, _location.Width);
                 pnlView.CreateGraphics().DrawString(_location.Identifier, _font, _brushWhite, _x + (2), _y);
@@ -77,10 +78,10 @@ namespace Ticket_to_ride
 
             foreach (Connection _connection in map.getConnections())
             {
-                int connectionAX = _connection.A.X *size;
-                int connectionAY = _connection.A.Y * size;
-                int connectionBX = _connection.B.X * size;
-                int connectionBY = _connection.B.Y * size;
+                int connectionAX = (int)(_connection.A.X *size);
+                int connectionAY = (int)(_connection.A.Y * size);
+                int connectionBX = (int)(_connection.B.X * size);
+                int connectionBY = (int)(_connection.B.Y * size);
 
                 Point point1 = new Point(connectionAX, connectionAY);
                 Point point2 = new Point(connectionBX, connectionBY);
@@ -137,10 +138,10 @@ namespace Ticket_to_ride
             Map map = _game.GetMap();
             foreach (Connection connection in map.getConnections())
             {
-               int aX = connection.A.X * size;
-               int aY = connection.A.Y * size;
-               int bX = connection.B.X * size;
-               int bY = connection.B.Y * size;
+               int aX = (int)(connection.A.X * size);
+               int aY = (int)(connection.A.Y * size);
+               int bX = (int)(connection.B.X * size);
+               int bY = (int)(connection.B.Y * size);
                 int width = connection.A.Width /2;
                 if ((((x - width) > aX && (x + width) < bX) ||( (x - width) < aX && (x + width) > bX)) &&
                     (((y - width) > aY && (y + width) < bY) || ((y - width) < aY && (y + width) > bY)))

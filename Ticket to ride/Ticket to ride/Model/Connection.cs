@@ -21,6 +21,7 @@ namespace Ticket_to_ride.Model
             set { selected = value; }
         }
 
+        public int WeightForComputation { get; set; }
 
         public Player Owner
         {

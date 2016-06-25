@@ -5,9 +5,9 @@ namespace Ticket_to_ride.Model
 {
     class Human : Player
     {
-        public Human(Location startLocation, Location endLocation, int id, Brush colour, Hand hand)
+        public Human(RoutesTasks routeTasks, int id, Brush colour, Hand hand)
         {
-            _task = new RouteTask(startLocation, endLocation);
+            _task = routeTasks;
             _playerType = PlayerType.Human;
             _id = id;
             _colour = colour;

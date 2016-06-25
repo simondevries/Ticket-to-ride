@@ -10,7 +10,9 @@ namespace Ticket_to_ride.Model
 {
     static class ConnectionColourComparer
     {
-
+        /// <summary>
+        /// returns a matching card and if none are found it will use a wildcard
+        /// </summary>
         public static bool AreCompadable(ConnectionColour connectionColour, CardType cardType)
         {
             if (connectionColour == ConnectionColour.Black && (cardType == CardType.Black))
@@ -19,7 +21,6 @@ namespace Ticket_to_ride.Model
             }
             if (connectionColour == ConnectionColour.Green && (cardType == CardType.Green))
             {
-
                 return true;
             }
             if (connectionColour == ConnectionColour.Orange && (cardType == CardType.Orange))
@@ -30,11 +31,11 @@ namespace Ticket_to_ride.Model
             {
                 return true;
             }
-            if (cardType == CardType.Wildcard)
+            if (connectionColour == ConnectionColour.Undefined)
             {
                 return true;
-            }
-            if (connectionColour == ConnectionColour.Undefined)
+            }   
+            if (cardType == CardType.Wildcard)
             {
                 return true;
             }

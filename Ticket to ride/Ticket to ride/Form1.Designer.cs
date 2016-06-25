@@ -38,9 +38,9 @@
             this.boardCardThree = new System.Windows.Forms.Button();
             this.boardCardTwo = new System.Windows.Forms.Button();
             this.boardCardOne = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.elementHost2 = new System.Windows.Forms.Integration.ElementHost();
             this.mainFrame1 = new Ticket_to_ride.MainFrame();
-            this.button1 = new System.Windows.Forms.Button();
             this.pnlView.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -67,7 +67,7 @@
             // 
             // fromTop
             // 
-            this.fromTop.Location = new System.Drawing.Point(537, 24);
+            this.fromTop.Location = new System.Drawing.Point(541, 585);
             this.fromTop.Name = "fromTop";
             this.fromTop.Size = new System.Drawing.Size(75, 64);
             this.fromTop.TabIndex = 10;
@@ -78,7 +78,7 @@
             // turn
             // 
             this.turn.AutoSize = true;
-            this.turn.Location = new System.Drawing.Point(835, 13);
+            this.turn.Location = new System.Drawing.Point(53, 557);
             this.turn.Name = "turn";
             this.turn.Size = new System.Drawing.Size(29, 13);
             this.turn.TabIndex = 9;
@@ -87,15 +87,15 @@
             // playersCards
             // 
             this.playersCards.FormattingEnabled = true;
-            this.playersCards.Location = new System.Drawing.Point(648, 14);
+            this.playersCards.Location = new System.Drawing.Point(631, 585);
             this.playersCards.Name = "playersCards";
-            this.playersCards.Size = new System.Drawing.Size(159, 147);
+            this.playersCards.Size = new System.Drawing.Size(77, 147);
             this.playersCards.TabIndex = 8;
             // 
             // deckSize
             // 
             this.deckSize.AutoSize = true;
-            this.deckSize.Location = new System.Drawing.Point(551, 8);
+            this.deckSize.Location = new System.Drawing.Point(538, 557);
             this.deckSize.Name = "deckSize";
             this.deckSize.Size = new System.Drawing.Size(52, 13);
             this.deckSize.TabIndex = 7;
@@ -103,7 +103,7 @@
             // 
             // boardCardFive
             // 
-            this.boardCardFive.Location = new System.Drawing.Point(456, 3);
+            this.boardCardFive.Location = new System.Drawing.Point(460, 585);
             this.boardCardFive.Name = "boardCardFive";
             this.boardCardFive.Size = new System.Drawing.Size(75, 64);
             this.boardCardFive.TabIndex = 6;
@@ -112,7 +112,7 @@
             // 
             // boardCardFour
             // 
-            this.boardCardFour.Location = new System.Drawing.Point(375, 3);
+            this.boardCardFour.Location = new System.Drawing.Point(379, 585);
             this.boardCardFour.Name = "boardCardFour";
             this.boardCardFour.Size = new System.Drawing.Size(75, 64);
             this.boardCardFour.TabIndex = 5;
@@ -121,7 +121,7 @@
             // 
             // boardCardThree
             // 
-            this.boardCardThree.Location = new System.Drawing.Point(294, 3);
+            this.boardCardThree.Location = new System.Drawing.Point(298, 585);
             this.boardCardThree.Name = "boardCardThree";
             this.boardCardThree.Size = new System.Drawing.Size(75, 64);
             this.boardCardThree.TabIndex = 4;
@@ -130,7 +130,7 @@
             // 
             // boardCardTwo
             // 
-            this.boardCardTwo.Location = new System.Drawing.Point(213, 3);
+            this.boardCardTwo.Location = new System.Drawing.Point(217, 585);
             this.boardCardTwo.Name = "boardCardTwo";
             this.boardCardTwo.Size = new System.Drawing.Size(75, 64);
             this.boardCardTwo.TabIndex = 3;
@@ -139,12 +139,22 @@
             // 
             // boardCardOne
             // 
-            this.boardCardOne.Location = new System.Drawing.Point(127, 3);
+            this.boardCardOne.Location = new System.Drawing.Point(131, 585);
             this.boardCardOne.Name = "boardCardOne";
             this.boardCardOne.Size = new System.Drawing.Size(80, 64);
             this.boardCardOne.TabIndex = 2;
             this.boardCardOne.Text = "Next Turn";
             this.boardCardOne.UseVisualStyleBackColor = true;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(16, 590);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(104, 48);
+            this.button1.TabIndex = 1;
+            this.button1.Text = "Next Turn";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // elementHost2
             // 
@@ -154,16 +164,6 @@
             this.elementHost2.TabIndex = 1;
             this.elementHost2.Text = "elementHost2";
             this.elementHost2.Child = this.mainFrame1;
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(12, 8);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(104, 48);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "Next Turn";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // Form1
             // 

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Ticket_to_ride.Model
 {
-    static class BrushBuilder
+    public static class BrushBuilder
     {
         public static Brush PlayerOne()
         {

@@ -3,19 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Documents;
 using Ticket_to_ride.Services;
 
 namespace Ticket_to_ride.Model
 {
-    class Map
+    public class Map
     {
         List<Connection> _connections = new List<Connection>();
         List<Location> _location = new List<Location>();
+        private readonly int _numberOfLocations;
 
         public Map(List<Connection> connection, List<Location> location)
         {
             _connections = connection;
             _location = location;
+            _numberOfLocations = _location.Count;
         }
 
         public void setWeight(Connection connectionToSet, int weight){
@@ -60,6 +63,11 @@ namespace Ticket_to_ride.Model
         public Connection getConnection(int connection)
         {
             return _connections[connection];
+        }
+
+        public int GetNumberOfLocations()
+        {
+            return _numberOfLocations;
         }
     }
 }

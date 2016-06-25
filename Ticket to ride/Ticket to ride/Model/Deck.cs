@@ -12,6 +12,7 @@ namespace Ticket_to_ride.Model
         private List<CardType> _cardTypes = new List<CardType>();
         public List<CardType> _onBoard = new List<CardType>();
 
+        private const int NumberOfCards = 99;
         public Deck()
         {
             _cardTypes.Add(CardType.Black);
@@ -24,7 +25,7 @@ namespace Ticket_to_ride.Model
 
             foreach (var type in _cardTypes)
             {
-                for (int i = 0; i < 5; i++)
+                for (int i = 0; i < 50; i++)
                 {
                     _deck.Add(type);
                 }
@@ -64,9 +65,10 @@ namespace Ticket_to_ride.Model
         {
             foreach (var player in players)
             {
-                for(int i =0;i<4;i++){
+                for (int i = 0; i < NumberOfCards; i++)
+                {
                     player._hand.AddCard(PickCard());
-
+                        
                 }
             }
         }
