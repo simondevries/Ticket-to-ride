@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Ticket_to_ride.Model;
 
 namespace Ticket_to_ride.Services
@@ -12,13 +10,12 @@ namespace Ticket_to_ride.Services
     {
 
 
-        public Ai(RoutesTasks routesTasks, int id, Brush colour, Hand hand)
+        public Ai(PlayerRouteHand playerRouteHand, int id, Brush colour, TrainDeck trainDeck) : base(trainDeck)
         {
-            _task = routesTasks;
+            PlayerRouteHand = playerRouteHand;
             _playerType = PlayerType.Ai;
             _id = id;
             _colour = colour;
-            _hand = hand;
         }
 
         public void PerformTurn(Map map)
@@ -29,7 +26,7 @@ namespace Ticket_to_ride.Services
             //get list of all possible connection order
             //todo add all combination of locations
 
-            List<Location> locations = _task.GetAllLocations();
+            List<Location> locations = PlayerRouteHand.GetAllLocations();
 
             List<List<Location>> destinationOrders = GenerateDestinationOrders(locations);
 
@@ -124,7 +121,12 @@ namespace Ticket_to_ride.Services
 
             //does this update the risk here ?
             Connection trainPlacement = TrainPlacementDecider.PlaceTrain(map);
-            TrianPlacer.PlaceTrain(trainPlacement, map, this);
+            bool placeTrain = TrianPlacer.PlaceTrain(trainPlacement, map, this);
+
+            if (placeTrain == false)
+            {
+                Console.WriteLine("Computer failed to place train");
+            }
 
         }
 

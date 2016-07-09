@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Ticket_to_ride.Model;
 namespace Ticket_to_ride.Services
@@ -6,58 +7,38 @@ namespace Ticket_to_ride.Services
     public class Game
     {
         TurnCoordinator _turn;
-        Map _map;
-        Ai _computerOne;
-        Ai _computerTwo;
-        Human _humanOne;
-        List<Hand> _hands;
         List<Player> _players;
-        Deck _deck;
+        readonly TrainDeck _trainDeck;
+        readonly Map _map;
+        private readonly int _numberOfAi;
+        private readonly int _numberOfHumans;
+        private readonly RouteCardDeck _routeDeck;
 
-        public Game(Map map)
+        public Game(Map map, int numberOfAi, int numberOfHumans)
         {
+            _players = new List<Player>();
+            _numberOfAi = numberOfAi;
+            _numberOfHumans = numberOfHumans;
+
             _map = map;
+            _trainDeck = new TrainDeck();
+            _routeDeck = new RouteCardDeck(_map);
         }
 
-        public void start()
+        public void Start()
         {
-            InitializeHands();
+            PlayersBuilder playersBuilder = new PlayersBuilder(_trainDeck, _routeDeck);
+            _players = playersBuilder.WithAi(_numberOfAi).WithHumans(_numberOfHumans).Build();
 
-            _deck = new Deck();
-
-            _players = new List<Player>();
-            RouteTasksGenerator routeTasksGenerator = new RouteTasksGenerator();
-           // _players.Add(new Ai(_map.getLocation(8), _map.getLocation(18), 0, BrushBuilder.playerOne(), _hands[0]));
-          //  _players.Add(new Ai(_map.getLocation(10), _map.getLocation(16), 1, BrushBuilder.playerTwo(), _hands[1]));
-            _players.Add(new Human(routeTasksGenerator.GenerateRouteTasks(_map, 2), 1, BrushBuilder.PlayerOne(), _hands[0]));
-            //_players.Add(new Human(routeTasksGenerator.GenerateRouteTasks(_map, 2), 1, BrushBuilder.PlayerTwo(), _hands[1]));
-           
-             _players.Add(new Ai(routeTasksGenerator.GenerateRouteTasks(_map, 2), 0, BrushBuilder.PlayerTwo(), _hands[1]));
-           // _players.Add(new Ai(_map.getLocation(3), _map.getLocation(10), _map.getLocation(7), 1, BrushBuilder.PlayerFour(), _hands[1]));
-          //  _players.Add(_humanOne);
-            
-
-
-            _deck.DealNewBoard();
-            _deck.DealHands(_players);
+            _trainDeck.DealFaceUpCards();
 
             _turn = new TurnCoordinator(_players, _map);
         }
 
-        private void InitializeHands()
-        {
-            _hands = new List<Hand>();
-            for (int i = 0; i < 6; i++)
-            {
-                _hands.Add(new Hand());
-            }
-        }
-
-
         public void SendTrainPlacement(Connection connection)
         {
-            Human currentTurnPlayer = (Human) _turn.GetCurrentTurnPlayer();
-            currentTurnPlayer.PerformTurn(_map, connection);
+            Human currentTurnPlayer = (Human)_turn.GetCurrentTurnPlayer();
+            currentTurnPlayer.PerformTurn(_map, connection, _turn);
         }
 
         public Map GetMap()
@@ -65,16 +46,24 @@ namespace Ticket_to_ride.Services
             return _map;
         }
 
-        public Deck GetDeck()
+        public TrainDeck GetDeck()
         {
-            return _deck;
+            return _trainDeck;
         }
 
-        public Hand GetPlayersHand(int playerId)
+        public PlayerTrainHand GetPlayersHand(int playerId)
         {
             return _players
                 .Where(player => player._id == playerId)
-                .Select(player => player._hand)
+                .Select(player => player.PlayerTrainHand)
+                .FirstOrDefault();
+        }
+
+        public PlayerRouteHand GetPlayersRouteHand(int playerId)
+        {
+            return _players
+                .Where(player => player._id == playerId)
+                .Select(player => player.PlayerRouteHand)
                 .FirstOrDefault();
         }
 
@@ -101,11 +90,32 @@ namespace Ticket_to_ride.Services
 
         public void PlayerPickedFromTop()
         {
-            if (_turn.IsTurnOver() == false)
+            bool tryPickFromTopSucceeds = _turn.GetCurrentTurnPlayer().PlayerTrainHand.TryPickFromTop(_trainDeck);
+            if (tryPickFromTopSucceeds)
             {
-                _turn.GetCurrentTurnPlayer()._hand.PickFromTop(_deck);
                 _turn.DecrementMove();
             }
+            Console.WriteLine("No cards in Deck");
+        }
+
+        public void PickRouteCards()
+        {
+            _turn.GetCurrentTurnPlayer().PlayerRouteHand.AddRoutes(_routeDeck.PullNonStartingFourRouteCards());
+            _turn.NextTurn();
+        }
+
+        public void PickFaceUpCard(int index)
+        {
+            bool tryPickFaceUpCard = _turn.GetCurrentTurnPlayer().PlayerTrainHand.TryPickFaceUpCard(index);
+            if (tryPickFaceUpCard)
+            {
+                _turn.DecrementMove();
+            }
+        }
+
+        public int TrainsRemaining()
+        {
+            return _turn.GetCurrentTurnPlayer()._availableTrains;
         }
     }
 }

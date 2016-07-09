@@ -12,6 +12,8 @@
 
         White,
 
-        Wildcard
+        Wildcard,
+
+        Empty
     }
 }

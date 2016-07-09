@@ -1,41 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Ticket_to_ride.Model
 {
-    public static class BrushBuilder
+    public class BrushBuilder
     {
-        public static Brush PlayerOne()
+        private int _currentPlayerColourIndex = 0;
+
+        public Brush GetNextColour()
         {
-            return new SolidBrush(Color.Blue);
+            return brushes[_currentPlayerColourIndex++];
         }
-        public static Brush PlayerTwo()
+
+        private List<Brush> brushes = new List<Brush>
         {
-            return new SolidBrush(Color.Green);
-        }
-        public static Brush PlayerThree()
-        {
-            return new SolidBrush(Color.Red);
-        }
-        public static Brush PlayerFour()
-        {
-            return new SolidBrush(Color.Pink);
-        }
-        public static Brush PlayerFive()
-        {
-            return new SolidBrush(Color.Maroon);
-        }
-        public static Brush PlayerSix()
-        {
-            return new SolidBrush(Color.LimeGreen);
-        }
-        public static Brush PlayerSeven()
-        {
-            return new SolidBrush(Color.Gold);
-        }
+            new SolidBrush(Color.Red),
+            new SolidBrush(Color.Blue),
+            new SolidBrush(Color.Green),
+            new SolidBrush(Color.Pink),
+            new SolidBrush(Color.LimeGreen),
+            new SolidBrush(Color.Gold),
+            new SolidBrush(Color.MediumPurple),
+            new SolidBrush(Color.Black)
+        };
     }
 }

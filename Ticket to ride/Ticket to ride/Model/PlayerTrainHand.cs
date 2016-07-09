@@ -1,21 +1,19 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Policy;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Ticket_to_ride.Model
 {
-    public class Hand
+    public class PlayerTrainHand
     {
         public Player _owner;
         public List<CardType> _cards;
+        public TrainDeck _trainDeck;
 
-        public Hand()
+        public PlayerTrainHand(TrainDeck trainDeck)
         {
             _cards = new List<CardType>();
+            _trainDeck = trainDeck;
         }
 
         public void AddCard(CardType card)
@@ -24,23 +22,18 @@ namespace Ticket_to_ride.Model
             _cards.Add(card);
         }
 
-        public void PickFromTop(Deck deck)
+        public bool TryPickFromTop(TrainDeck trainDeck)
         {
             try
             {
-                AddCard(deck.PickCard());
+                AddCard(trainDeck.PickTopCard());
+                return true;
             }
-            catch (InvalidOperationException)
+            catch (NoCardsException)
             {
                 Console.WriteLine("Ran out of cards");
+                return false;
             }
-        }
-
-        private bool CanAffordConnection(Connection connection)
-        {
-            int numberOfWildCards = _cards.Count(card => card == CardType.Wildcard);
-            int numberOfCardsForColour = _cards.Count(card => ConnectionColourComparer.AreCompadable(connection._colour, card));
-            return numberOfCardsForColour >= (connection.Weight - numberOfWildCards);
         }
 
         public bool SpendCardsIfPossible(Connection connection)
@@ -58,10 +51,30 @@ namespace Ticket_to_ride.Model
                 for(int i = 0; i < connection.Weight; i++)
                 {
                     _cards.Remove(sortedCard[i]);
+                    _trainDeck.AddToDiscardPile(sortedCard[i]);
                 }
                 return true;
             }
 
+            return false;
+        }
+
+        public bool TryPickFaceUpCard(int index)
+        {
+            try
+            {
+                CardType faceUpCardAtIndex = _trainDeck.PickFaceUpCard(index);
+                if (faceUpCardAtIndex == CardType.Empty)
+                {
+                        return false;
+                }
+                AddCard(faceUpCardAtIndex);
+                return true;
+            }
+            catch (InvalidOperationException)
+            {
+                Console.WriteLine("Ran out of cards");
+            }
             return false;
         }
     }

@@ -56,6 +56,12 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\RouteTaskSelectorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\RouteTaskSelectorForm.Designer.cs">
+      <DependentUpon>RouteTaskSelectorForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainFrame.xaml.cs">
       <DependentUpon>MainFrame.xaml</DependentUpon>
     </Compile>
@@ -63,14 +69,17 @@
     <Compile Include="Model\ConnectionColour.cs" />
     <Compile Include="Model\CardType.cs" />
     <Compile Include="Model\ConnectionColourComparer.cs" />
-    <Compile Include="Model\Deck.cs" />
+    <Compile Include="Model\NoCardsException.cs" />
+    <Compile Include="Model\RouteCardDeck.cs" />
+    <Compile Include="Model\RouteCardSelectorState.cs" />
+    <Compile Include="Model\TrainDeck.cs" />
     <Compile Include="Model\GuiLocation.cs" />
-    <Compile Include="Model\Hand.cs" />
+    <Compile Include="Model\PlayerTrainHand.cs" />
     <Compile Include="Model\Human.cs" />
     <Compile Include="Model\MapGenerator.cs" />
     <Compile Include="Model\Player.cs" />
     <Compile Include="Model\PlayerType.cs" />
-    <Compile Include="Model\RoutesTasks.cs" />
+    <Compile Include="Model\PlayerRouteHand.cs" />
     <Compile Include="Model\TrainPlacementDecider.cs" />
     <Compile Include="Model\TurnCoordinator.cs" />
     <Compile Include="Services\Ai.cs" />
@@ -78,6 +87,7 @@
     <Compile Include="Model\Map.cs" />
     <Compile Include="Services\Game.cs" />
     <Compile Include="Services\MyExtensions.cs" />
+    <Compile Include="Services\PlayersBuilder.cs" />
     <Compile Include="Services\RiskMapGenerator.cs" />
     <Compile Include="Model\Route.cs" />
     <Compile Include="Model\RouteCard.cs" />
@@ -86,10 +96,12 @@
     <Compile Include="Repository\RouteRepository.cs" />
     <Compile Include="Services\Graph\ShortestPath.cs" />
     <Compile Include="Model\Connection.cs" />
-    <Compile Include="Services\RouteTasksGenerator.cs" />
     <Compile Include="Services\TrianPlacer.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\RouteTaskSelectorForm.resx">
+      <DependentUpon>RouteTaskSelectorForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

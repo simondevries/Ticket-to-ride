@@ -28,7 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.pnlView = new System.Windows.Forms.Panel();
+            this.LblTrainsRemaining = new System.Windows.Forms.Label();
+            this.BtnPickRouteCard = new System.Windows.Forms.Button();
+            this.LstRouteCards = new System.Windows.Forms.ListBox();
             this.fromTop = new System.Windows.Forms.Button();
             this.turn = new System.Windows.Forms.Label();
             this.playersCards = new System.Windows.Forms.ListBox();
@@ -46,30 +50,49 @@
             // 
             // pnlView
             // 
-            this.pnlView.Controls.Add(this.fromTop);
-            this.pnlView.Controls.Add(this.turn);
-            this.pnlView.Controls.Add(this.playersCards);
+            this.pnlView.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pnlView.BackgroundImage")));
+            this.pnlView.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.pnlView.Controls.Add(this.deckSize);
-            this.pnlView.Controls.Add(this.boardCardFive);
-            this.pnlView.Controls.Add(this.boardCardFour);
-            this.pnlView.Controls.Add(this.boardCardThree);
-            this.pnlView.Controls.Add(this.boardCardTwo);
-            this.pnlView.Controls.Add(this.boardCardOne);
-            this.pnlView.Controls.Add(this.button1);
-            this.pnlView.Controls.Add(this.elementHost2);
-            this.pnlView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlView.Location = new System.Drawing.Point(0, 0);
+            this.pnlView.Location = new System.Drawing.Point(191, 12);
             this.pnlView.Name = "pnlView";
-            this.pnlView.Size = new System.Drawing.Size(1362, 741);
+            this.pnlView.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.pnlView.Size = new System.Drawing.Size(1041, 720);
             this.pnlView.TabIndex = 0;
             this.pnlView.Paint += new System.Windows.Forms.PaintEventHandler(this.pnlView_Paint);
             this.pnlView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pnlView_MouseDown);
             // 
+            // LblTrainsRemaining
+            // 
+            this.LblTrainsRemaining.AutoSize = true;
+            this.LblTrainsRemaining.Location = new System.Drawing.Point(18, 9);
+            this.LblTrainsRemaining.Name = "LblTrainsRemaining";
+            this.LblTrainsRemaining.Size = new System.Drawing.Size(89, 13);
+            this.LblTrainsRemaining.TabIndex = 12;
+            this.LblTrainsRemaining.Text = "Trains Remaining";
+            // 
+            // BtnPickRouteCard
+            // 
+            this.BtnPickRouteCard.Location = new System.Drawing.Point(18, 607);
+            this.BtnPickRouteCard.Name = "BtnPickRouteCard";
+            this.BtnPickRouteCard.Size = new System.Drawing.Size(156, 53);
+            this.BtnPickRouteCard.TabIndex = 1;
+            this.BtnPickRouteCard.Text = "Pick Route Card";
+            this.BtnPickRouteCard.UseVisualStyleBackColor = true;
+            this.BtnPickRouteCard.Click += new System.EventHandler(this.BtnPickRouteCard_Click);
+            // 
+            // LstRouteCards
+            // 
+            this.LstRouteCards.FormattingEnabled = true;
+            this.LstRouteCards.Location = new System.Drawing.Point(17, 463);
+            this.LstRouteCards.Name = "LstRouteCards";
+            this.LstRouteCards.Size = new System.Drawing.Size(157, 134);
+            this.LstRouteCards.TabIndex = 11;
+            // 
             // fromTop
             // 
-            this.fromTop.Location = new System.Drawing.Point(541, 585);
+            this.fromTop.Location = new System.Drawing.Point(18, 32);
             this.fromTop.Name = "fromTop";
-            this.fromTop.Size = new System.Drawing.Size(75, 64);
+            this.fromTop.Size = new System.Drawing.Size(156, 36);
             this.fromTop.TabIndex = 10;
             this.fromTop.Text = "From Top";
             this.fromTop.UseVisualStyleBackColor = true;
@@ -78,7 +101,7 @@
             // turn
             // 
             this.turn.AutoSize = true;
-            this.turn.Location = new System.Drawing.Point(53, 557);
+            this.turn.Location = new System.Drawing.Point(99, 240);
             this.turn.Name = "turn";
             this.turn.Size = new System.Drawing.Size(29, 13);
             this.turn.TabIndex = 9;
@@ -87,15 +110,15 @@
             // playersCards
             // 
             this.playersCards.FormattingEnabled = true;
-            this.playersCards.Location = new System.Drawing.Point(631, 585);
+            this.playersCards.Location = new System.Drawing.Point(17, 284);
             this.playersCards.Name = "playersCards";
-            this.playersCards.Size = new System.Drawing.Size(77, 147);
+            this.playersCards.Size = new System.Drawing.Size(157, 173);
             this.playersCards.TabIndex = 8;
             // 
             // deckSize
             // 
             this.deckSize.AutoSize = true;
-            this.deckSize.Location = new System.Drawing.Point(538, 557);
+            this.deckSize.Location = new System.Drawing.Point(524, 86);
             this.deckSize.Name = "deckSize";
             this.deckSize.Size = new System.Drawing.Size(52, 13);
             this.deckSize.TabIndex = 7;
@@ -103,54 +126,59 @@
             // 
             // boardCardFive
             // 
-            this.boardCardFive.Location = new System.Drawing.Point(460, 585);
+            this.boardCardFive.Location = new System.Drawing.Point(18, 214);
             this.boardCardFive.Name = "boardCardFive";
             this.boardCardFive.Size = new System.Drawing.Size(75, 64);
             this.boardCardFive.TabIndex = 6;
-            this.boardCardFive.Text = "Next Turn";
+            this.boardCardFive.Text = "CardFive";
             this.boardCardFive.UseVisualStyleBackColor = true;
+            this.boardCardFive.Click += new System.EventHandler(this.boardCardFive_Click);
             // 
             // boardCardFour
             // 
-            this.boardCardFour.Location = new System.Drawing.Point(379, 585);
+            this.boardCardFour.Location = new System.Drawing.Point(99, 144);
             this.boardCardFour.Name = "boardCardFour";
             this.boardCardFour.Size = new System.Drawing.Size(75, 64);
             this.boardCardFour.TabIndex = 5;
-            this.boardCardFour.Text = "Next Turn";
+            this.boardCardFour.Text = "CardFour";
             this.boardCardFour.UseVisualStyleBackColor = true;
+            this.boardCardFour.Click += new System.EventHandler(this.boardCardFour_Click);
             // 
             // boardCardThree
             // 
-            this.boardCardThree.Location = new System.Drawing.Point(298, 585);
+            this.boardCardThree.Location = new System.Drawing.Point(17, 144);
             this.boardCardThree.Name = "boardCardThree";
             this.boardCardThree.Size = new System.Drawing.Size(75, 64);
             this.boardCardThree.TabIndex = 4;
-            this.boardCardThree.Text = "Next Turn";
+            this.boardCardThree.Text = "CardThree";
             this.boardCardThree.UseVisualStyleBackColor = true;
+            this.boardCardThree.Click += new System.EventHandler(this.boardCardThree_Click);
             // 
             // boardCardTwo
             // 
-            this.boardCardTwo.Location = new System.Drawing.Point(217, 585);
+            this.boardCardTwo.Location = new System.Drawing.Point(99, 74);
             this.boardCardTwo.Name = "boardCardTwo";
             this.boardCardTwo.Size = new System.Drawing.Size(75, 64);
             this.boardCardTwo.TabIndex = 3;
-            this.boardCardTwo.Text = "Next Turn";
+            this.boardCardTwo.Text = "CardTwo";
             this.boardCardTwo.UseVisualStyleBackColor = true;
+            this.boardCardTwo.Click += new System.EventHandler(this.boardCardTwo_Click);
             // 
             // boardCardOne
             // 
-            this.boardCardOne.Location = new System.Drawing.Point(131, 585);
+            this.boardCardOne.Location = new System.Drawing.Point(18, 74);
             this.boardCardOne.Name = "boardCardOne";
-            this.boardCardOne.Size = new System.Drawing.Size(80, 64);
+            this.boardCardOne.Size = new System.Drawing.Size(75, 64);
             this.boardCardOne.TabIndex = 2;
-            this.boardCardOne.Text = "Next Turn";
+            this.boardCardOne.Text = "CardOne";
             this.boardCardOne.UseVisualStyleBackColor = true;
+            this.boardCardOne.Click += new System.EventHandler(this.boardCardOne_Click);
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(16, 590);
+            this.button1.Location = new System.Drawing.Point(17, 677);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(104, 48);
+            this.button1.Size = new System.Drawing.Size(157, 55);
             this.button1.TabIndex = 1;
             this.button1.Text = "Next Turn";
             this.button1.UseVisualStyleBackColor = true;
@@ -158,9 +186,9 @@
             // 
             // elementHost2
             // 
-            this.elementHost2.Location = new System.Drawing.Point(12, 0);
+            this.elementHost2.Location = new System.Drawing.Point(12, 1);
             this.elementHost2.Name = "elementHost2";
-            this.elementHost2.Size = new System.Drawing.Size(97, 78);
+            this.elementHost2.Size = new System.Drawing.Size(22, 10);
             this.elementHost2.TabIndex = 1;
             this.elementHost2.Text = "elementHost2";
             this.elementHost2.Child = this.mainFrame1;
@@ -169,13 +197,28 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1362, 741);
+            this.ClientSize = new System.Drawing.Size(1244, 739);
+            this.Controls.Add(this.turn);
+            this.Controls.Add(this.BtnPickRouteCard);
+            this.Controls.Add(this.LblTrainsRemaining);
             this.Controls.Add(this.pnlView);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.LstRouteCards);
+            this.Controls.Add(this.elementHost2);
+            this.Controls.Add(this.fromTop);
+            this.Controls.Add(this.playersCards);
+            this.Controls.Add(this.boardCardOne);
+            this.Controls.Add(this.boardCardTwo);
+            this.Controls.Add(this.boardCardThree);
+            this.Controls.Add(this.boardCardFour);
+            this.Controls.Add(this.boardCardFive);
             this.Name = "Form1";
+            this.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.Text = "Form1";
             this.pnlView.ResumeLayout(false);
             this.pnlView.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -194,6 +237,9 @@
         private System.Windows.Forms.ListBox playersCards;
         private System.Windows.Forms.Button fromTop;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.ListBox LstRouteCards;
+        private System.Windows.Forms.Button BtnPickRouteCard;
+        private System.Windows.Forms.Label LblTrainsRemaining;
     }
 }
 

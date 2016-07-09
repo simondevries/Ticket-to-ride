@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows;
 using Ticket_to_ride.Services;
 
 namespace Ticket_to_ride.Model
@@ -12,23 +10,28 @@ namespace Ticket_to_ride.Model
         PlayerType _currentTurn;
         List<Player> _players;
         List<PlayerType> _playertypes;
-        int turn = 0;
-        Map _map;
-        private int _movesLeft;
-
+        int turn;
+        private bool _isLastRound;
+        private int lastRoundPlayerId;
+        private readonly Map _map;
+        private int _movesLeftInTurn;
+        private const int TOTAL_CARD_DRAWS = 2;
 
         public TurnCoordinator(List<Player> players, Map map)
         {
             _players = players;
             _currentTurn = players[0]._playerType;
             _map = map;
-            _movesLeft = 2;
+            _movesLeftInTurn = TOTAL_CARD_DRAWS;
         }
 
         public void NextTurn()
         {
+            MessageBox.Show("Next Turn");
+
+            CheckIfLastTurn();
             IncrementTurn();
-            _movesLeft = 2;
+            _movesLeftInTurn = 2;
             _currentTurn = _players[turn]._playerType;
             if (_currentTurn == PlayerType.Human)
             {
@@ -42,9 +45,34 @@ namespace Ticket_to_ride.Model
             }
         }
 
+        private void CheckIfLastTurn()
+        {
+            if (_isLastRound && lastRoundPlayerId == _players[turn]._id)
+            {
+                MessageBox.Show("Game Over");
+
+            }
+
+            if (_players[turn].HasFinished)
+            {
+                if (_players[turn]._id == lastRoundPlayerId)
+                {
+                    MessageBox.Show("Last round");
+                    
+                }
+                _isLastRound = true;
+                lastRoundPlayerId = _players[turn]._id;
+            }
+
+        }
+
         public void DecrementMove()
         {
-            _movesLeft--;
+            _movesLeftInTurn--;
+            if (_movesLeftInTurn <= 0)
+            {
+                NextTurn();
+            }
         }
 
         private void IncrementTurn()
@@ -68,10 +96,6 @@ namespace Ticket_to_ride.Model
             return _currentTurn;
         }
 
-        public bool IsTurnOver()
-        {
-            return _movesLeft <= 0;
-        }
 
         public Player GetCurrentTurnPlayer()
         {

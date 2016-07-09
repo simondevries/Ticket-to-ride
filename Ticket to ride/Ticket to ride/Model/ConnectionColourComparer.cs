@@ -31,6 +31,10 @@ namespace Ticket_to_ride.Model
             {
                 return true;
             }
+            if (connectionColour == ConnectionColour.White && (cardType == CardType.White))
+            {
+                return true;
+            }
             if (connectionColour == ConnectionColour.Undefined)
             {
                 return true;

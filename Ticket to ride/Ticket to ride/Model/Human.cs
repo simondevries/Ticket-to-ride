@@ -5,19 +5,22 @@ namespace Ticket_to_ride.Model
 {
     class Human : Player
     {
-        public Human(RoutesTasks routeTasks, int id, Brush colour, Hand hand)
+        public Human(PlayerRouteHand playerRouteHand, int id, Brush colour, TrainDeck trainDeck) : base(trainDeck)
         {
-            _task = routeTasks;
+            PlayerRouteHand = playerRouteHand;
             _playerType = PlayerType.Human;
             _id = id;
             _colour = colour;
-            _hand = hand;
+                
         }
 
-        public void PerformTurn(Map map, Connection trainPlacement)
+        public void PerformTurn(Map map, Connection trainPlacement, TurnCoordinator turn)
         {
             //TODO sdv validate cards here instead
-            TrianPlacer.PlaceTrain(trainPlacement, map, this);
+            if (TrianPlacer.PlaceTrain(trainPlacement, map, this))
+            {
+                turn.NextTurn();
+            }
         }
     }
 }

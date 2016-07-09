@@ -2,16 +2,16 @@
 
 namespace Ticket_to_ride.Model
 {
-    public class RoutesTasks
+    public class PlayerRouteHand
     {
-        private List<RouteCard> _routes;
+        private readonly List<RouteCard> _routes;
 
-        public RoutesTasks()
+        public PlayerRouteHand()
         {
             _routes = new List<RouteCard>();
         }
 
-        public RoutesTasks(List<RouteCard> routeTasks)
+        public PlayerRouteHand(List<RouteCard> routeTasks)
         {
             _routes = routeTasks;
         }
@@ -19,6 +19,12 @@ namespace Ticket_to_ride.Model
         public void AddRoutes(RouteCard route)
         {
            _routes.Add(route);
+        }
+
+
+        public void AddRoutes(List<RouteCard> playerRouteHand)
+        {
+            _routes.AddRange(playerRouteHand);
         }
 
         public List<RouteCard> GetRoutes()
