@@ -88,7 +88,7 @@ namespace Ticket_to_ride.Model
         {
             string output = "";
             foreach (var type in _cardTypes)
-            {
+                {
                 int numberOfCards = _deck.Select(card => card == type).Count();
                 output += "Type" + type + ": " + numberOfCards;
             }

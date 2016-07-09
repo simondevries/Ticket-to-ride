@@ -25,5 +25,7 @@ namespace Ticket_to_ride.Model
             _id = id;
             _colour = colour;
         }
+
+
     }
 }

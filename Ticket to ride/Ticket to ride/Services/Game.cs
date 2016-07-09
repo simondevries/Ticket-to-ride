@@ -30,7 +30,9 @@ namespace Ticket_to_ride.Services
            // _players.Add(new Ai(_map.getLocation(8), _map.getLocation(18), 0, BrushBuilder.playerOne(), _hands[0]));
           //  _players.Add(new Ai(_map.getLocation(10), _map.getLocation(16), 1, BrushBuilder.playerTwo(), _hands[1]));
             _players.Add(new Human(routeTasksGenerator.GenerateRouteTasks(_map, 2), 1, BrushBuilder.PlayerOne(), _hands[0]));
-            _players.Add(new Ai(routeTasksGenerator.GenerateRouteTasks(_map, 2), 0, BrushBuilder.PlayerTwo(), _hands[1]));
+            //_players.Add(new Human(routeTasksGenerator.GenerateRouteTasks(_map, 2), 1, BrushBuilder.PlayerTwo(), _hands[1]));
+           
+             _players.Add(new Ai(routeTasksGenerator.GenerateRouteTasks(_map, 2), 0, BrushBuilder.PlayerTwo(), _hands[1]));
            // _players.Add(new Ai(_map.getLocation(3), _map.getLocation(10), _map.getLocation(7), 1, BrushBuilder.PlayerFour(), _hands[1]));
           //  _players.Add(_humanOne);
             
@@ -45,7 +47,7 @@ namespace Ticket_to_ride.Services
         private void InitializeHands()
         {
             _hands = new List<Hand>();
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 6; i++)
             {
                 _hands.Add(new Hand());
             }

@@ -25,5 +25,17 @@ namespace Ticket_to_ride.Model
         {
             return _routes;
         }
+
+        public List<Location> GetAllLocations()
+        {
+            List<Location> locations = new List<Location>();
+            foreach (RouteCard routeCard in _routes)
+            {
+                locations.Add(routeCard.GetStartLocation());
+                locations.Add(routeCard.GetEndLocation());
+            }
+
+            return locations;
+        }
     }
 }
