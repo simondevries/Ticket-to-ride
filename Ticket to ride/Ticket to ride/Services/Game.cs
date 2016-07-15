@@ -10,29 +10,33 @@ namespace Ticket_to_ride.Services
         List<Player> _players;
         readonly TrainDeck _trainDeck;
         readonly Map _map;
-        private readonly int _numberOfAi;
-        private readonly int _numberOfHumans;
+        private int _numberOfAi;
+        private int _numberOfHumans;
         private readonly RouteCardDeck _routeDeck;
+        private ScoreCalculator _scoreCalculator;
 
-        public Game(Map map, int numberOfAi, int numberOfHumans)
+
+        public Game(Map map)
         {
             _players = new List<Player>();
-            _numberOfAi = numberOfAi;
-            _numberOfHumans = numberOfHumans;
 
             _map = map;
             _trainDeck = new TrainDeck();
             _routeDeck = new RouteCardDeck(_map);
         }
 
-        public void Start()
+        public void Start(int numberOfAi, int numberOfHumans)
         {
+            _numberOfAi = numberOfAi;
+            _numberOfHumans = numberOfHumans;
             PlayersBuilder playersBuilder = new PlayersBuilder(_trainDeck, _routeDeck);
             _players = playersBuilder.WithAi(_numberOfAi).WithHumans(_numberOfHumans).Build();
 
             _trainDeck.DealFaceUpCards();
 
-            _turn = new TurnCoordinator(_players, _map);
+            _scoreCalculator = new ScoreCalculator(_map, numberOfHumans + _numberOfAi);
+
+            _turn = new TurnCoordinator(_players, _map, _scoreCalculator);
         }
 
         public void SendTrainPlacement(Connection connection)
@@ -116,6 +120,12 @@ namespace Ticket_to_ride.Services
         public int TrainsRemaining()
         {
             return _turn.GetCurrentTurnPlayer()._availableTrains;
+        }
+
+        public string GetScoreBoard()
+        {
+            _scoreCalculator.CalculateScoreDuringGame();
+            return _scoreCalculator.GetScoreBoard();
         }
     }
 }

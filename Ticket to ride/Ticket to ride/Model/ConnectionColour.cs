@@ -8,7 +8,7 @@
 
         Red,
 
-        Green,
+        Pink,
 
         White,
 

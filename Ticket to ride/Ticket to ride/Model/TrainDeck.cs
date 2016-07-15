@@ -12,7 +12,7 @@ namespace Ticket_to_ride.Model
         private readonly List<CardType> _discardPile;
 
         private const int NUMBER_OF_CARDS_PLAYERS_START_WITH = 5;
-        private const int NUMBER_OF_EACH_TYPE_OF_CARD = 5;
+        private const int NUMBER_OF_EACH_TYPE_OF_CARD = 10;
         private const int NUMBER_OF_FACEUP_CARDS_ON_BOARD = 5;
         
         /// <summary>
@@ -25,7 +25,7 @@ namespace Ticket_to_ride.Model
             _cardTypes.Add(CardType.Black);
             _cardTypes.Add(CardType.White);
             _cardTypes.Add(CardType.Red);
-            _cardTypes.Add(CardType.Green);
+            _cardTypes.Add(CardType.Pink);
             _cardTypes.Add(CardType.Orange);
             _cardTypes.Add(CardType.Wildcard);
 

@@ -10,7 +10,8 @@ namespace Ticket_to_ride.Services
     {
 
 
-        public Ai(PlayerRouteHand playerRouteHand, int id, Brush colour, TrainDeck trainDeck) : base(trainDeck)
+        public Ai(PlayerRouteHand playerRouteHand, int id, Brush colour, TrainDeck trainDeck)
+            : base(trainDeck)
         {
             PlayerRouteHand = playerRouteHand;
             _playerType = PlayerType.Ai;
@@ -20,106 +21,12 @@ namespace Ticket_to_ride.Services
 
         public void PerformTurn(Map map)
         {
-
-            ShortestPathGenerator shortestPath = new ShortestPathGenerator(map.getLocations(), map.getConnections());
-
-            //get list of all possible connection order
-            //todo add all combination of locations
-
-            List<Location> locations = PlayerRouteHand.GetAllLocations();
-
-            List<List<Location>> destinationOrders = GenerateDestinationOrders(locations);
-
-
-            //0 = A - B
-            //1 = A - C
-            //2 = B - C
-            List<int> costs = new List<int>();
-
-            List<Route> routes = new List<Route>();
-
-
-            //Foreach connection order 
-            //A
-            for (int i = 0; i < destinationOrders.Count; i++)
-            {
-                //get initial shortest between all nodes
-                //todo sdv uncomment
-                //    Dictionary<Location, Route> shortestLocationsAB = shortestPath.CalculateMinCost(_task.GetStartLocation(), _id);
-                //  Dictionary<Location, Route> shortestLocationsBC = shortestPath.CalculateMinCost(_task.GetEndLocation(), _id);
-                Dictionary<int, Route> distanceBetweenDestinations = new Dictionary<int, Route>();
-                //                distanceBetweenDestinations[0] = shortestLocationsAB[_task.GetEndLocation()];
-                //                distanceBetweenDestinations[1] = shortestLocationsAB[_task.GetThirdLocation()];
-                //                distanceBetweenDestinations[2] = shortestLocationsBC[_task.GetThirdLocation()];
-
-                //B
-                //Reset weight
-                //Set the weight to 0 of all the selected routes
-
-                //Check if there is a fast way for that distance between destinations
-                //If there is then set the distance BetweenDistinations
-
-                for (int j = 0; j < destinationOrders[i].Count - 1; j++)
-                {
-                    foreach (Connection connection in map.getConnections())
-                    {
-                        connection.WeightForComputation = connection.Weight;
-                    }
-
-                    foreach (Route route in distanceBetweenDestinations.Values)
-                    {
-                        foreach (Connection connection in route.Connections)
-                        {
-                            connection.Weight = 0;
-                        }
-                    }
-
-                    Dictionary<Location, Route> routeOne = shortestPath.CalculateMinCost(destinationOrders[i][j], _id);
-                    distanceBetweenDestinations.Add(j, routeOne[destinationOrders[i][j + 1]]);
-
-
-                    foreach (Connection connection in map.getConnections())
-                    {
-                        connection.Weight = connection.WeightForComputation;
-                    }
-                }
-                costs.Add(distanceBetweenDestinations[0].Cost + distanceBetweenDestinations[1].Cost);
-
-
-                List<Connection> routeToAdd = new List<Connection>();
-
-                foreach (Route destinationRoute in distanceBetweenDestinations.Values)
-                {
-                    foreach (var connection in destinationRoute.Connections)
-                    {
-                        if (routeToAdd.Count(conn => conn == connection) == 0)
-                        {
-                            routeToAdd.Add(connection);
-                        }
-                    }
-                }
-                routes.Add(new Route("asd") { Connections = routeToAdd });
-
-            }
-
-
-
-            //Foreach connection 
-            //Find shortest
-            //If found shorter
-            // Update all other connectors (see hashmap)
-
-
-
-            //Get shortest of all connections, set as shortestpath
-            //Dictionary<Location, Route> shortestLocations = shortestPath.CalculateMinCost(_task.GetStartLocation(), _id);
-            Route chosenRoute = routes.OrderBy(route => route.Connections.Count).First();
-
+            Route choosenRoute = GenerateRoute(map);
+            Console.WriteLine(choosenRoute.ToString());
             RiskMapGenerator riskMapGenerator = new RiskMapGenerator(map);
-            //todo sdv uncommment !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            //  riskMapGenerator.getConnectionWithGreatestRisk(chosenRoute, _task, _id);
+            //Pass in with the correct order
 
-            //does this update the risk here ?
+            riskMapGenerator.getConnectionWithGreatestRisk(choosenRoute, _id);
             Connection trainPlacement = TrainPlacementDecider.PlaceTrain(map);
             bool placeTrain = TrianPlacer.PlaceTrain(trainPlacement, map, this);
 
@@ -127,136 +34,187 @@ namespace Ticket_to_ride.Services
             {
                 Console.WriteLine("Computer failed to place train");
             }
-
         }
 
-        private List<List<Location>> GenerateDestinationOrders(List<Location> inputLocations)
+        private Route GenerateRoute(Map map)
         {
-            Console.Write("All locations: ");
-            foreach (var loc in inputLocations)
+            ShortestPathGenerator shortestPath = new ShortestPathGenerator(map.getLocations(), map.getConnections());
+
+            List<Location> destinations = PlayerRouteHand.GetAllLocations();
+            //Generate A-B, A-C, A-D, B-C ...
+            List<DestinationPair> destinationPairs = GetDestinationPairs(destinations);
+
+            //Add cost to each destination pair
+            destinationPairs = AddCostToEachDestinationPair(destinationPairs, shortestPath, destinations);
+            Console.WriteLine(destinationPairs.Select(p => "" + p.StartIndex + "," + p.EndIndex + "," + p.Weight));
+
+            //todo go through all combinations
+            //todo remove identifier?
+            Route finalRouteWithDuplicates = new Route("MainRoute");
+            finalRouteWithDuplicates.Cost = 0;
+
+
+            int[] order = new int[destinations.Count];
+            for (int i = 0; i < destinations.Count; i++)
             {
-                Console.Write("" + loc.Identifier);
+                order[i] = i;
             }
-            Console.WriteLine();
-            List<Location> alreadyProcessed = new List<Location>();
-            List<List<Location>> desinationOrders = new List<List<Location>>();
-
-
-
-            for (int i = 0; i < inputLocations.Count; i++)
+            for (int i = 0; i < order.Length - 1; i++)
             {
-                List<Location> locations = inputLocations.Select(item => (Location)item).ToList();
-                Swap(locations, i, 0);
-                PrintAlreadyProcessed(locations[i], alreadyProcessed);
-                List<Location> allLocationsExceptFirst = locations.GetRange(1, locations.Count - 1);
-                List<List<Location>> destinationOrder = GetDestinationOrder(allLocationsExceptFirst, alreadyProcessed, 0);
-                foreach (List<Location> list in destinationOrder)
+                int startIndex = order[i];
+                int endIndex = order[i + 1];
+
+                DestinationPair associateDestinationPair =
+                    destinationPairs.FirstOrDefault(pair => pair.HasStartAndEnd(startIndex, endIndex));
+                finalRouteWithDuplicates.AddRoute(associateDestinationPair.Route);
+
+                //todo clean
+                associateDestinationPair.StartLocation = destinations[associateDestinationPair.StartIndex];
+                associateDestinationPair.EndLocation = destinations[associateDestinationPair.EndIndex];
+
+                finalRouteWithDuplicates.startAndEnd.Add(associateDestinationPair);
+            }
+
+            //remove dupes
+//            IEnumerable<Connection> connections = finalRouteWithDuplicates.Connections.Distinct();
+            //            finalRoute.AddConnections(connections.ToList());
+            Route finalRoute = new Route("");
+            finalRoute.startAndEnd = finalRouteWithDuplicates.startAndEnd;
+            foreach (Connection connection in finalRouteWithDuplicates.Connections)
+            {
+                bool foundElsewhere = false;
+                foreach (Connection connectionCompare in finalRouteWithDuplicates.Connections)
                 {
-                    list.Insert(0, locations[0]);
-                    desinationOrders.Add(list);
-                }
-
-
-                alreadyProcessed.Add(locations[0]);
-            }
-
-            foreach (List<Location> desinationOrder in desinationOrders)
-            {
-                Console.WriteLine();
-                foreach (var location in desinationOrder)
-                {
-                    Console.Write(location.Identifier);
-                }
-            }
-
-            return desinationOrders;
-        }
-
-        private static void PrintAlreadyProcessed(Location location, List<Location> alreadyProcessed)
-        {
-            Console.WriteLine("Processing for " + location.Identifier);
-            foreach (Location alreadyProcessedLocation in alreadyProcessed)
-            {
-                Console.WriteLine("" + alreadyProcessedLocation.Identifier);
-            }
-        }
-
-        private static List<List<Location>> GetDestinationOrder(List<Location> inputLocations, List<Location> alreadyProcessed, int tabLevel)
-        {
-            Console.WriteLine();
-            for (int i = 0; i < tabLevel; i++)
-            {
-                Console.Write('\t');
-            }
-            foreach (Location location in inputLocations)
-            {
-                Console.Write(location.Identifier);
-            }
-
-            List<List<Location>> allCombinations = new List<List<Location>>();
-
-            if (inputLocations.Count == 2)
-            {
-                Console.Write("base case: ");
-
-
-                if (alreadyProcessed.Contains(inputLocations[1]) == false)
-                {
-                    Console.Write("adding locations in order 0,1 ");
-                    allCombinations.Add(new List<Location> { inputLocations[0], inputLocations[1] });
-                }
-                 if ((alreadyProcessed.Contains(inputLocations[0]) == false))
-                {
-                    Console.Write("adding locations in order 1,0 ");
-                    allCombinations.Add(new List<Location> { inputLocations[1], inputLocations[0] });
-
-                }
-                return allCombinations;
-            }
-
-            Console.Write("Not base case");
-
-            for (int i = 0; i < inputLocations.Count; i++)
-            {
-                List<Location> locations =  inputLocations.Select(item => (Location)item).ToList();;
-                Swap(locations, 0, i);
-                
-                Location currentLocation = locations[0];
-
-                Console.Write(", removing location 0 (" + currentLocation.Identifier + ")");
-                
-                List<List<Location>> subLocation = new List<List<Location>>();
-
-                Console.Write("identifier " + currentLocation.Identifier + " is now running for remaining locations");
-
-                foreach (List<Location> result in GetDestinationOrder(locations.GetRange(1, locations.Count -1), alreadyProcessed, tabLevel + 1))
-                {
-                    Console.Write("identifier " + currentLocation.Identifier + " is adding ");
-                    foreach (Location location in result)
+                    if((connection.A == connectionCompare.A && connection.B==connectionCompare.B ||
+                        connection.B == connectionCompare.A && connection.A==connectionCompare.B) &&
+                        connection != connectionCompare)
                     {
-                        Console.Write(location.Identifier);
+                        foundElsewhere = true;
                     }
-                    subLocation.Add(result);
                 }
-
-
-                foreach (List<Location> list in subLocation)
+                if (!foundElsewhere || !finalRoute.Connections.Contains(connection))
                 {
-                    Console.Write("identifier " + currentLocation.Identifier + " is inserting itself into all combinations");
-                    list.Insert(0, currentLocation);
-                    allCombinations.Add(list);
+                    finalRoute.AddConnection(connection);
                 }
-
             }
 
-            return allCombinations;
+            return finalRoute;
         }
 
-        public static void Swap(List<Location> list, int indexA, int indexB)
+        private List<DestinationPair> AddCostToEachDestinationPair(List<DestinationPair> destinationPairs, ShortestPathGenerator shortestPath, List<Location> destinations)
         {
-            Location tmp = list[indexA];
-            list[indexA] = list[indexB];
-            list[indexB] = tmp;
+            //todo can i reduce complexity since this is run twice for final Destination Pair (i.e 0->4 and 4->0)
+            foreach (DestinationPair destinationPair in destinationPairs)
+            {
+                //Get shortest path from this to all other
+                Dictionary<Location, Route> allRoutes = shortestPath.CalculateMinCost(destinations[destinationPair.StartIndex],
+                    _id);
+
+                //Get all pairs that link to this Destination pair start
+                IEnumerable<DestinationPair> destinationPairsWithThisStartLocation =
+                    destinationPairs.Where(pair => pair.HasStartOrEnd(destinationPair.StartIndex) && !pair.HasWeight);
+
+                //Update the pair with the route and cost
+                foreach (DestinationPair pair in destinationPairsWithThisStartLocation)
+                {
+
+                    Location location = destinations[pair.GetOppositeEnd(pair.StartIndex)];
+                    pair.Weight = allRoutes[location].Cost;
+                    pair.Route.AddConnections(allRoutes[location].Connections);
+                }
+            }
+            return destinationPairs;
+        }
+
+        private List<DestinationPair> GetDestinationPairs(List<Location> destinations)
+        {
+            List<DestinationPair> destinationPairs = new List<DestinationPair>();
+            for (int i = 0; i < destinations.Count; i++)
+            {
+                for (int j = 0; j < destinations.Count; j++)
+                {
+                    if (i != j)
+                    {
+                        destinationPairs.Add(new DestinationPair(i, j));
+                    }
+                }
+            }
+            return destinationPairs;
+        }
+    }
+
+    public class DestinationPair
+    {
+        //todo merge
+        public Location StartLocation { get; set; }
+        public Location EndLocation { get; set; }
+        private readonly int _endIndex;
+        private readonly int _startIndex;
+        private int _weight;
+        private Route _route;
+
+        public DestinationPair(int startIndex, int endIndex)
+        {
+            _startIndex = startIndex;
+            _endIndex = endIndex;
+
+            _route = new Route("");
+        }
+
+
+        public override string ToString()
+        {
+            return _startIndex + " -> " + _endIndex;
+        }
+
+        public override bool Equals(object o)
+        {
+            DestinationPair destinationPair = (DestinationPair)o;
+            return _endIndex == destinationPair._endIndex && _startIndex == destinationPair._startIndex;
+        }
+
+        public bool HasStartAndEnd(int startId, int endId)
+        {
+            return _startIndex == startId && _endIndex == endId;
+        }
+
+        public bool HasStartOrEnd(int locationIndex)
+        {
+            return _startIndex == locationIndex || _endIndex == locationIndex;
+        }
+
+        public bool HasLocationId(int locationId)
+        {
+            return _startIndex == locationId || _endIndex == locationId;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return (_endIndex * 397) ^ _startIndex;
+            }
+        }
+
+        public bool HasWeight
+        {
+            get { return Weight != 0; }
+        }
+
+        public int Weight
+        {
+            get { return _weight; }
+            set { _weight = value; }
+        }
+
+        public int EndIndex { get { return _endIndex; } }
+        public int StartIndex { get { return _startIndex; } }
+        public Route Route { get { return _route; }
+            set { _route = value;  } }
+
+        public int GetOppositeEnd(int index)
+        {
+            return _startIndex == index ? _endIndex : _startIndex;
         }
     }
 }

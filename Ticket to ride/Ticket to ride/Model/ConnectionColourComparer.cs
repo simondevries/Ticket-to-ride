@@ -19,7 +19,7 @@ namespace Ticket_to_ride.Model
             {
                 return true;
             }
-            if (connectionColour == ConnectionColour.Green && (cardType == CardType.Green))
+            if (connectionColour == ConnectionColour.Pink && (cardType == CardType.Pink))
             {
                 return true;
             }
@@ -53,14 +53,14 @@ namespace Ticket_to_ride.Model
             {
                 case(ConnectionColour.Black):
                     return  new SolidBrush(Color.Black);
-                case (ConnectionColour.Green):
-                    return new SolidBrush(Color.Green);
+                case (ConnectionColour.Pink):
+                    return new SolidBrush(Color.DeepPink);
                 case (ConnectionColour.Orange):
                     return new SolidBrush(Color.Orange);
                 case (ConnectionColour.Red):
                     return new SolidBrush(Color.Red);
                 case (ConnectionColour.Undefined):
-                    return new SolidBrush(Color.Gray);
+                    return new SolidBrush(Color.DimGray);
                 case (ConnectionColour.White):
                     return new SolidBrush(Color.White);
             }

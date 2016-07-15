@@ -9,17 +9,12 @@ namespace Ticket_to_ride.Model
     public class Connection
     {
         Location _a, _b;
+        private int _originalWeight;
         int _weight;
         int _risk;
         bool selected = false;
         public Player _owner;
         public ConnectionColour _colour;
-
-        public bool Selected
-        {
-            get { return selected; }
-            set { selected = value; }
-        }
 
         public int WeightForComputation { get; set; }
 
@@ -29,14 +24,19 @@ namespace Ticket_to_ride.Model
             set { _owner = value; }
         }
 
+        public bool Selected
+        {
+            get { return selected; }
+            set { selected = value; }
+        }
+
         public Connection(Location a, Location b, int weight, ConnectionColour colour)
         {
             _a = a;
             _b = b;
             _weight = weight;
+            _originalWeight = weight;
             _colour = colour; 
-        
-
         }
 
         public int Risk
@@ -63,6 +63,10 @@ namespace Ticket_to_ride.Model
             set { _weight = value; }
         }
 
-
+        public int OriginalWeight
+        {
+            get { return _originalWeight; }
+            set { _originalWeight = value; }
+        }
     }
 }

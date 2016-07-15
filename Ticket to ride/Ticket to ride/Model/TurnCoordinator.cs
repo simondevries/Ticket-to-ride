@@ -16,9 +16,11 @@ namespace Ticket_to_ride.Model
         private readonly Map _map;
         private int _movesLeftInTurn;
         private const int TOTAL_CARD_DRAWS = 2;
+        private ScoreCalculator _scoreCalculator;
 
-        public TurnCoordinator(List<Player> players, Map map)
+        public TurnCoordinator(List<Player> players, Map map, ScoreCalculator scoreCalculator)
         {
+            _scoreCalculator = scoreCalculator;
             _players = players;
             _currentTurn = players[0]._playerType;
             _map = map;
@@ -33,14 +35,14 @@ namespace Ticket_to_ride.Model
             IncrementTurn();
             _movesLeftInTurn = 2;
             _currentTurn = _players[turn]._playerType;
-            if (_currentTurn == PlayerType.Human)
+            CheckIfNeedToPlayAiTurn();
+        }
+
+        private void CheckIfNeedToPlayAiTurn()
+        {
+            if (_currentTurn == PlayerType.Ai)
             {
-                //Do noting
-                Console.WriteLine("Please perform an action");
-            }
-            else
-            {
-                Ai a = (Ai)_players[turn];
+                Ai a = (Ai) _players[turn];
                 a.PerformTurn(_map);
             }
         }
@@ -50,7 +52,7 @@ namespace Ticket_to_ride.Model
             if (_isLastRound && lastRoundPlayerId == _players[turn]._id)
             {
                 MessageBox.Show("Game Over");
-
+                MessageBox.Show(_scoreCalculator.CalculateEndGameScore(_players));
             }
 
             if (_players[turn].HasFinished)

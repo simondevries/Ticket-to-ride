@@ -1,5 +1,6 @@
 ﻿using System;
 using Ticket_to_ride.Model;
+// ReSharper disable RedundantLogicalConditionalExpressionOperand
 
 
 namespace Ticket_to_ride.Services
@@ -11,8 +12,10 @@ namespace Ticket_to_ride.Services
         public static bool PlaceTrain(Connection connection, Map map, Player owner){
             try
             {
+                
                 if (owner._availableTrains > connection.Weight &&
-                    owner.PlayerTrainHand.SpendCardsIfPossible(connection))
+                    owner.PlayerTrainHand.SpendCardsIfPossible(connection) ||
+                    (Settings.AiCanAffordAnything && owner._playerType == PlayerType.Ai))
                 {
                     owner.UseTrains(connection.Weight);
                     map.setWeight(connection, 0);

@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Windows.Documents;
 using System.Windows.Forms;
-using System.Windows.Media;
 using Ticket_to_ride.Services;
 using Ticket_to_ride.Model;
 using Brush = System.Drawing.Brush;
@@ -16,17 +14,20 @@ namespace Ticket_to_ride
 {
     public partial class Form1 : Form
     {
-
-        const double size = 1.0;
-        Game _game;
+        private double zoomScale = 1.0;
+        private Game _game;
+        private readonly Map _map;
+        private bool _hasGameBegun;
+        private const string TXT_NUMBER_OF_AI_TEXT = "Please enter number of Ai";
+        private const string TXT_NUMBER_OF_HUMANS_TEXT = "Please enter number of Humans";
+        private  Size _pnlViewOriginalSize = new Size(1041, 720);
         public Form1()
         {
+            _map = new MapGenerator().CreateMap();
+            _game = new Game(_map);
             InitializeComponent();
-            Map map = new MapGenerator().CreateMap();
-            int numberOfHumans = 2;
-            int numberOfAi = 0;
-            _game = new Game(map, numberOfAi, numberOfHumans);
-            _game.Start();
+            pnlView.Size = _pnlViewOriginalSize;
+
         }
 
         private void pnlView_Paint(object sender, PaintEventArgs e)
@@ -36,6 +37,10 @@ namespace Ticket_to_ride
 
         void PaintGui()
         {
+
+            txtNumberOfAi.Text = TXT_NUMBER_OF_AI_TEXT;
+            txtNumberOfHumans.Text = TXT_NUMBER_OF_HUMANS_TEXT;
+
             Map map  = _game.GetMap();
 
             TrainDeck deck = _game.GetDeck();
@@ -50,32 +55,80 @@ namespace Ticket_to_ride
 
             deckSize.Text = "Cards left: " + deck.CardsRemaining;
 
-            _game.GetTurnPlayerType();
-            DisplayTrainCards();
-            DisplayRouteCards();
-
-            LblTrainsRemaining.Text = string.Format("Remaining trains{0}", _game.TrainsRemaining());
-            pnlView.BackColor = Color.White;
-
-
             Brush brushBlack = new SolidBrush(Color.Black);
             Brush brushWhite = new SolidBrush(Color.White);
-            Font font = new Font(FontFamily.GenericSansSerif, 15);
+            Brush brushRouteCardLocation = new SolidBrush(Color.Red);
+            Font font = new Font(FontFamily.GenericSansSerif, 12);
 
-
-            string turnText = _game.GetTurnPlayerType() == PlayerType.Ai ? "Ai's turn" : "Your turn";
-            Text = turnText;
-            
-
-            foreach (Location _location in map.getLocations())
+            PlayerRouteHand playerTrainHand = new PlayerRouteHand();
+            if (_hasGameBegun)
             {
-                int _x = (int)(_location.X * size - _location.Width / 2);
-                int _y = (int)(_location.Y * size - _location.Width / 2);
+                DisplayTrainCards();
 
-                pnlView.CreateGraphics().FillEllipse(brushBlack, _x, _y, _location.Width, _location.Width);
-                pnlView.CreateGraphics().DrawString(_location.Identifier, font, brushWhite, _x + (2), _y);
+                playerTrainHand = _game.GetPlayersRouteHand(_game.GetPlayerId());
+                LstRouteCards.Items.Clear();
+                foreach (RouteCard card in playerTrainHand.GetRoutes())
+                {
+                    LstRouteCards.Items.Add(card);
+                }
+
+                lblScore.Text = _game.GetScoreBoard();
+                LblTrainsRemaining.Text = string.Format("Remaining trains: {0}", _game.TrainsRemaining());
+                pnlView.BackColor = Color.White;
+
+                string turnText = _game.GetTurnPlayerType() == PlayerType.Ai ? "Ai's turn" : "Your turn";
+                Text = turnText;
+                lblCurrentTurn.Text = string.Format("Turn: Player {0}", _game.GetPlayerId());
             }
 
+            _currentRouteLocationColour = -1;
+            Dictionary<int, Brush> locationPair = new Dictionary<int, Brush>();
+
+            foreach (RouteCard routeCard in playerTrainHand.GetRoutes())
+            {
+                Brush locationColourForRoutePair = GetLocationColourForRoutePair();
+                //todo convert id to int
+                //todo when two cards are at the same start- this will beome redundat once we have proper cards
+                try
+                {
+                    locationPair.Add(Convert.ToInt32(routeCard.GetStartLocation().Identifier),
+                        locationColourForRoutePair);
+                    locationPair.Add(Convert.ToInt32(routeCard.GetEndLocation().Identifier), locationColourForRoutePair);
+                }
+                catch 
+                {
+                    
+                }
+            }
+
+
+
+            foreach (Location loction in map.getLocations())
+            {
+                int _x = (int)(loction.X * zoomScale - loction.Width / 2);
+                int _y = (int)(loction.Y * zoomScale - loction.Width / 2);
+
+
+                if (locationPair.ContainsKey(Convert.ToInt32(loction.Identifier)))
+                {
+                    pnlView.CreateGraphics().FillEllipse(locationPair[Convert.ToInt32(loction.Identifier)], _x-3, _y-3, loction.Width+6, loction.Width+6);
+                }
+                else
+                {
+                    pnlView.CreateGraphics().FillEllipse(brushBlack, _x-3, _y-3, loction.Width+6, loction.Width+6);
+                }
+
+                pnlView.CreateGraphics().FillEllipse(brushWhite, _x+2, _y+2, loction.Width-4, loction.Width-4);
+
+                if (Convert.ToInt32(loction.Identifier) < 10)
+                {
+                    pnlView.CreateGraphics().DrawString(loction.Identifier, font, brushBlack, _x + (5), _y + 3);
+                }
+                else
+                {
+                    pnlView.CreateGraphics().DrawString(loction.Identifier, font, brushBlack, _x + (1), _y + 2);
+                }
+            }
 
             DrawConnections(map, brushWhite);
         }
@@ -99,10 +152,10 @@ namespace Ticket_to_ride
                 }
                 processedConnections.Add(connection);
 
-                int connectionAX = (int) (connection.A.X*size);
-                int connectionAY = (int) (connection.A.Y*size);
-                int connectionBX = (int) (connection.B.X*size);
-                int connectionBY = (int) (connection.B.Y*size);
+                int connectionAX = (int) (connection.A.X*zoomScale);
+                int connectionAY = (int) (connection.A.Y*zoomScale);
+                int connectionBX = (int) (connection.B.X*zoomScale);
+                int connectionBY = (int) (connection.B.Y*zoomScale);
 
                 Point point1 = new Point(connectionAX, connectionAY);
                 Point point2 = new Point(connectionBX, connectionBY);
@@ -135,6 +188,8 @@ namespace Ticket_to_ride
                     Pen backgroundPen = new Pen(brushWhite, 10);
 
 
+                    Pen borderPen = new Pen(Color.Gray, 8);
+                    pnlView.CreateGraphics().DrawLine(borderPen, new Point(newx, newy), new Point(newx2, newy2));
                     pnlView.CreateGraphics().DrawLine(pen, new Point(newx, newy), new Point(newx2, newy2));
 
 
@@ -153,15 +208,7 @@ namespace Ticket_to_ride
             }
         }
 
-        private void DisplayRouteCards()
-        {
-            PlayerRouteHand playerTrainHand = _game.GetPlayersRouteHand(_game.GetPlayerId());
-            LstRouteCards.Items.Clear();
-            foreach (RouteCard card in playerTrainHand.GetRoutes())
-            {
-                LstRouteCards.Items.Add(card);
-            }
-        }
+
 
         private void DisplayTrainCards()
         {
@@ -187,6 +234,7 @@ namespace Ticket_to_ride
                 _game.SendTrainPlacement(connection);
                 //  _game.nextTurn();
                 PaintGui();
+                
             }
         }
 
@@ -195,10 +243,10 @@ namespace Ticket_to_ride
             Map map = _game.GetMap();
             foreach (Connection connection in map.getConnections())
             {
-                int aX = (int)(connection.A.X * size);
-                int aY = (int)(connection.A.Y * size);
-                int bX = (int)(connection.B.X * size);
-                int bY = (int)(connection.B.Y * size);
+                int aX = (int)(connection.A.X * zoomScale);
+                int aY = (int)(connection.A.Y * zoomScale);
+                int bX = (int)(connection.B.X * zoomScale);
+                int bY = (int)(connection.B.Y * zoomScale);
                 int width = connection.A.Width / 2;
                 if ((((x - width) > aX && (x + width) < bX) || ((x - width) < aX && (x + width) > bX)) &&
                     (((y - width) > aY && (y + width) < bY) || ((y - width) < aY && (y + width) > bY)))
@@ -212,36 +260,109 @@ namespace Ticket_to_ride
         private void fromTop_Click(object sender, EventArgs e)
         {
             _game.PlayerPickedFromTop();
+            PaintGui();
         }
 
         private void BtnPickRouteCard_Click(object sender, EventArgs e)
         {
             _game.PickRouteCards();
+            PaintGui();
         }
 
         private void boardCardOne_Click(object sender, EventArgs e)
         {
             _game.PickFaceUpCard(0);
+            PaintGui();
         }
 
         private void boardCardTwo_Click(object sender, EventArgs e)
         {
             _game.PickFaceUpCard(1);
+            PaintGui();
         }
 
         private void boardCardThree_Click(object sender, EventArgs e)
         {
             _game.PickFaceUpCard(2);
+            PaintGui();
         }
 
         private void boardCardFour_Click(object sender, EventArgs e)
         {
             _game.PickFaceUpCard(3);
+            PaintGui();
         }
 
         private void boardCardFive_Click(object sender, EventArgs e)
         {
             _game.PickFaceUpCard(4);
+            PaintGui();
+        }
+        private void pnlNumberOfPlayers_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            int numberOfAi = txtNumberOfAi.Text == TXT_NUMBER_OF_AI_TEXT ? 0 : Convert.ToInt32(txtNumberOfAi.Text);
+            int numberOfHumans = txtNumberOfHumans.Text == TXT_NUMBER_OF_HUMANS_TEXT ? 0 : Convert.ToInt32(txtNumberOfHumans.Text);
+            if (numberOfAi + numberOfHumans < 8 && numberOfHumans + numberOfAi > 0)
+            {
+                pnlNumberOfPlayers.Visible = false;
+                _game.Start(numberOfAi, numberOfHumans);
+                pnlGame.Enabled = true;
+                _hasGameBegun = true;
+                PaintGui();
+            }
+        }
+
+        private void txtNumberOfHumans_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtNumberOfAi_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private static readonly List<Brush> LocationColourForRoutePair = new List<Brush>
+        {
+            Brushes.Orange,
+            Brushes.Blue,
+            Brushes.Green,
+            Brushes.Purple,
+            Brushes.Maroon,
+            Brushes.Tomato,
+            Brushes.Turquoise,
+            Brushes.Sienna,
+            Brushes.PaleVioletRed,
+            Brushes.LightSlateGray
+        };
+
+        private int _currentRouteLocationColour = -1;
+
+        public Brush GetLocationColourForRoutePair()
+        {
+            if (_currentRouteLocationColour >= LocationColourForRoutePair.Count() )
+            {
+                _currentRouteLocationColour = -1;
+            }
+            _currentRouteLocationColour++;
+            return LocationColourForRoutePair[_currentRouteLocationColour];
+        }
+
+        private void trackBar1_Scroll(object sender, EventArgs e)
+        {
+            double scale = 1+ (0.30/trackBar1.Value);
+            zoomScale = scale;
+            Size zoomedPanelView = new Size((int)(_pnlViewOriginalSize.Width*scale), (int)(_pnlViewOriginalSize.Height * scale));
+
+            pnlView.Size = zoomedPanelView;
+            pnlView.Refresh();
         }
     }
+
+
 }

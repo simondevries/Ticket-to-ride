@@ -14,10 +14,10 @@ namespace Ticket_to_ride.Model
 
         private List<Brush> brushes = new List<Brush>
         {
-            new SolidBrush(Color.Red),
             new SolidBrush(Color.Blue),
             new SolidBrush(Color.Green),
             new SolidBrush(Color.Pink),
+            new SolidBrush(Color.Red),
             new SolidBrush(Color.LimeGreen),
             new SolidBrush(Color.Gold),
             new SolidBrush(Color.MediumPurple),

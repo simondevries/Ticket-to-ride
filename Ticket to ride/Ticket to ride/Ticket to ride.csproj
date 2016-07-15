@@ -56,6 +56,12 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\CardSelector.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\CardSelector.Designer.cs">
+      <DependentUpon>CardSelector.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\RouteTaskSelectorForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -96,9 +102,14 @@
     <Compile Include="Repository\RouteRepository.cs" />
     <Compile Include="Services\Graph\ShortestPath.cs" />
     <Compile Include="Model\Connection.cs" />
+    <Compile Include="Services\ScoreCalculator.cs" />
     <Compile Include="Services\TrianPlacer.cs" />
+    <Compile Include="Settings.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\CardSelector.resx">
+      <DependentUpon>CardSelector.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\RouteTaskSelectorForm.resx">
       <DependentUpon>RouteTaskSelectorForm.cs</DependentUpon>

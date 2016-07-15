@@ -29,8 +29,9 @@ namespace Ticket_to_ride.Model
             {
                 int startRouteNumber = random.Next(numberOfLocations);
                 int endRouteNumber = random.Next(numberOfLocations);
+                int points = random.Next(20);
 
-                RouteCard routeCard = new RouteCard(map.getLocation(startRouteNumber), map.getLocation(endRouteNumber), isHard);
+                RouteCard routeCard = new RouteCard(map.getLocation(startRouteNumber), map.getLocation(endRouteNumber), isHard, points);
                 deck.Add(routeCard);
             }
         }

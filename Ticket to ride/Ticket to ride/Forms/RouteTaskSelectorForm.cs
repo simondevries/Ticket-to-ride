@@ -32,14 +32,13 @@ namespace Ticket_to_ride.Forms
             _routeFour = routeFour;
 
 
-            string routeOneText = routeOne.GetStartLocation().Identifier + " to " + routeOne.GetEndLocation().Identifier;
-            string routeTwoText = routeTwo.GetStartLocation().Identifier + " to " + routeTwo.GetEndLocation().Identifier;
-            string routeThreeText = routeThree.GetStartLocation().Identifier + " to " + routeThree.GetEndLocation().Identifier;
+            string routeOneText = routeOne.ToString();
+            string routeTwoText = routeTwo.ToString();
+            string routeThreeText = routeThree.ToString();
             string routeFourText = "";
             if (RouteCardSelectorState == RouteCardSelectorState.InitialPickup)
             {
-                routeFourText = routeFour.GetStartLocation().Identifier + " to " +
-                                       routeFour.GetEndLocation().Identifier;
+                routeFourText = routeFour.ToString();
             }
 
             InitializeComponent();

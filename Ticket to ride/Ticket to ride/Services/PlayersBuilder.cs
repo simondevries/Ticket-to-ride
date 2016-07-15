@@ -25,7 +25,7 @@ namespace Ticket_to_ride.Services
             for (int i = 0; i < _numberOfHumans; i++)
             {
                 PlayerRouteHand routeCardsForPlayer = new PlayerRouteHand(_routeDeck.PullStartingFourRouteCards());
-                players.Add(new Human(routeCardsForPlayer, i, brushBuilder.GetNextColour(), _trainDeck));
+                players.Add(new Human(routeCardsForPlayer, i, brushBuilder. GetNextColour(), _trainDeck));
             }
 
             for (int i = 0; i < _numberOfAi; i++)

@@ -54,7 +54,7 @@
             // 
             this.LblRouteTwo.AutoSize = true;
             this.LblRouteTwo.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LblRouteTwo.Location = new System.Drawing.Point(231, 9);
+            this.LblRouteTwo.Location = new System.Drawing.Point(14, 120);
             this.LblRouteTwo.Name = "LblRouteTwo";
             this.LblRouteTwo.Size = new System.Drawing.Size(66, 24);
             this.LblRouteTwo.TabIndex = 5;
@@ -64,7 +64,7 @@
             // 
             this.LblRouteThree.AutoSize = true;
             this.LblRouteThree.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LblRouteThree.Location = new System.Drawing.Point(410, 9);
+            this.LblRouteThree.Location = new System.Drawing.Point(14, 228);
             this.LblRouteThree.Name = "LblRouteThree";
             this.LblRouteThree.Size = new System.Drawing.Size(66, 24);
             this.LblRouteThree.TabIndex = 6;
@@ -74,7 +74,7 @@
             // 
             this.LblRouteFour.AutoSize = true;
             this.LblRouteFour.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LblRouteFour.Location = new System.Drawing.Point(600, 8);
+            this.LblRouteFour.Location = new System.Drawing.Point(13, 333);
             this.LblRouteFour.Name = "LblRouteFour";
             this.LblRouteFour.Size = new System.Drawing.Size(66, 24);
             this.LblRouteFour.TabIndex = 7;
@@ -107,7 +107,7 @@
             // BtnRouteTwo
             // 
             this.BtnRouteTwo.AutoSize = true;
-            this.BtnRouteTwo.Location = new System.Drawing.Point(234, 71);
+            this.BtnRouteTwo.Location = new System.Drawing.Point(17, 182);
             this.BtnRouteTwo.Name = "BtnRouteTwo";
             this.BtnRouteTwo.Size = new System.Drawing.Size(81, 17);
             this.BtnRouteTwo.TabIndex = 10;
@@ -117,7 +117,7 @@
             // BtnRouteThree
             // 
             this.BtnRouteThree.AutoSize = true;
-            this.BtnRouteThree.Location = new System.Drawing.Point(413, 71);
+            this.BtnRouteThree.Location = new System.Drawing.Point(17, 290);
             this.BtnRouteThree.Name = "BtnRouteThree";
             this.BtnRouteThree.Size = new System.Drawing.Size(81, 17);
             this.BtnRouteThree.TabIndex = 11;
@@ -127,7 +127,7 @@
             // BtnRouteFour
             // 
             this.BtnRouteFour.AutoSize = true;
-            this.BtnRouteFour.Location = new System.Drawing.Point(603, 71);
+            this.BtnRouteFour.Location = new System.Drawing.Point(16, 396);
             this.BtnRouteFour.Name = "BtnRouteFour";
             this.BtnRouteFour.Size = new System.Drawing.Size(81, 17);
             this.BtnRouteFour.TabIndex = 12;
@@ -136,7 +136,7 @@
             // 
             // btnContinue
             // 
-            this.btnContinue.Location = new System.Drawing.Point(334, 105);
+            this.btnContinue.Location = new System.Drawing.Point(17, 447);
             this.btnContinue.Name = "btnContinue";
             this.btnContinue.Size = new System.Drawing.Size(93, 39);
             this.btnContinue.TabIndex = 13;
@@ -148,7 +148,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(770, 156);
+            this.ClientSize = new System.Drawing.Size(379, 539);
             this.Controls.Add(this.btnContinue);
             this.Controls.Add(this.BtnRouteFour);
             this.Controls.Add(this.BtnRouteThree);

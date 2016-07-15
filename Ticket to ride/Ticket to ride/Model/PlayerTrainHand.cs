@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Ticket_to_ride.Forms;
 
 namespace Ticket_to_ride.Model
 {
@@ -20,6 +21,32 @@ namespace Ticket_to_ride.Model
         {
             //placein order??
             _cards.Add(card);
+        }
+
+        private List<CardType> AvailableCardTypes(int weight)
+        {
+            List<CardType> cardTypes = new List<CardType>();
+            if (_cards.Count(type => type == CardType.Black) >= weight)
+            {
+                cardTypes.Add(CardType.Black);
+            }
+            if (_cards.Count(type => type == CardType.Orange) >= weight)
+            {
+                cardTypes.Add(CardType.Orange);
+            }
+            if (_cards.Count(type => type == CardType.Pink) >= weight)
+            {
+                cardTypes.Add(CardType.Pink);
+            }
+            if (_cards.Count(type => type == CardType.Red) >= weight)
+            {
+                cardTypes.Add(CardType.Red);
+            }
+            if (_cards.Count(type => type == CardType.White) >= weight)
+            {
+                cardTypes.Add(CardType.White);
+            }
+            return cardTypes;
         }
 
         public bool TryPickFromTop(TrainDeck trainDeck)
@@ -47,8 +74,25 @@ namespace Ticket_to_ride.Model
 
             if (compadableCards.Count >= connection.Weight)
             {
+                if (connection._colour == ConnectionColour.Undefined)
+                {
+                    List<CardType> availableCardTypes = AvailableCardTypes(connection.Weight);
+                    if (availableCardTypes.Count == 0)
+                    {
+                        return false;
+                    }
+                    CardSelector cardSelector = new CardSelector(availableCardTypes);
+                    cardSelector.ShowDialog();
+                    for (int i = 0; i < connection.Weight; i++)
+                    {
+                        _cards.Remove(cardSelector.Result);
+                        _trainDeck.AddToDiscardPile(cardSelector.Result);
+                    }
+                    return true;
+                }
+
                 List<CardType> sortedCard = compadableCards.OrderBy(card => card).ToList();
-                for(int i = 0; i < connection.Weight; i++)
+                for (int i = 0; i < connection.Weight; i++)
                 {
                     _cards.Remove(sortedCard[i]);
                     _trainDeck.AddToDiscardPile(sortedCard[i]);
@@ -66,7 +110,7 @@ namespace Ticket_to_ride.Model
                 CardType faceUpCardAtIndex = _trainDeck.PickFaceUpCard(index);
                 if (faceUpCardAtIndex == CardType.Empty)
                 {
-                        return false;
+                    return false;
                 }
                 AddCard(faceUpCardAtIndex);
                 return true;
