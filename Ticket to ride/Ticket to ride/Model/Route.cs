@@ -9,7 +9,7 @@ namespace Ticket_to_ride.Model
         List<Connection> _connections;
         string _identifier;
         //todo make prop
-        public List<> startAndEnd;
+        public List<DestinationPair> startAndEnd;
 
         public Route(string _identifier)
         {

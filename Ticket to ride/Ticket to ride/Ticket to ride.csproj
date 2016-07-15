@@ -91,6 +91,9 @@
     <Compile Include="Services\Ai.cs" />
     <Compile Include="Model\Location.cs" />
     <Compile Include="Model\Map.cs" />
+    <Compile Include="Services\AiRouteCoordinator.cs" />
+    <Compile Include="Services\AiRouteGenerator.cs" />
+    <Compile Include="Services\DestinationPair.cs" />
     <Compile Include="Services\Game.cs" />
     <Compile Include="Services\MyExtensions.cs" />
     <Compile Include="Services\PlayersBuilder.cs" />

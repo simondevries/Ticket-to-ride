@@ -8,10 +8,7 @@ using Ticket_to_ride.Model;
 
 namespace Ticket_to_ride.Services
 {
-
-
-
-    class ShortestPathGenerator
+    public class ShortestPathGenerator
     {
         List<Connection> _connections;
         List<Location> _locations;
