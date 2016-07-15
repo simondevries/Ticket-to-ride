@@ -30,6 +30,12 @@ namespace Ticket_to_ride.Model
             set { selected = value; }
         }
 
+        public bool HasSameStartAndEnd(Connection connectionToCompare)
+        {
+            return connectionToCompare.A == A && connectionToCompare.B == B ||
+            connectionToCompare.A == B && connectionToCompare.B == A;
+        }
+
         public Connection(Location a, Location b, int weight, ConnectionColour colour)
         {
             _a = a;

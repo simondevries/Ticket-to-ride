@@ -78,6 +78,7 @@
     <Compile Include="Model\NoCardsException.cs" />
     <Compile Include="Model\RouteCardDeck.cs" />
     <Compile Include="Model\RouteCardSelectorState.cs" />
+    <Compile Include="Model\RouteCombinationMap.cs" />
     <Compile Include="Model\TrainDeck.cs" />
     <Compile Include="Model\GuiLocation.cs" />
     <Compile Include="Model\PlayerTrainHand.cs" />
@@ -105,6 +106,8 @@
     <Compile Include="Repository\RouteRepository.cs" />
     <Compile Include="Services\Graph\ShortestPath.cs" />
     <Compile Include="Model\Connection.cs" />
+    <Compile Include="Services\RouteCombinationBuilder.cs" />
+    <Compile Include="Services\RouteCombinationReader.cs" />
     <Compile Include="Services\ScoreCalculator.cs" />
     <Compile Include="Services\TrianPlacer.cs" />
     <Compile Include="Settings.cs" />

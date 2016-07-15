@@ -5,40 +5,21 @@ namespace Ticket_to_ride.Model
 {
     class RiskMapGenerator
     {
-        Map _riskMap;
+        readonly Map _riskMap;
 
         public RiskMapGenerator(Map riskMap)
         {
             _riskMap = riskMap;
         }
 
-        public void getConnectionWithGreatestRisk(Route chosenRoute,  int playerId)
+        public void GetConnectionWithGreatestRisk(PlayerRouteHand chosenRoute, Route choosenRoute, int playerId)
         {
-            clearRisk();
+            ClearRisk();
 
-            foreach (DestinationPair destinationPair in chosenRoute.startAndEnd)
+            foreach (RouteCard route in chosenRoute.GetRoutes())
             {
-                List<Connection> connectionsForSection = new List<Connection>();
-                bool start = false;
-                foreach (Connection connection in chosenRoute.Connections)
-                {
-                    if (connection.A == destinationPair.StartLocation)
-                    {
-                        start = true;
-                    }
-                    if (connection.A == destinationPair.EndLocation)
-                    {
-                        break;
-                    }
 
-                    if (start)
-                    {
-                        connectionsForSection.Add(connection);
-                    }
-                }
-
-
-                foreach (Connection connection in connectionsForSection)
+                foreach (Connection connection in choosenRoute.Connections)
                 {
                     if (connection.Weight == 0)
                     {
@@ -47,35 +28,19 @@ namespace Ticket_to_ride.Model
                     int originalWeight = connection.Weight;
                     _riskMap.setWeight(connection, 9999);
                     ShortestPathGenerator shortestPath = new ShortestPathGenerator(_riskMap.getLocations(), _riskMap.getConnections());
-                    Dictionary<Location, Route> _shortestLocations = shortestPath.CalculateMinCost(destinationPair.StartLocation, playerId);
+                    Dictionary<Location, Route> _shortestLocations = shortestPath.CalculateMinCost(route.GetStartLocation(), playerId);
                     //todo Cost should be added if route overlap in multiple occasions
-                    int routeCost = _shortestLocations[destinationPair.EndLocation].Cost;
-                    setRisk(connection, routeCost);
+                    int routeCost = connection.Risk;
+                    routeCost += _shortestLocations[route.GetEndLocation()].Cost;
+                    SetRisk(connection, routeCost);
                     
                     _riskMap.setWeight(connection, originalWeight);
                 }  
             }
-
-           
-
-//            foreach (Connection connection in chosenRoute.Connections)
-//            {
-//                if (connection.Weight == 0)
-//                {
-//                    continue;
-//                }
-//                int originalWeight = connection.Weight;
-//                _riskMap.setWeight(connection, 9999);
-//                ShortestPathGenerator shortestPath = new ShortestPathGenerator(_riskMap.getLocations(), _riskMap.getConnections());
-//                Dictionary<Location, Route> _shortestLocations = shortestPath.CalculateMinCost(aiCard.GetEndLocation(), playerId);
-//                int routeCost = _shortestLocations[aiCard.GetThirdLocation()].Cost;
-//                setRisk(connection, routeCost);
-//                _riskMap.setWeight(connection, originalWeight);
-//            }
         }
 
 
-        private void clearRisk()
+        private void ClearRisk()
         {
             foreach (Connection connection in _riskMap.getConnections())
             {
@@ -84,7 +49,7 @@ namespace Ticket_to_ride.Model
         }
 
 
-        private void setRisk(Connection connectionToCheck, int risk)
+        private void SetRisk(Connection connectionToCheck, int risk)
         {
             //todo can I use index instead
             foreach (Connection connection in _riskMap.getConnections())

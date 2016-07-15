@@ -33,16 +33,29 @@ namespace Ticket_to_ride.Services
             Route finalRouteWithDuplicates = new Route("MainRoute");
             finalRouteWithDuplicates.Cost = 0;
 
-
-            int[] order = new int[destinations.Count];
-            for (int i = 0; i < destinations.Count; i++)
+            List<Route> allPossibleRoutes = new List<Route>();
+            RouteCombinationMap routeSolutionMap = new RouteCombinationBuilder().Build(destinations.Count);
+            foreach (RouteSolution routeSolution in routeSolutionMap.Solutions)
             {
-                order[i] = i;
+                Route sumOfAllRoutesForARouteSolution = new Route("sumOfRoutes");
+                //When there are multiple sub routes then we need to add them up (i.e. a route on the east of map + west of map)
+                foreach (ConnectedRoute connectedRoute in routeSolution.Solution)
+                {
+                    sumOfAllRoutesForARouteSolution.CombineRoutes(AiRouteGenerator.GetRouteForThisRouteCombination(connectedRoute.Connection, destinationPairs, finalRouteWithDuplicates, destinations));
+                }
+                allPossibleRoutes.Add(sumOfAllRoutesForARouteSolution);
             }
-
-            Route finalRoute = AiRouteGenerator.GetCostForEachRouteCombination(order, destinationPairs, finalRouteWithDuplicates, destinations);
-            
-
+            //PickBest Route
+            Route finalRoute = new Route("Final Route");
+            int lowestRouteCost = int.MaxValue;
+            foreach (Route route in allPossibleRoutes)
+            {
+                if (route.Cost < lowestRouteCost)
+                {
+                    finalRoute = route;
+                    lowestRouteCost = finalRoute.Cost;
+                }
+            }
 
             return finalRoute;
         }

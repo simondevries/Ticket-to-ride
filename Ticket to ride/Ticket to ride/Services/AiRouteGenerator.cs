@@ -7,10 +7,10 @@ namespace Ticket_to_ride.Services
 {
     public class AiRouteGenerator
     {
-        public static Route GetCostForEachRouteCombination(int[] order, List<DestinationPair> destinationPairs, Route finalRouteWithDuplicates,
+        public static Route GetRouteForThisRouteCombination(List<int> order, List<DestinationPair> destinationPairs, Route finalRouteWithDuplicates,
             List<Location> destinations)
         {
-            for (int i = 0; i < order.Length - 1; i++)
+            for (int i = 0; i < order.Count - 1; i++)
             {
                 int startIndex = order[i];
                 int endIndex = order[i + 1];
@@ -34,8 +34,7 @@ namespace Ticket_to_ride.Services
                 bool foundElsewhere = false;
                 foreach (Connection connectionCompare in finalRouteWithDuplicates.Connections)
                 {
-                    if ((connection.A == connectionCompare.A && connection.B == connectionCompare.B ||
-                         connection.B == connectionCompare.A && connection.A == connectionCompare.B) &&
+                    if ((connection.HasSameStartAndEnd(connectionCompare)) &&
                         connection != connectionCompare)
                     {
                         foundElsewhere = true;
