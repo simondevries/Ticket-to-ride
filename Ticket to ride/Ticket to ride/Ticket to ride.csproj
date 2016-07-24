@@ -76,6 +76,7 @@
     <Compile Include="Model\CardType.cs" />
     <Compile Include="Model\ConnectionColourComparer.cs" />
     <Compile Include="Model\NoCardsException.cs" />
+    <Compile Include="Model\PlayerScore.cs" />
     <Compile Include="Model\RouteCardDeck.cs" />
     <Compile Include="Model\RouteCardSelectorState.cs" />
     <Compile Include="Model\RouteCombinationMap.cs" />
@@ -110,6 +111,7 @@
     <Compile Include="Repository\RouteRepository.cs" />
     <Compile Include="Services\Graph\ShortestPath.cs" />
     <Compile Include="Model\Connection.cs" />
+    <Compile Include="Services\RouteExistsBetweenLocationsValidator.cs" />
     <Compile Include="Services\RouteCombinationBuilder.cs" />
     <Compile Include="Services\RouteCombinationReader.cs" />
     <Compile Include="Services\ScoreCalculator.cs" />

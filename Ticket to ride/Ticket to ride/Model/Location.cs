@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Ticket_to_ride.Model
 {
@@ -13,11 +9,23 @@ namespace Ticket_to_ride.Model
         string _identifier;
         public Location()
         {
-
+            AssociatedConnections = new List<Connection>();
         }
+
+        public List<Connection> AssociatedConnections
+        {
+            get;
+            set;
+        }
+
+        public void AddToAssociatedConnections(Connection connection)
+        {
+            AssociatedConnections.Add(connection);
+        }
+
         public string Identifier
         {
-            get { return this._identifier; }
+            get { return _identifier; }
             set { this._identifier = value; }
         }
         public override string ToString()

@@ -8,22 +8,25 @@ namespace Ticket_to_ride.Services
     public class ScoreCalculator
     {
         private readonly Map _map;
-        private Dictionary<int, int> _scoreBoard;
+        private Dictionary<int, PlayerScore> _scoreBoard;
+
         private int _numberOfPlayers;
+        private RouteExistsBetweenLocationsValidator _routeExistsBetweenLocationsValidator;
 
         public ScoreCalculator(Map map, int numberOfPlayers)
         {
             _numberOfPlayers = numberOfPlayers;
             _map = map;
             CreateNewScoreBoard();
+            _routeExistsBetweenLocationsValidator = new RouteExistsBetweenLocationsValidator();
         }
 
         private void CreateNewScoreBoard()
         {
-            _scoreBoard = new Dictionary<int, int>();
+            _scoreBoard = new Dictionary<int, PlayerScore>();
             for (int i = 0; i < _numberOfPlayers; i++)
             {
-                _scoreBoard.Add(i, 0);
+                _scoreBoard.Add(i, new PlayerScore());
             }
         }
 
@@ -43,16 +46,48 @@ namespace Ticket_to_ride.Services
 
                 if (connection.Owner != null)
                 {
-                    _scoreBoard[connection.Owner._id] += GetPointsForRouteLength(connection.OriginalWeight);
+                    _scoreBoard[connection.Owner._id].AddScore(GetPointsForRouteLength(connection.OriginalWeight));
                 }
             }
         }
 
-        public string CalculateEndGameScore(List<Player>  players)
+        public string CalculateEndGameScore(List<Player> players)
         {
             string output = "Final Score: \n";
             List<Connection> processedConnections = new List<Connection>();
 
+            CalculateScoreForTrains(processedConnections);
+
+            CalculateScoreForRouteCards(players);
+
+            //print
+            foreach (KeyValuePair<int, PlayerScore> keyValuePair in _scoreBoard)
+            {
+                output += String.Format("=======Player {0}=======\n Points: {1}.\n {2}", keyValuePair.Key, keyValuePair.Value.Score, keyValuePair.Value.Message);
+            }
+
+            return output;
+        }
+
+        private void CalculateScoreForRouteCards(List<Player> players)
+        {
+            //score for cards
+            foreach (Player player in players)
+            {
+                foreach (RouteCard route in player.PlayerRouteHand.GetRoutes())
+                {
+                    if (_routeExistsBetweenLocationsValidator.DoesRouteExist(route.GetStartLocation(),
+                        route.GetEndLocation(), _map, player))
+                    {
+                        _scoreBoard[player._id].AddScore(route.GetPoints());
+                        _scoreBoard[player._id].AddMessage(route.ToString());
+                    }
+                }
+            }
+        }
+
+        private void CalculateScoreForTrains(List<Connection> processedConnections)
+        {
             //score for trains
             CreateNewScoreBoard();
             foreach (Connection connection in _map.getConnections())
@@ -66,26 +101,10 @@ namespace Ticket_to_ride.Services
 
                 if (connection.Owner != null)
                 {
-                    _scoreBoard[connection.Owner._id] += GetPointsForRouteLength(connection.OriginalWeight);
+                    _scoreBoard[connection.Owner._id].AddScore(GetPointsForRouteLength(connection.OriginalWeight));
+                    _scoreBoard[connection.Owner._id].AddMessage(string.Format("{0} points for trains.", GetPointsForRouteLength(connection.OriginalWeight)));
                 }
             }
-
-            //score for cards
-            foreach (Player player in players)
-            {
-                foreach ( RouteCard route in player.PlayerRouteHand.GetRoutes())
-                {
-                    _scoreBoard[player._id] += route.GetPoints();
-                }
-            }
-
-            //print
-            foreach (KeyValuePair<int, int> keyValuePair in _scoreBoard)
-            {
-                output += String.Format("Player {0} got {1} points.\n", keyValuePair.Key, keyValuePair.Value);
-            }
-
-            return output;
         }
 
         private static int GetPointsForRouteLength(int originalWeight)
@@ -109,9 +128,9 @@ namespace Ticket_to_ride.Services
         public string GetScoreBoard()
         {
             string output = "Score\n";
-            foreach (KeyValuePair<int, int> keyValuePair in _scoreBoard)
+            foreach (KeyValuePair<int, PlayerScore> keyValuePair in _scoreBoard)
             {
-                output += String.Format("Player {0}: {1}\n", keyValuePair.Key, keyValuePair.Value);
+                output += String.Format("Player {0}: {1}\n", keyValuePair.Key+1, keyValuePair.Value);
             }
             return output;
         }

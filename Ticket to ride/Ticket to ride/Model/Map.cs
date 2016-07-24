@@ -14,6 +14,15 @@ namespace Ticket_to_ride.Model
             _connections = connection;
             _location = location;
             _numberOfLocations = _location.Count;
+
+            foreach (Connection con in connection)
+            {
+                con.A.AddToAssociatedConnections(con);
+                con.B.AddToAssociatedConnections(con);
+            }
+
+
+
         }
 
         public void setWeight(Connection connectionToSet, int weight){
