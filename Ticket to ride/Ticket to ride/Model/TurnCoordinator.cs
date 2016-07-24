@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Windows;
 using Ticket_to_ride.Services;
+using Ticket_to_ride.Services.Ai;
 
 namespace Ticket_to_ride.Model
 {
-    class TurnCoordinator
+    public class TurnCoordinator
     {
         PlayerType _currentTurn;
         List<Player> _players;
@@ -18,13 +19,18 @@ namespace Ticket_to_ride.Model
         private const int TOTAL_CARD_DRAWS = 2;
         private ScoreCalculator _scoreCalculator;
 
-        public TurnCoordinator(List<Player> players, Map map, ScoreCalculator scoreCalculator)
+        public TurnCoordinator( Map map, ScoreCalculator scoreCalculator)
         {
             _scoreCalculator = scoreCalculator;
-            _players = players;
-            _currentTurn = players[0]._playerType;
+            _players = new List<Player>();
             _map = map;
             _movesLeftInTurn = TOTAL_CARD_DRAWS;
+        }
+
+        public void SetPlayers(List<Player> players)
+        {
+            _players = players;
+            _currentTurn = players[0]._playerType;
         }
 
         public void NextTurn()
@@ -35,7 +41,10 @@ namespace Ticket_to_ride.Model
             IncrementTurn();
             _movesLeftInTurn = 2;
             _currentTurn = _players[turn]._playerType;
-            CheckIfNeedToPlayAiTurn();
+            if (Settings.AutoAiTurn)
+            {
+                CheckIfNeedToPlayAiTurn();
+            }
         }
 
         private void CheckIfNeedToPlayAiTurn()
@@ -71,6 +80,21 @@ namespace Ticket_to_ride.Model
         public void DecrementMove()
         {
             _movesLeftInTurn--;
+        }
+
+
+        public bool HasMovesLeft()
+        {
+            if (_movesLeftInTurn <= 0)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public void DecrementMoveAndTryProgressTurn()
+        {
+            DecrementMove();
             if (_movesLeftInTurn <= 0)
             {
                 NextTurn();

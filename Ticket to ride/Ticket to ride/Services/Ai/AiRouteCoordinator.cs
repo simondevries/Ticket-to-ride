@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using Ticket_to_ride.Model;
 
-namespace Ticket_to_ride.Services
+namespace Ticket_to_ride.Services.Ai
 {
     public class AiRouteCoordinator
     {
         private AiRouteGenerator _aiRouteGenerator;
-        private Ai _ai;
+        private readonly Ai _ai;
 
-        public AiRouteCoordinator(Ai ai)
+        public AiRouteCoordinator(Services.Ai.Ai ai)
         {
             _ai = ai;
             _aiRouteGenerator = new AiRouteGenerator();
@@ -30,13 +30,16 @@ namespace Ticket_to_ride.Services
 
             //todo go through all combinations
             //todo remove identifier?
-            Route finalRouteWithDuplicates = new Route("MainRoute");
-            finalRouteWithDuplicates.Cost = 0;
+            //todo refactor to another class
+
 
             List<Route> allPossibleRoutes = new List<Route>();
             RouteCombinationMap routeSolutionMap = new RouteCombinationBuilder().Build(destinations.Count);
             foreach (RouteSolution routeSolution in routeSolutionMap.Solutions)
             {
+                Route finalRouteWithDuplicates = new Route("MainRoute");
+                finalRouteWithDuplicates.Cost = 0;
+
                 Route sumOfAllRoutesForARouteSolution = new Route("sumOfRoutes");
                 //When there are multiple sub routes then we need to add them up (i.e. a route on the east of map + west of map)
                 foreach (ConnectedRoute connectedRoute in routeSolution.Solution)

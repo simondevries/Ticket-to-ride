@@ -41,6 +41,11 @@ namespace Ticket_to_ride.Model
             _deck.Shuffle();
         }
 
+        public bool FaceUpBoardContains(CardType cardType)
+        {
+            return FaceUpCards.Contains(cardType);
+        }
+
         public void AddToDiscardPile(CardType card)
         {
             _discardPile.Add(card);
@@ -125,6 +130,16 @@ namespace Ticket_to_ride.Model
                 return cardToReturn;
         }
 
+
+        public CardType PickFaceUpCard(CardType card)
+        {
+            for (int i = 0; i < FaceUpCards.Count; i++)
+            {
+                if(FaceUpCards[i] == card)
+                return PickFaceUpCard(i);
+            }
+            return CardType.Empty;
+        }
 
         public CardType PickFaceUpCard(int index)
         {

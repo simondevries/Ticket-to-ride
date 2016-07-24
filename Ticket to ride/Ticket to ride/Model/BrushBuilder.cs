@@ -16,7 +16,7 @@ namespace Ticket_to_ride.Model
         {
             new SolidBrush(Color.Blue),
             new SolidBrush(Color.Green),
-            new SolidBrush(Color.Pink),
+            new SolidBrush(Color.SaddleBrown),
             new SolidBrush(Color.Red),
             new SolidBrush(Color.LimeGreen),
             new SolidBrush(Color.Gold),

@@ -2,6 +2,7 @@
 {
     public static class Settings
     {
-        public const bool AiCanAffordAnything = true;
+        public const bool PlayersCanAffordAnything = false;
+        public const bool AutoAiTurn = true;
     }
 }

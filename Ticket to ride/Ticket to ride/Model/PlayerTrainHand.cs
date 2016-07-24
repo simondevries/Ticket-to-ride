@@ -60,10 +60,10 @@ namespace Ticket_to_ride.Model
             {
                 Console.WriteLine("Ran out of cards");
                 return false;
-            }
+            }   
         }
 
-        public bool SpendCardsIfPossible(Connection connection)
+        public bool SpendCardsIfPossible(Connection connection, PlayerType playerType, AiUndefindRouteCardSelector aiUndefindRouteCardSelector)
         {
             //todo this is only temoporary for testing
             //            if (_owner._playerType == PlayerType.Ai)
@@ -81,13 +81,32 @@ namespace Ticket_to_ride.Model
                     {
                         return false;
                     }
-                    CardSelector cardSelector = new CardSelector(availableCardTypes);
-                    cardSelector.ShowDialog();
-                    for (int i = 0; i < connection.Weight; i++)
+                    if (playerType == PlayerType.Human)
                     {
-                        _cards.Remove(cardSelector.Result);
-                        _trainDeck.AddToDiscardPile(cardSelector.Result);
+
+                        CardSelector cardSelector = new CardSelector(availableCardTypes);
+                        cardSelector.ShowDialog();
+                        for (int i = 0; i < connection.Weight; i++)
+                        {
+                            _cards.Remove(cardSelector.Result);
+                            _trainDeck.AddToDiscardPile(cardSelector.Result);
+                        }
                     }
+                    else
+                    {
+                        //todo pick the prefered card
+                        CardType selectedCard = aiUndefindRouteCardSelector.SelectCard(connection.Weight);
+                        if (selectedCard == CardType.Empty)
+                        {
+                            return false;
+                        }
+                        for (int i = 0; i < connection.Weight; i++)
+                        {
+                            _cards.Remove(selectedCard);
+                            _trainDeck.AddToDiscardPile(selectedCard);
+                        }
+                    }
+
                     return true;
                 }
 
@@ -120,6 +139,50 @@ namespace Ticket_to_ride.Model
                 Console.WriteLine("Ran out of cards");
             }
             return false;
+        }
+    }
+
+    public class AiUndefindRouteCardSelector
+    {
+        public List<CardType> PreferredCards = new List<CardType>();
+        public PlayerTrainHand PlayerTrainHand;
+
+        public AiUndefindRouteCardSelector(PlayerTrainHand playerTrainHand)
+        {
+            PlayerTrainHand = playerTrainHand;
+        }
+
+        public CardType SelectCard(int numberOfCardsRequired)
+        {
+            foreach (CardType card in PlayerTrainHand._cards)
+            {
+                if (PreferredCards.Contains(card) == false)
+                {
+                    if (PlayerTrainHand._cards.Count(type => type == card) >= numberOfCardsRequired)
+                    {
+                        return card;
+                    }
+                }
+           }
+            return CardType.Empty;
+        }
+
+        public void SetPreferredCardTypes(IEnumerable<CardType> preferredConnections)
+        {
+
+            foreach (CardType cardType in preferredConnections)
+            {
+                if (PreferredCards.Contains(cardType) == false && cardType != CardType.Empty)
+                {
+                    PreferredCards.Add(cardType);
+                }
+            }
+
+            //todo
+            if (PreferredCards.Count > 3)
+            {
+                PreferredCards = new List<CardType>();
+            }
         }
     }
 }

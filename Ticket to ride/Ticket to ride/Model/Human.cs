@@ -17,7 +17,7 @@ namespace Ticket_to_ride.Model
         public void PerformTurn(Map map, Connection trainPlacement, TurnCoordinator turn)
         {
             //TODO sdv validate cards here instead
-            if (TrianPlacer.PlaceTrain(trainPlacement, map, this))
+            if (TrianPlacer.CanSuccessfullyPlaceTrain(trainPlacement, map, this, null))
             {
                 turn.NextTurn();
             }

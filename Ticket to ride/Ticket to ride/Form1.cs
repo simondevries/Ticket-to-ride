@@ -78,7 +78,7 @@ namespace Ticket_to_ride
 
                 string turnText = _game.GetTurnPlayerType() == PlayerType.Ai ? "Ai's turn" : "Your turn";
                 Text = turnText;
-                lblCurrentTurn.Text = string.Format("Turn: Player {0}", _game.GetPlayerId());
+                lblCurrentTurn.Text = string.Format("Turn: Player {0}, {1}", _game.GetPlayerId() + 1, turnText);
             }
 
             _currentRouteLocationColour = -1;
@@ -214,8 +214,11 @@ namespace Ticket_to_ride
         {
             PlayerTrainHand hand = _game.GetPlayersHand(_game.GetPlayerId());
             playersCards.Items.Clear();
-            foreach (var card in hand._cards)
+            List<CardType> cardTypes = hand._cards;
+            cardTypes = cardTypes.OrderBy(card => card).ToList();
+            foreach (var card in cardTypes)
             {
+
                 playersCards.Items.Add(card);
             }
         }
@@ -237,6 +240,8 @@ namespace Ticket_to_ride
                 
             }
         }
+
+
 
         Connection GetConnectionAtPoint(int x, int y)
         {
@@ -361,6 +366,12 @@ namespace Ticket_to_ride
 
             pnlView.Size = zoomedPanelView;
             pnlView.Refresh();
+        }
+
+        private void btnPerformAiTurn_Click(object sender, EventArgs e)
+        {
+            _game.PerformAiTurn();
+            PaintGui();
         }
     }
 

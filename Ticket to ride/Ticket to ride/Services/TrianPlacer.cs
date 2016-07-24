@@ -9,13 +9,13 @@ namespace Ticket_to_ride.Services
     {
         public const int Inf = 10000;
 
-        public static bool PlaceTrain(Connection connection, Map map, Player owner){
+        public static bool CanSuccessfullyPlaceTrain(Connection connection, Map map, Player owner, AiUndefindRouteCardSelector aiUndefindRouteCardSelector){
             try
             {
                 
                 if (owner._availableTrains > connection.Weight &&
-                    owner.PlayerTrainHand.SpendCardsIfPossible(connection) ||
-                    (Settings.AiCanAffordAnything && owner._playerType == PlayerType.Ai))
+                    owner.PlayerTrainHand.SpendCardsIfPossible(connection, owner._playerType, aiUndefindRouteCardSelector) ||
+                    (Settings.PlayersCanAffordAnything))
                 {
                     owner.UseTrains(connection.Weight);
                     map.setWeight(connection, 0);

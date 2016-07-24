@@ -6,7 +6,7 @@ namespace Ticket_to_ride.Services
 {
     public class Game
     {
-        TurnCoordinator _turn;
+        TurnCoordinator _turnCoordinator;
         List<Player> _players;
         readonly TrainDeck _trainDeck;
         readonly Map _map;
@@ -29,20 +29,20 @@ namespace Ticket_to_ride.Services
         {
             _numberOfAi = numberOfAi;
             _numberOfHumans = numberOfHumans;
-            PlayersBuilder playersBuilder = new PlayersBuilder(_trainDeck, _routeDeck);
-            _players = playersBuilder.WithAi(_numberOfAi).WithHumans(_numberOfHumans).Build();
 
             _trainDeck.DealFaceUpCards();
 
             _scoreCalculator = new ScoreCalculator(_map, numberOfHumans + _numberOfAi);
-
-            _turn = new TurnCoordinator(_players, _map, _scoreCalculator);
+            _turnCoordinator = new TurnCoordinator(_map, _scoreCalculator);
+            PlayersBuilder playersBuilder = new PlayersBuilder(_trainDeck, _routeDeck, _turnCoordinator);
+            _players = playersBuilder.WithAi(_numberOfAi).WithHumans(_numberOfHumans).Build();
+            _turnCoordinator.SetPlayers(_players);
         }
 
         public void SendTrainPlacement(Connection connection)
         {
-            Human currentTurnPlayer = (Human)_turn.GetCurrentTurnPlayer();
-            currentTurnPlayer.PerformTurn(_map, connection, _turn);
+            Human currentTurnPlayer = (Human)_turnCoordinator.GetCurrentTurnPlayer();
+            currentTurnPlayer.PerformTurn(_map, connection, _turnCoordinator);
         }
 
         public Map GetMap()
@@ -73,53 +73,60 @@ namespace Ticket_to_ride.Services
 
         public void NextTurn()
         {
-            _turn.NextTurn();
+            _turnCoordinator.NextTurn();
+        }
+
+
+        public void PerformAiTurn()
+        {
+             Ai.Ai a = (Ai.Ai) _turnCoordinator.GetCurrentTurnPlayer();
+            a.PerformTurn(_map);
         }
 
         public PlayerType GetTurn()
         {
-            return _turn.GetCurrentTurnPlayerType();
+            return _turnCoordinator.GetCurrentTurnPlayerType();
         }
 
         public PlayerType GetTurnPlayerType()
         {
-            return _turn.GetCurrentTurnPlayerType();
+            return _turnCoordinator.GetCurrentTurnPlayerType();
         }
 
 
         public int GetPlayerId()
         {
-            return _turn.GetCurrentTurnPlayer()._id;
+            return _turnCoordinator.GetCurrentTurnPlayer()._id;
         }
 
         public void PlayerPickedFromTop()
         {
-            bool tryPickFromTopSucceeds = _turn.GetCurrentTurnPlayer().PlayerTrainHand.TryPickFromTop(_trainDeck);
+            bool tryPickFromTopSucceeds = _turnCoordinator.GetCurrentTurnPlayer().PlayerTrainHand.TryPickFromTop(_trainDeck);
             if (tryPickFromTopSucceeds)
             {
-                _turn.DecrementMove();
+                _turnCoordinator.DecrementMoveAndTryProgressTurn();
             }
             Console.WriteLine("No cards in Deck");
         }
 
         public void PickRouteCards()
         {
-            _turn.GetCurrentTurnPlayer().PlayerRouteHand.AddRoutes(_routeDeck.PullNonStartingFourRouteCards());
-            _turn.NextTurn();
+            _turnCoordinator.GetCurrentTurnPlayer().PlayerRouteHand.AddRoutes(_routeDeck.PullNonStartingFourRouteCards());
+            _turnCoordinator.NextTurn();
         }
 
         public void PickFaceUpCard(int index)
         {
-            bool tryPickFaceUpCard = _turn.GetCurrentTurnPlayer().PlayerTrainHand.TryPickFaceUpCard(index);
+            bool tryPickFaceUpCard = _turnCoordinator.GetCurrentTurnPlayer().PlayerTrainHand.TryPickFaceUpCard(index);
             if (tryPickFaceUpCard)
             {
-                _turn.DecrementMove();
+                _turnCoordinator.DecrementMoveAndTryProgressTurn();
             }
         }
 
         public int TrainsRemaining()
         {
-            return _turn.GetCurrentTurnPlayer()._availableTrains;
+            return _turnCoordinator.GetCurrentTurnPlayer()._availableTrains;
         }
 
         public string GetScoreBoard()

@@ -46,6 +46,7 @@
             this.boardCardOne = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.pnlGame = new System.Windows.Forms.Panel();
+            this.btnPerformAiTurn = new System.Windows.Forms.Button();
             this.txtNumberOfHumans = new System.Windows.Forms.TextBox();
             this.txtNumberOfAi = new System.Windows.Forms.TextBox();
             this.pnlNumberOfPlayers = new System.Windows.Forms.Panel();
@@ -82,7 +83,7 @@
             // 
             // trackBar1
             // 
-            this.trackBar1.Location = new System.Drawing.Point(3, 690);
+            this.trackBar1.Location = new System.Drawing.Point(10, 720);
             this.trackBar1.Minimum = 1;
             this.trackBar1.Name = "trackBar1";
             this.trackBar1.Size = new System.Drawing.Size(153, 45);
@@ -216,6 +217,7 @@
             // 
             // pnlGame
             // 
+            this.pnlGame.Controls.Add(this.btnPerformAiTurn);
             this.pnlGame.Controls.Add(this.trackBar1);
             this.pnlGame.Controls.Add(this.LblTrainsRemaining);
             this.pnlGame.Controls.Add(this.lblCurrentTurn);
@@ -237,6 +239,16 @@
             this.pnlGame.Name = "pnlGame";
             this.pnlGame.Size = new System.Drawing.Size(1244, 739);
             this.pnlGame.TabIndex = 9;
+            // 
+            // btnPerformAiTurn
+            // 
+            this.btnPerformAiTurn.Location = new System.Drawing.Point(12, 690);
+            this.btnPerformAiTurn.Name = "btnPerformAiTurn";
+            this.btnPerformAiTurn.Size = new System.Drawing.Size(156, 24);
+            this.btnPerformAiTurn.TabIndex = 12;
+            this.btnPerformAiTurn.Text = "Perform AI Turn";
+            this.btnPerformAiTurn.UseVisualStyleBackColor = true;
+            this.btnPerformAiTurn.Click += new System.EventHandler(this.btnPerformAiTurn_Click);
             // 
             // txtNumberOfHumans
             // 
@@ -335,6 +347,7 @@
         private System.Windows.Forms.TextBox txtNumberOfHumans;
         private System.Windows.Forms.TextBox txtNumberOfAi;
         private System.Windows.Forms.TrackBar trackBar1;
+        private System.Windows.Forms.Button btnPerformAiTurn;
     }
 }
 

@@ -77,22 +77,23 @@ namespace Ticket_to_ride.Model
             }
 
             List<Connection> newConnections = new List<Connection>();
-            Connections.AddRange(newRoute.Connections);
-
+//            Connections.AddRange(newRoute.Connections);
+//            _cost += newRoute.Cost
             //todo worry about dup connections- this will cause it to not favour dup locations
+            //todo hash table
             
-            //            //todo is it okay to ignore start and end?
-//            foreach (Connection connection in Connections)
-//            {
-//                foreach (Connection newConnection in newRoute.Connections)
-//                {
-//                    if (!connection.HasSameStartAndEnd(newConnection))
-//                    {
-//                        newConnections.Add(newConnection);
-//                        Cost += newConnection.Weight;
-//                    }
-//                }
-//            }
+          
+            foreach (Connection connection in Connections)
+            {
+                foreach (Connection newConnection in newRoute.Connections)
+                {
+                    if (!connection.HasSameStartAndEnd(newConnection))
+                    {
+                        newConnections.Add(newConnection);
+                        Cost += newConnection.Weight;
+                    }
+                }
+            }
             Connections = newConnections;
         }
     }

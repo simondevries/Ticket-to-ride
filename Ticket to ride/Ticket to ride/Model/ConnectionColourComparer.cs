@@ -1,15 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
+﻿using System.Drawing;
 
 namespace Ticket_to_ride.Model
 {
     static class ConnectionColourComparer
     {
+
+        public static CardType GetCardTypeFromConnectionColour(ConnectionColour connectionColour)
+        {
+            switch (connectionColour)
+            {
+                case(ConnectionColour.Orange):
+                {
+                    return CardType.Orange;
+                }
+                case (ConnectionColour.Black):
+                {
+                    return CardType.Black;
+                }
+                case (ConnectionColour.Pink):
+                {
+                    return CardType.Pink;
+                }
+                case (ConnectionColour.Red):
+                {
+                    return CardType.Red;
+                }
+                case (ConnectionColour.White):
+                {
+                    return CardType.White;
+                }
+            }
+            return CardType.Empty;
+        }
+
+
         /// <summary>
         /// returns a matching card and if none are found it will use a wildcard
         /// </summary>

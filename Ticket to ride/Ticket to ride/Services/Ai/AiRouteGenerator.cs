@@ -1,9 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Ticket_to_ride.Model;
 
-namespace Ticket_to_ride.Services
+namespace Ticket_to_ride.Services.Ai
 {
     public class AiRouteGenerator
     {
