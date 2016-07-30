@@ -55,20 +55,26 @@ namespace Ticket_to_ride.Services.Ai
             int cheapest = int.MaxValue;
             //set to default
             int selectedRoute = 0;
-            int index = 0;
+            List<Tuple<double, Route>> costDict = new List<Tuple<double, Route>>();
+            //todo remove tuple no need to item 2
+
             foreach (Route route in possibleSolutionRoute)
             {
-                    if (route.Cost < cheapest)
-                    {
-                        selectedRoute = index;
-                        cheapest = route.Cost;
-                    }
-                    index++;
-
-//                    logger.Log(
-//                        string.Format("Route {0} Cost {1}", route.ToString(), route.Cost), LogType.Debug);
-                
+                costDict.Add(new Tuple<double, Route>((double)route.GetPoints() / (double)route.Cost, route));
             }
+            int index = 0;
+            Route selectedFinalRoute = new Route("Final Route");
+            double lowestCost = 0;
+            foreach (Tuple<double, Route> keyValuePair in costDict)
+            {
+                if (keyValuePair.Item1 > lowestCost)
+                {
+                    selectedRoute = index;
+                    lowestCost = keyValuePair.Item1;
+                }
+                index++;
+            }
+
 
 //            int numberOfCardsToPickup =
 //_aiNumberOfCardsToPickUpDecider.ShouldPickUpMoreCards(numberOfTrainsOtherPlayersHave,

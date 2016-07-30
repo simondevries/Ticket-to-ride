@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Windows.Forms;
 using Ticket_to_ride.Services;
 
 namespace Ticket_to_ride.Model
@@ -20,6 +21,17 @@ namespace Ticket_to_ride.Model
             _connections = new List<Connection>();
             this._identifier = _identifier;
             startAndEnd = new List<DestinationPair>();
+        }
+
+        public int GetPoints()
+        {
+            int point = 0;
+
+            foreach (Connection connection in _connections)
+            {
+                point += PointMapper.GetPointsForRouteWeight(connection.Weight);
+            }
+            return point;
         }
 
 

@@ -106,6 +106,7 @@
     <Compile Include="Services\Game.cs" />
     <Compile Include="Services\MyExtensions.cs" />
     <Compile Include="Services\PlayersBuilder.cs" />
+    <Compile Include="Services\PointMapper.cs" />
     <Compile Include="Services\RiskMapGenerator.cs" />
     <Compile Include="Model\Route.cs" />
     <Compile Include="Model\RouteCard.cs" />
