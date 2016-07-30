@@ -14,12 +14,13 @@ namespace Ticket_to_ride.Services
         private int _numberOfHumans;
         private readonly RouteCardDeck _routeDeck;
         private ScoreCalculator _scoreCalculator;
+        private Logger _gameLog;
 
 
         public Game(Map map)
         {
             _players = new List<Player>();
-
+            _gameLog = new Logger();
             _map = map;
             _trainDeck = new TrainDeck();
             _routeDeck = new RouteCardDeck(_map);
@@ -33,8 +34,8 @@ namespace Ticket_to_ride.Services
             _trainDeck.DealFaceUpCards();
 
             _scoreCalculator = new ScoreCalculator(_map, numberOfHumans + _numberOfAi);
-            _turnCoordinator = new TurnCoordinator(_map, _scoreCalculator);
-            PlayersBuilder playersBuilder = new PlayersBuilder(_trainDeck, _routeDeck, _turnCoordinator);
+            _turnCoordinator = new TurnCoordinator(_map, _scoreCalculator, _gameLog);
+            PlayersBuilder playersBuilder = new PlayersBuilder(_trainDeck, _routeDeck, _turnCoordinator,_map, _gameLog);
             _players = playersBuilder.WithAi(_numberOfAi).WithHumans(_numberOfHumans).Build();
             _turnCoordinator.SetPlayers(_players);
         }
@@ -49,6 +50,7 @@ namespace Ticket_to_ride.Services
         {
             return _map;
         }
+
 
         public TrainDeck GetDeck()
         {
@@ -80,7 +82,15 @@ namespace Ticket_to_ride.Services
         public void PerformAiTurn()
         {
              Ai.Ai a = (Ai.Ai) _turnCoordinator.GetCurrentTurnPlayer();
-            a.PerformTurn(_map);
+
+            List<int> numberOfTrainsOtherPlayersHave = new List<int>();
+            foreach (Player player in _players)
+            {
+                numberOfTrainsOtherPlayersHave.Add(player._availableTrains);
+            }
+
+
+            a.PerformTurn(_map, numberOfTrainsOtherPlayersHave, _gameLog);
         }
 
         public PlayerType GetTurn()
@@ -111,7 +121,7 @@ namespace Ticket_to_ride.Services
 
         public void PickRouteCards()
         {
-            _turnCoordinator.GetCurrentTurnPlayer().PlayerRouteHand.AddRoutes(_routeDeck.PullNonStartingFourRouteCards());
+            _turnCoordinator.GetCurrentTurnPlayer().PlayerRouteHand.AddRoutes(_routeDeck.PullNonStartingFourRouteCardsForHuman());
             _turnCoordinator.NextTurn();
         }
 
@@ -133,6 +143,11 @@ namespace Ticket_to_ride.Services
         {
             _scoreCalculator.CalculateScoreDuringGame();
             return _scoreCalculator.GetScoreBoard();
+        }
+
+        public Logger getLog()
+        {
+            return _gameLog;
         }
     }
 }

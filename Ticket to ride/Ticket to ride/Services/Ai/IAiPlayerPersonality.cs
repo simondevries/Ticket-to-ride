@@ -7,6 +7,6 @@
         /// </summary>
         int RiskDifferenceBetweenConnectionsToConsiderWorthOfSavingUpFor();
 
-
+        int NumberOfTrainsOtherPlayersNeedToHaveInOrderToPickUpFourCards();
     }
 }

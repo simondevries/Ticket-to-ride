@@ -46,6 +46,7 @@
             this.boardCardOne = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.pnlGame = new System.Windows.Forms.Panel();
+            this.aiActions = new System.Windows.Forms.RichTextBox();
             this.btnPerformAiTurn = new System.Windows.Forms.Button();
             this.txtNumberOfHumans = new System.Windows.Forms.TextBox();
             this.txtNumberOfAi = new System.Windows.Forms.TextBox();
@@ -64,7 +65,7 @@
             this.pnlView.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pnlView.BackgroundImage")));
             this.pnlView.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pnlView.Controls.Add(this.lblScore);
-            this.pnlView.Location = new System.Drawing.Point(180, 3);
+            this.pnlView.Location = new System.Drawing.Point(330, 3);
             this.pnlView.Name = "pnlView";
             this.pnlView.Size = new System.Drawing.Size(1041, 720);
             this.pnlView.TabIndex = 0;
@@ -122,16 +123,16 @@
             // LstRouteCards
             // 
             this.LstRouteCards.FormattingEnabled = true;
-            this.LstRouteCards.Location = new System.Drawing.Point(12, 525);
+            this.LstRouteCards.Location = new System.Drawing.Point(172, 486);
             this.LstRouteCards.Name = "LstRouteCards";
-            this.LstRouteCards.Size = new System.Drawing.Size(157, 95);
+            this.LstRouteCards.Size = new System.Drawing.Size(157, 134);
             this.LstRouteCards.TabIndex = 11;
             // 
             // fromTop
             // 
-            this.fromTop.Location = new System.Drawing.Point(7, 85);
+            this.fromTop.Location = new System.Drawing.Point(12, 85);
             this.fromTop.Name = "fromTop";
-            this.fromTop.Size = new System.Drawing.Size(156, 36);
+            this.fromTop.Size = new System.Drawing.Size(70, 77);
             this.fromTop.TabIndex = 10;
             this.fromTop.Text = "From Top";
             this.fromTop.UseVisualStyleBackColor = true;
@@ -150,16 +151,16 @@
             // playersCards
             // 
             this.playersCards.FormattingEnabled = true;
-            this.playersCards.Location = new System.Drawing.Point(7, 346);
+            this.playersCards.Location = new System.Drawing.Point(9, 486);
             this.playersCards.Name = "playersCards";
-            this.playersCards.Size = new System.Drawing.Size(157, 173);
+            this.playersCards.Size = new System.Drawing.Size(157, 134);
             this.playersCards.TabIndex = 8;
             // 
             // boardCardFive
             // 
-            this.boardCardFive.Location = new System.Drawing.Point(7, 267);
+            this.boardCardFive.Location = new System.Drawing.Point(250, 85);
             this.boardCardFive.Name = "boardCardFive";
-            this.boardCardFive.Size = new System.Drawing.Size(75, 64);
+            this.boardCardFive.Size = new System.Drawing.Size(75, 28);
             this.boardCardFive.TabIndex = 6;
             this.boardCardFive.Text = "CardFive";
             this.boardCardFive.UseVisualStyleBackColor = true;
@@ -167,9 +168,9 @@
             // 
             // boardCardFour
             // 
-            this.boardCardFour.Location = new System.Drawing.Point(88, 197);
+            this.boardCardFour.Location = new System.Drawing.Point(169, 131);
             this.boardCardFour.Name = "boardCardFour";
-            this.boardCardFour.Size = new System.Drawing.Size(75, 64);
+            this.boardCardFour.Size = new System.Drawing.Size(75, 32);
             this.boardCardFour.TabIndex = 5;
             this.boardCardFour.Text = "CardFour";
             this.boardCardFour.UseVisualStyleBackColor = true;
@@ -177,9 +178,9 @@
             // 
             // boardCardThree
             // 
-            this.boardCardThree.Location = new System.Drawing.Point(6, 197);
+            this.boardCardThree.Location = new System.Drawing.Point(169, 85);
             this.boardCardThree.Name = "boardCardThree";
-            this.boardCardThree.Size = new System.Drawing.Size(75, 64);
+            this.boardCardThree.Size = new System.Drawing.Size(75, 32);
             this.boardCardThree.TabIndex = 4;
             this.boardCardThree.Text = "CardThree";
             this.boardCardThree.UseVisualStyleBackColor = true;
@@ -187,9 +188,9 @@
             // 
             // boardCardTwo
             // 
-            this.boardCardTwo.Location = new System.Drawing.Point(88, 127);
+            this.boardCardTwo.Location = new System.Drawing.Point(88, 132);
             this.boardCardTwo.Name = "boardCardTwo";
-            this.boardCardTwo.Size = new System.Drawing.Size(75, 64);
+            this.boardCardTwo.Size = new System.Drawing.Size(75, 30);
             this.boardCardTwo.TabIndex = 3;
             this.boardCardTwo.Text = "CardTwo";
             this.boardCardTwo.UseVisualStyleBackColor = true;
@@ -197,9 +198,9 @@
             // 
             // boardCardOne
             // 
-            this.boardCardOne.Location = new System.Drawing.Point(7, 127);
+            this.boardCardOne.Location = new System.Drawing.Point(88, 85);
             this.boardCardOne.Name = "boardCardOne";
-            this.boardCardOne.Size = new System.Drawing.Size(75, 64);
+            this.boardCardOne.Size = new System.Drawing.Size(75, 30);
             this.boardCardOne.TabIndex = 2;
             this.boardCardOne.Text = "CardOne";
             this.boardCardOne.UseVisualStyleBackColor = true;
@@ -217,6 +218,8 @@
             // 
             // pnlGame
             // 
+            this.pnlGame.Controls.Add(this.aiActions);
+            this.pnlGame.Controls.Add(this.playersCards);
             this.pnlGame.Controls.Add(this.btnPerformAiTurn);
             this.pnlGame.Controls.Add(this.trackBar1);
             this.pnlGame.Controls.Add(this.LblTrainsRemaining);
@@ -224,7 +227,6 @@
             this.pnlGame.Controls.Add(this.BtnPickRouteCard);
             this.pnlGame.Controls.Add(this.deckSize);
             this.pnlGame.Controls.Add(this.button1);
-            this.pnlGame.Controls.Add(this.playersCards);
             this.pnlGame.Controls.Add(this.LstRouteCards);
             this.pnlGame.Controls.Add(this.boardCardFive);
             this.pnlGame.Controls.Add(this.boardCardFour);
@@ -237,8 +239,17 @@
             this.pnlGame.Enabled = false;
             this.pnlGame.Location = new System.Drawing.Point(0, 0);
             this.pnlGame.Name = "pnlGame";
-            this.pnlGame.Size = new System.Drawing.Size(1244, 739);
+            this.pnlGame.Size = new System.Drawing.Size(1470, 761);
             this.pnlGame.TabIndex = 9;
+            // 
+            // aiActions
+            // 
+            this.aiActions.Location = new System.Drawing.Point(7, 168);
+            this.aiActions.Name = "aiActions";
+            this.aiActions.Size = new System.Drawing.Size(317, 312);
+            this.aiActions.TabIndex = 12;
+            this.aiActions.Text = "";
+            this.aiActions.TextChanged += new System.EventHandler(this.txtOutput_TextChanged);
             // 
             // btnPerformAiTurn
             // 
@@ -305,7 +316,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1244, 739);
+            this.ClientSize = new System.Drawing.Size(1470, 761);
             this.Controls.Add(this.pnlNumberOfPlayers);
             this.Controls.Add(this.elementHost2);
             this.Controls.Add(this.pnlGame);
@@ -348,6 +359,7 @@
         private System.Windows.Forms.TextBox txtNumberOfAi;
         private System.Windows.Forms.TrackBar trackBar1;
         private System.Windows.Forms.Button btnPerformAiTurn;
+        private System.Windows.Forms.RichTextBox aiActions;
     }
 }
 

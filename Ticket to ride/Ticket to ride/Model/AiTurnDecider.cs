@@ -11,19 +11,25 @@ namespace Ticket_to_ride.Model
     class AiTurnDecider
     {
         private AiTrainCardPicker _trainCardPicker;
-        private AiRouteCardPicker _routeCardPicker;
+        private readonly AiRouteCardPicker _routeCardPicker;
         private AiUndefindRouteCardSelector _aiUndefindRouteCardSelector;
-        public PlayerTrainHand PerformTurn(Map riskMap, PlayerTrainHand hand, IAiPlayerPersonality aiPlayerPersonality, Ai ai, TrainDeck deck)
+
+        public AiTurnDecider()
         {
+            _routeCardPicker = new AiRouteCardPicker();
+        }
+
+        public PlayerTrainHand PerformTurn(PlayerRouteHand finishdRouteCards, Map riskMap, PlayerTrainHand playerTrainHand, AiPlayerPersonalities aiPlayerPersonality, Ai ai, TrainDeck trainDeck, RouteCardDeck routeCardDeck, PlayerRouteHand playerRouteHand, List<int> numberOfTrainsOtherPlayersHave, Logger logger){
             _trainCardPicker = new AiTrainCardPicker();
-            _aiUndefindRouteCardSelector = new AiUndefindRouteCardSelector(hand);
-            //PickupRouteCards
-            if (riskMap.getConnections().OrderByDescending(conn => conn.Risk).FirstOrDefault().Risk == 0)
+            _aiUndefindRouteCardSelector = new AiUndefindRouteCardSelector(playerTrainHand);
+
+            bool pickedUpRouteCards = PickRouteCardsIfNecessairy(finishdRouteCards, riskMap, aiPlayerPersonality, ai, routeCardDeck, playerRouteHand, numberOfTrainsOtherPlayersHave, logger);
+            if (pickedUpRouteCards)
             {
-                //Get Route Cards
-
-
+                //end turn
+                return playerTrainHand;
             }
+
 
             List<Connection> preferredConnections = GetPreferredRoutes(riskMap, aiPlayerPersonality);
 
@@ -31,13 +37,33 @@ namespace Ticket_to_ride.Model
                 connection => ConnectionColourComparer.GetCardTypeFromConnectionColour(connection._colour));
 
             _aiUndefindRouteCardSelector.SetPreferredCardTypes(preferredCardTypes);
-            bool successfullyPlacedTrain = CanSuccessfullyPlaceTrain(riskMap, hand, ai, preferredConnections);
+            bool successfullyPlacedTrain = CanSuccessfullyPlaceTrain(riskMap, playerTrainHand, ai, preferredConnections);
 
             if (!successfullyPlacedTrain)
             {
-                _trainCardPicker.PickCard(deck, preferredConnections, hand);
+                _trainCardPicker.PickCard(trainDeck, preferredConnections, playerTrainHand);
             }
-            return hand;
+            return playerTrainHand;
+        }
+
+        private bool PickRouteCardsIfNecessairy(PlayerRouteHand finishdRouteCards, Map riskMap, AiPlayerPersonalities aiPlayerPersonality, Ai ai, RouteCardDeck routeCardDeck, PlayerRouteHand playerRouteHand, List<int> numberOfTrainsOtherPlayersHave, Logger logger)
+        {
+//PickupRouteCards
+            if (riskMap.getConnections().OrderByDescending(conn => conn.Risk).FirstOrDefault().Risk == 0)
+            {
+
+                logger.Log(
+                    string.Format("Player {0} picks up more train cards", ai._id), LogType.Debug);
+                finishdRouteCards.AddRoutes(playerRouteHand.GetRoutes());
+                playerRouteHand.ClearRoutes();
+                //todo make it pick three cards
+                List<RouteCard> newRouteCards =
+                    _routeCardPicker.PickFourRouteCards(riskMap, routeCardDeck, ai._id, numberOfTrainsOtherPlayersHave,
+                        aiPlayerPersonality, logger).GetRoutes();
+                playerRouteHand.AddRoutes(newRouteCards);
+                return true;
+            }
+            return false;
         }
 
 

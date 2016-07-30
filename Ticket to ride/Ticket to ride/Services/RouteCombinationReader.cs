@@ -2,7 +2,7 @@
 
 namespace Ticket_to_ride.Services
 {
-    class RouteCombinationReader
+    public class RouteCombinationReader
     {
         public string[] Read(int numberOfRoutes)
         {

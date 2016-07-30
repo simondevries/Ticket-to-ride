@@ -53,6 +53,14 @@ namespace Ticket_to_ride
                 boardCardFive.Text = deck.FaceUpCards[4].ToString();
             }
 
+            if (Settings.ShowDebugLog)
+            {
+                aiActions.Text = _game.getLog().GetDebug();
+            }
+            else
+            {
+                aiActions.Text = _game.getLog().GetUserFriendly();
+            }
             deckSize.Text = "Cards left: " + deck.CardsRemaining;
 
             Brush brushBlack = new SolidBrush(Color.Black);
@@ -372,6 +380,10 @@ namespace Ticket_to_ride
         {
             _game.PerformAiTurn();
             PaintGui();
+        }
+
+        private void txtOutput_TextChanged(object sender, EventArgs e)
+        {
         }
     }
 

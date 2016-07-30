@@ -18,10 +18,12 @@ namespace Ticket_to_ride.Model
         private int _movesLeftInTurn;
         private const int TOTAL_CARD_DRAWS = 2;
         private ScoreCalculator _scoreCalculator;
+        private Logger _gameLog;
 
-        public TurnCoordinator( Map map, ScoreCalculator scoreCalculator)
+        public TurnCoordinator( Map map, ScoreCalculator scoreCalculator, Logger gameLog)
         {
             _scoreCalculator = scoreCalculator;
+            _gameLog = gameLog;
             _players = new List<Player>();
             _map = map;
             _movesLeftInTurn = TOTAL_CARD_DRAWS;
@@ -52,8 +54,21 @@ namespace Ticket_to_ride.Model
             if (_currentTurn == PlayerType.Ai)
             {
                 Ai a = (Ai) _players[turn];
-                a.PerformTurn(_map);
+
+                List<int> numberOfTrainsOtherPlayersHave = GetNumberOfTrainsOtherPlayersHave();
+
+                a.PerformTurn(_map, numberOfTrainsOtherPlayersHave, _gameLog);
             }
+        }
+
+        private List<int> GetNumberOfTrainsOtherPlayersHave()
+        {
+            List<int> numberOfTrainsOtherPlayersHave = new List<int>();
+            foreach (Player player in _players)
+            {
+                numberOfTrainsOtherPlayersHave.Add(player._availableTrains);
+            }
+            return numberOfTrainsOtherPlayersHave;
         }
 
         private void CheckIfLastTurn()

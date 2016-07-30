@@ -1,5 +1,5 @@
-C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\bin\Debug\Ticket to ride.exe.config
 C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\bin\Debug\Ticket to ride.exe
+C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\bin\Debug\Ticket to ride.exe.config
 C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\bin\Debug\Ticket to ride.pdb
 C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\obj\Debug\MainFrame.baml
 C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\obj\Debug\MainFrame.g.cs

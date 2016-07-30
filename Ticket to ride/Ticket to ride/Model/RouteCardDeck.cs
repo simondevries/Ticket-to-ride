@@ -36,17 +36,9 @@ namespace Ticket_to_ride.Model
             }
         }
 
-        public List<RouteCard> PullStartingFourRouteCards()
+        public List<RouteCard> PullStartingFourRouteCardsForHuman()
         {
-            List<RouteCard>  routeCards= new List<RouteCard>();    
-            routeCards.Add(_hardRouteCards[0]);
-            _hardRouteCards.RemoveAt(0);
-            routeCards.Add(_easyRouteCards[0]);
-            _easyRouteCards.RemoveAt(0);
-            routeCards.Add(_easyRouteCards[0]);
-            _easyRouteCards.RemoveAt(0);
-            routeCards.Add(_easyRouteCards[0]);
-            _easyRouteCards.RemoveAt(0);
+            List<RouteCard> routeCards = PullCardsFromTop(4);
 
 
             RouteTaskSelectorForm routeTaskSelectorForm = new RouteTaskSelectorForm(routeCards[0], routeCards[1], routeCards[2], routeCards[3], true, RouteCardSelectorState.InitialPickup);
@@ -55,20 +47,25 @@ namespace Ticket_to_ride.Model
             return routeTaskSelectorForm.SelectedRouteCards;
         }
 
-        public List<RouteCard> PullNonStartingFourRouteCards()
+        public List<RouteCard> PullNonStartingFourRouteCardsForHuman()
         {
-            List<RouteCard> routeCards = new List<RouteCard>();
-            routeCards.Add(_easyRouteCards[0]);
-            _easyRouteCards.RemoveAt(0);
-            routeCards.Add(_easyRouteCards[0]);
-            _easyRouteCards.RemoveAt(0);
-            routeCards.Add(_easyRouteCards[0]);
-            _easyRouteCards.RemoveAt(0);
+            List<RouteCard> routeCards = PullCardsFromTop(3);
 
             RouteTaskSelectorForm routeTaskSelectorForm = new RouteTaskSelectorForm(routeCards[0], routeCards[1], routeCards[2], null, false, RouteCardSelectorState.InGamePickup);
             routeTaskSelectorForm.ShowDialog();
 
             return routeTaskSelectorForm.SelectedRouteCards;
+        }
+
+        public List<RouteCard> PullCardsFromTop(int numberOfCards)
+        {
+            List<RouteCard> routeCards = new List<RouteCard>();
+            for (int i = 0; i < numberOfCards; i++)
+            {
+                routeCards.Add(_easyRouteCards[0]);
+                _easyRouteCards.RemoveAt(0);
+            }
+            return routeCards;
         }
     }
 }

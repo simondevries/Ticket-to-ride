@@ -21,6 +21,11 @@ namespace Ticket_to_ride.Model
            _routes.Add(route);
         }
 
+        public void ClearRoutes()
+        {
+            _routes.Clear();
+        }
+
 
         public void AddRoutes(List<RouteCard> playerRouteHand)
         {
@@ -30,6 +35,10 @@ namespace Ticket_to_ride.Model
         public List<RouteCard> GetRoutes()
         {
             return _routes;
+        }
+        public RouteCard GetRoute(int routeIndex)
+        {
+            return _routes[routeIndex];
         }
 
         public List<Location> GetAllLocations()

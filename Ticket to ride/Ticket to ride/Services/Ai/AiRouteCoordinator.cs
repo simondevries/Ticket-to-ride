@@ -7,25 +7,22 @@ namespace Ticket_to_ride.Services.Ai
 {
     public class AiRouteCoordinator
     {
-        private AiRouteGenerator _aiRouteGenerator;
-        private readonly Ai _ai;
+        private readonly AiRouteGenerator _aiRouteGenerator;
 
-        public AiRouteCoordinator(Services.Ai.Ai ai)
+        public AiRouteCoordinator()
         {
-            _ai = ai;
             _aiRouteGenerator = new AiRouteGenerator();
         }
 
-        public Route GenerateRoute(Map map)
+        public Route GenerateRoute(Map map, int aiId, List<Location> destinations, Logger gameLog)
         {
             ShortestPathGenerator shortestPath = new ShortestPathGenerator(map.getLocations(), map.getConnections());
 
-            List<Location> destinations = _ai.PlayerRouteHand.GetAllLocations();
             //Generate A-B, A-C, A-D, B-C ...
             List<DestinationPair> destinationPairs = _aiRouteGenerator.GetDestinationPairs(destinations);
 
             //Add cost to each destination pair
-            destinationPairs = _aiRouteGenerator.AddCostToEachDestinationPair(destinationPairs, shortestPath, destinations, _ai._id);
+            destinationPairs = _aiRouteGenerator.AddCostToEachDestinationPair(destinationPairs, shortestPath, destinations, aiId);
             Console.WriteLine(destinationPairs.Select(p => "" + p.StartIndex + "," + p.EndIndex + "," + p.Weight));
 
             //todo go through all combinations
