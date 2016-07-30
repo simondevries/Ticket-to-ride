@@ -30,7 +30,7 @@ namespace Ticket_to_ride.Services.Ai
             //todo remove identifier?
             //todo refactor to another class
 
-
+            Stopwatch stopwatch = new Stopwatch();;
             List<Route> allPossibleRoutes = new List<Route>();
             RouteCombinationMap routeSolutionMap = new RouteCombinationBuilder().Build(destinations.Count);
             foreach (RouteSolution routeSolution in routeSolutionMap.Solutions)
@@ -43,10 +43,12 @@ namespace Ticket_to_ride.Services.Ai
                 //When there are multiple sub routes then we need to add them up (i.e. a route on the east of map + west of map)
                 foreach (ConnectedRoute connectedRoute in routeSolution.Solution)
                 {
-                    sumOfAllRoutesForARouteSolution.CombineRoutes(AiRouteGenerator.GetRouteForThisRouteCombination(connectedRoute.Connection, destinationPairs, finalRouteWithDuplicates, destinations));
+                    sumOfAllRoutesForARouteSolution.CombineRoutes(AiRouteGenerator.GetRouteForThisRouteCombination(stopwatch, connectedRoute.Connection, destinationPairs, finalRouteWithDuplicates, destinations));
                 }
                 allPossibleRoutes.Add(sumOfAllRoutesForARouteSolution);
             }
+            Console.Out.WriteLine("Processing too");
+            gameLog.Log("Processing took " + stopwatch.ElapsedMilliseconds, LogType.Debug);
             //PickBest Route
             Route finalRoute = new Route("Final Route");
             int lowestRouteCost = int.MaxValue;

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Ticket_to_ride.Model;
 
@@ -6,7 +7,7 @@ namespace Ticket_to_ride.Services.Ai
 {
     public class AiRouteGenerator
     {
-        public static Route GetRouteForThisRouteCombination(List<int> order, List<DestinationPair> destinationPairs, Route finalRouteWithDuplicates,
+        public static Route GetRouteForThisRouteCombination(Stopwatch stopwatch, List<int> order, List<DestinationPair> destinationPairs, Route finalRouteWithDuplicates,
             List<Location> destinations)
         {
             for (int i = 0; i < order.Count - 1; i++)
@@ -26,24 +27,25 @@ namespace Ticket_to_ride.Services.Ai
             }
 
             //remove dupes
-            Route finalRoute = new Route("");
-            finalRoute.startAndEnd = finalRouteWithDuplicates.startAndEnd;
+            stopwatch.Start();
+            Dictionary<string, Connection> processedRoutes = new Dictionary<string, Connection>();
             foreach (Connection connection in finalRouteWithDuplicates.Connections)
             {
-                bool foundElsewhere = false;
-                foreach (Connection connectionCompare in finalRouteWithDuplicates.Connections)
+                if (!processedRoutes.ContainsKey(connection.A + "" + connection.B) &&
+                    !processedRoutes.ContainsKey(connection.B + "" + connection.A))
                 {
-                    if ((connection.HasSameStartAndEnd(connectionCompare)) &&
-                        connection != connectionCompare)
-                    {
-                        foundElsewhere = true;
-                    }
-                }
-                if (!foundElsewhere || !finalRoute.Connections.Contains(connection))
-                {
-                    finalRoute.AddConnection(connection);
+                    processedRoutes.Add(connection.A + "" + connection.B, connection);
                 }
             }
+
+            Route finalRoute = new Route("AiRoute");
+            finalRoute.startAndEnd = finalRouteWithDuplicates.startAndEnd;
+            //cost?
+            foreach (KeyValuePair<string, Connection> processedRoute in processedRoutes)
+            {
+                finalRoute.Connections.Add(processedRoute.Value);
+            }
+            stopwatch.Stop();
 
             AddCostToFinalRoute(finalRoute);
 
