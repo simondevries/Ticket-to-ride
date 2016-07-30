@@ -17,7 +17,7 @@ namespace Ticket_to_ride.Services.Ai
             _aiRouteCoordinator = new AiRouteCoordinator();
             _fourRouteCardCombinations = new List<List<int>>
             {
-              //  new List<int>{0,1,2,3}, TODO four not implemented yet
+                new List<int>{0,1,2,3}, 
                 new List<int>{0,1,2},
                 new List<int>{0,1,3},
                 new List<int>{0,2,3},
@@ -52,13 +52,13 @@ namespace Ticket_to_ride.Services.Ai
 
             //Pick the cheapest combination
             //todo choose more cards if time allows.
-            int cheapest = int.MaxValue;
+            int cheapest = 0;
             //set to default
             int selectedRoute = 0;
             int index = 0;
             foreach (Route route in possibleSolutionRoute)
             {
-                    if (route.Cost < cheapest)
+                    if (route.Cost > cheapest)
                     {
                         selectedRoute = index;
                         cheapest = route.Cost;

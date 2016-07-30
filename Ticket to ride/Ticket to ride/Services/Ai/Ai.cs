@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using Ticket_to_ride.Model;
 
@@ -35,13 +36,20 @@ namespace Ticket_to_ride.Services.Ai
 
         public void PerformTurn(Map map, List<int> numberOfTrainsOtherPlayersHave, Logger gameLog)
         {
+ 
+            //your sample code
             Route choosenRoute = _aiRouteCoordinator.GenerateRoute(map, _id, PlayerRouteHand.GetAllLocations(), gameLog);
 
+
             Console.WriteLine(choosenRoute.ToString());
-            
+
+
             RiskMapGenerator riskMapGenerator = new RiskMapGenerator(map);
             riskMapGenerator.GetConnectionWithGreatestRisk(PlayerRouteHand, choosenRoute, _id);
+
             PlayerTrainHand = _aiTurnDecider.PerformTurn(_finishdRouteCards, map, PlayerTrainHand, _aiPlayerPersonality, this, _gameTrainDeck, _routeCardDeck, PlayerRouteHand, numberOfTrainsOtherPlayersHave, gameLog);
+
+
             if (Settings.AutoAiTurn)
             {
                 _turnCoordinator.NextTurn();

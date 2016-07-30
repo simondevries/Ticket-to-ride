@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Ticket_to_ride.Model;
 
@@ -38,6 +39,7 @@ namespace Ticket_to_ride.Services.Ai
                 finalRouteWithDuplicates.Cost = 0;
 
                 Route sumOfAllRoutesForARouteSolution = new Route("sumOfRoutes");
+
                 //When there are multiple sub routes then we need to add them up (i.e. a route on the east of map + west of map)
                 foreach (ConnectedRoute connectedRoute in routeSolution.Solution)
                 {

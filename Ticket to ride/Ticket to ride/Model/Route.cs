@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Ticket_to_ride.Services;
 
@@ -81,8 +82,8 @@ namespace Ticket_to_ride.Model
 //            _cost += newRoute.Cost
             //todo worry about dup connections- this will cause it to not favour dup locations
             //todo hash table
-            
-          
+
+
             foreach (Connection connection in Connections)
             {
                 foreach (Connection newConnection in newRoute.Connections)
