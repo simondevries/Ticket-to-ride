@@ -1,5 +1,15 @@
-C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\bin\Debug\Ticket to ride.exe
 C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\bin\Debug\Ticket to ride.exe.config
+C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\bin\Debug\Ticket to ride.exe
+C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\bin\Debug\Ticket to ride.pdb
+C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\bin\Debug\Newtonsoft.Json.dll
+C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\bin\Debug\System.Net.Http.Formatting.dll
+C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\bin\Debug\System.Web.Http.dll
+C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\bin\Debug\System.Web.Http.WebHost.dll
+C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\bin\Debug\Newtonsoft.Json.xml
+C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\bin\Debug\System.Net.Http.Formatting.xml
+C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\bin\Debug\System.Web.Http.xml
+C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\bin\Debug\System.Web.Http.WebHost.xml
+C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\obj\Debug\Ticket to ride.csprojResolveAssemblyReference.cache
 C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\obj\Debug\MainFrame.baml
 C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\obj\Debug\MainFrame.g.cs
 C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\obj\Debug\Ticket to ride_MarkupCompile.cache
@@ -11,5 +21,13 @@ C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\obj\D
 C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\obj\Debug\Ticket to ride.csproj.GenerateResource.Cache
 C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\obj\Debug\Ticket to ride.exe
 C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\obj\Debug\Ticket to ride.pdb
-C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\bin\Debug\Ticket to ride.pdb
-C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\obj\Debug\Ticket to ride.csprojResolveAssemblyReference.cache
+C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\bin\Debug\Microsoft.Web.Infrastructure.dll
+C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\bin\Debug\Ninject.dll
+C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\bin\Debug\Ninject.Web.Common.dll
+C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\bin\Debug\Ninject.Web.WebApi.dll
+C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\bin\Debug\Ninject.Web.WebApi.WebHost.dll
+C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\bin\Debug\WebActivatorEx.dll
+C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\bin\Debug\Ninject.xml
+C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\bin\Debug\Ninject.Web.Common.xml
+C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\bin\Debug\Ninject.Web.WebApi.xml
+C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\bin\Debug\Ninject.Web.WebApi.WebHost.xml

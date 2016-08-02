@@ -23,8 +23,8 @@ namespace Ticket_to_ride
         private  Size _pnlViewOriginalSize = new Size(1041, 720);
         public Form1()
         {
-            _map = new MapGenerator().CreateMap();
-            _game = new Game(_map);
+            _game = new Game();
+            _map = _game.GetMap();
             InitializeComponent();
             pnlView.Size = _pnlViewOriginalSize;
 

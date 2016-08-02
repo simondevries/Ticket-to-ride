@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Ticket_to_ride.Model
 {
-    class MapGenerator
+    public class MapGenerator
     {
         List<Connection> _connections = new List<Connection>();
         List<Location> _location = new List<Location>();

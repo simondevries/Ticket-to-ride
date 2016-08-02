@@ -4,7 +4,28 @@ using System.Linq;
 using Ticket_to_ride.Model;
 namespace Ticket_to_ride.Services
 {
-    public class Game
+    public interface IGame
+    {
+        void Start(int numberOfAi, int numberOfHumans);
+        void SendTrainPlacement(Connection connection);
+        Map GetMap();
+        TrainDeck GetDeck();
+        PlayerTrainHand GetPlayersHand(int playerId);
+        PlayerRouteHand GetPlayersRouteHand(int playerId);
+        void NextTurn();
+        void PerformAiTurn();
+        PlayerType GetTurn();
+        PlayerType GetTurnPlayerType();
+        int GetPlayerId();
+        void PlayerPickedFromTop();
+        void PickRouteCards();
+        void PickFaceUpCard(int index);
+        int TrainsRemaining();
+        string GetScoreBoard();
+        Logger getLog();
+    }
+
+    public class Game : IGame
     {
         TurnCoordinator _turnCoordinator;
         List<Player> _players;
@@ -17,11 +38,11 @@ namespace Ticket_to_ride.Services
         private Logger _gameLog;
 
 
-        public Game(Map map)
+        public Game()
         {
             _players = new List<Player>();
             _gameLog = new Logger();
-            _map = map;
+            _map = new MapGenerator().CreateMap();
             _trainDeck = new TrainDeck();
             _routeDeck = new RouteCardDeck(_map);
         }
