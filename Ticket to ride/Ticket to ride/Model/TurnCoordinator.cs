@@ -11,7 +11,7 @@ namespace Ticket_to_ride.Model
         PlayerType _currentTurn;
         List<Player> _players;
         List<PlayerType> _playertypes;
-        int turn;
+        int _turn;
         private bool _isLastRound;
         private int lastRoundPlayerId;
         private readonly Map _map;
@@ -42,7 +42,7 @@ namespace Ticket_to_ride.Model
             CheckIfLastTurn();
             IncrementTurn();
             _movesLeftInTurn = 2;
-            _currentTurn = _players[turn]._playerType;
+            _currentTurn = _players[_turn]._playerType;
             if (Settings.AutoAiTurn)
             {
                 CheckIfNeedToPlayAiTurn();
@@ -53,7 +53,7 @@ namespace Ticket_to_ride.Model
         {
             if (_currentTurn == PlayerType.Ai)
             {
-                Ai a = (Ai) _players[turn];
+                Ai a = (Ai) _players[_turn];
 
                 List<int> numberOfTrainsOtherPlayersHave = GetNumberOfTrainsOtherPlayersHave();
 
@@ -73,21 +73,21 @@ namespace Ticket_to_ride.Model
 
         private void CheckIfLastTurn()
         {
-            if (_isLastRound && lastRoundPlayerId == _players[turn]._id)
+            if (_isLastRound && lastRoundPlayerId == _players[_turn]._id)
             {
                 MessageBox.Show("Game Over");
                 MessageBox.Show(_scoreCalculator.CalculateEndGameScore(_players));
             }
 
-            if (_players[turn].HasFinished)
+            if (_players[_turn].HasFinished)
             {
-                if (_players[turn]._id == lastRoundPlayerId)
+                if (_players[_turn]._id == lastRoundPlayerId)
                 {
                     MessageBox.Show("Last round");
                     
                 }
                 _isLastRound = true;
-                lastRoundPlayerId = _players[turn]._id;
+                lastRoundPlayerId = _players[_turn]._id;
             }
 
         }
@@ -118,9 +118,9 @@ namespace Ticket_to_ride.Model
 
         private void IncrementTurn()
         {
-            if (turn + 1 >= _players.Count)
+            if (_turn + 1 >= _players.Count)
             {
-                turn = 0;
+                _turn = 0;
             }
             else
             {
@@ -129,7 +129,7 @@ namespace Ticket_to_ride.Model
         }
 
         public void ProgressTurn(){
-            turn++;
+            _turn++;
         }
 
         public PlayerType GetCurrentTurnPlayerType()
@@ -140,11 +140,19 @@ namespace Ticket_to_ride.Model
 
         public Player GetCurrentTurnPlayer()
         {
-            if (turn < _players.Count)
+            if (_turn < _players.Count)
             {
-                return _players[turn];
+                return _players[_turn];
             }
             return null;
+        }
+
+        public TurnCoordinatorDto Map()
+        {
+            return new TurnCoordinatorDto
+            {
+                Turn = _turn
+            };
         }
     }
 }

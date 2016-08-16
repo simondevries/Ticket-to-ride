@@ -54,6 +54,9 @@
             this.button2 = new System.Windows.Forms.Button();
             this.elementHost2 = new System.Windows.Forms.Integration.ElementHost();
             this.mainFrame1 = new Ticket_to_ride.MainFrame();
+            this.button3 = new System.Windows.Forms.Button();
+            this.button4 = new System.Windows.Forms.Button();
+            this.txtGameGuid = new System.Windows.Forms.TextBox();
             this.pnlView.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             this.pnlGame.SuspendLayout();
@@ -218,6 +221,9 @@
             // 
             // pnlGame
             // 
+            this.pnlGame.Controls.Add(this.txtGameGuid);
+            this.pnlGame.Controls.Add(this.button4);
+            this.pnlGame.Controls.Add(this.button3);
             this.pnlGame.Controls.Add(this.aiActions);
             this.pnlGame.Controls.Add(this.playersCards);
             this.pnlGame.Controls.Add(this.btnPerformAiTurn);
@@ -241,6 +247,7 @@
             this.pnlGame.Name = "pnlGame";
             this.pnlGame.Size = new System.Drawing.Size(1470, 761);
             this.pnlGame.TabIndex = 9;
+            this.pnlGame.Paint += new System.Windows.Forms.PaintEventHandler(this.pnlGame_Paint);
             // 
             // aiActions
             // 
@@ -312,6 +319,33 @@
             this.elementHost2.Text = "elementHost2";
             this.elementHost2.Child = this.mainFrame1;
             // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(88, 56);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(51, 25);
+            this.button3.TabIndex = 13;
+            this.button3.Text = "Save";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(145, 55);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(47, 27);
+            this.button4.TabIndex = 14;
+            this.button4.Text = "Load";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
+            // txtGameGuid
+            // 
+            this.txtGameGuid.Location = new System.Drawing.Point(198, 60);
+            this.txtGameGuid.Name = "txtGameGuid";
+            this.txtGameGuid.Size = new System.Drawing.Size(125, 20);
+            this.txtGameGuid.TabIndex = 15;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -360,6 +394,9 @@
         private System.Windows.Forms.TrackBar trackBar1;
         private System.Windows.Forms.Button btnPerformAiTurn;
         private System.Windows.Forms.RichTextBox aiActions;
+        private System.Windows.Forms.TextBox txtGameGuid;
+        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button button3;
     }
 }
 

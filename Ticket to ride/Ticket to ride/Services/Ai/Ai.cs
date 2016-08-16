@@ -56,6 +56,11 @@ namespace Ticket_to_ride.Services.Ai
             }
         }
 
+        public PlayerRouteHand GetFinishedRouteHand
+        {
+            get { return  _finishdRouteCards; }
+        }
+
 
     }
 }

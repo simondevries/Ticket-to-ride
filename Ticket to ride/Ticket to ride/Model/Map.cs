@@ -3,22 +3,10 @@ using System.Collections.Generic;
 
 namespace Ticket_to_ride.Model
 {
-    public interface IMap
-    {
-        void setWeight(Connection connectionToSet, int weight);
-        void setOwner(Connection connectionToSet, Player owner);
-        List<Connection> getAssociatedConnection(Connection connectionToCheck);
-        List<Location> getLocations();
-        Location getLocation(int location);
-        List<Connection> getConnections();
-        Connection getConnection(int connection);
-        int GetNumberOfLocations();
-    }
-
     public class Map : IMap
     {
-        List<Connection> _connections = new List<Connection>();
-        List<Location> _location = new List<Location>();
+        readonly List<Connection> _connections = new List<Connection>();
+        readonly List<Location> _location = new List<Location>();
         private readonly int _numberOfLocations;
 
         public Map(List<Connection> connection, List<Location> location)
@@ -32,9 +20,6 @@ namespace Ticket_to_ride.Model
                 con.A.AddToAssociatedConnections(con);
                 con.B.AddToAssociatedConnections(con);
             }
-
-
-
         }
 
         public void setWeight(Connection connectionToSet, int weight){

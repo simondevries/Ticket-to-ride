@@ -31,3 +31,15 @@ C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\bin\D
 C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\bin\Debug\Ninject.Web.Common.xml
 C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\bin\Debug\Ninject.Web.WebApi.xml
 C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\bin\Debug\Ninject.Web.WebApi.WebHost.xml
+C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\bin\Debug\FireSharp.dll
+C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\bin\Debug\Microsoft.Threading.Tasks.dll
+C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\bin\Debug\Microsoft.Threading.Tasks.Extensions.Desktop.dll
+C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\bin\Debug\Microsoft.Threading.Tasks.Extensions.dll
+C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\bin\Debug\System.Net.Http.Extensions.dll
+C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\bin\Debug\System.Net.Http.Primitives.dll
+C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\bin\Debug\Microsoft.Threading.Tasks.xml
+C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\bin\Debug\Microsoft.Threading.Tasks.Extensions.xml
+C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\bin\Debug\Microsoft.Threading.Tasks.Extensions.Desktop.xml
+C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\bin\Debug\System.Net.Http.Extensions.xml
+C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\bin\Debug\System.Net.Http.Primitives.xml
+C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\obj\Debug\Ticket to ride.csproj.App.config

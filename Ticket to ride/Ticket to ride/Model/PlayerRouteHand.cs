@@ -52,5 +52,10 @@ namespace Ticket_to_ride.Model
 
             return locations;
         }
+
+        public void AddRoutes(PlayerRouteHand routeHand)
+        {
+            _routes.AddRange(routeHand._routes);
+        }
     }
 }

@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using Ticket_to_ride.Model;
+using Ticket_to_ride.Repository;
+
 namespace Ticket_to_ride.Services
 {
     public interface IGame
     {
-        void Start(int numberOfAi, int numberOfHumans);
+        IGame Start(int numberOfAi, int numberOfHumans);
         void SendTrainPlacement(Connection connection);
         Map GetMap();
         TrainDeck GetDeck();
@@ -25,6 +27,38 @@ namespace Ticket_to_ride.Services
         Logger getLog();
     }
 
+    public class GameDto
+    {
+        public int NumberOfHumans { get; set; }
+        public int NumberOfAi { get; set; }
+
+        public Game Map()
+        {
+            return new Game();
+        }
+    }
+
+    public class RouteCardDeckDto
+    {
+       // public List<RouteCard> RouteCards { get; set; }
+    }
+
+    public class TrainDeckDto
+    {
+        public List<int> TrainDeck { get; set; }
+
+        public TrainDeck Map()
+        {
+            return new TrainDeck(TrainDeck);
+        }
+    }
+
+    public class TurnCoordinatorDto
+    {
+        public int Turn { get; set; }
+    }
+
+    //todo separate game from game coordinator
     public class Game : IGame
     {
         TurnCoordinator _turnCoordinator;
@@ -36,19 +70,28 @@ namespace Ticket_to_ride.Services
         private readonly RouteCardDeck _routeDeck;
         private ScoreCalculator _scoreCalculator;
         private Logger _gameLog;
-
+        private GameRepository _gameRepository;
+        private Guid _gameGuid;
 
         public Game()
-        {
+        {   
             _players = new List<Player>();
             _gameLog = new Logger();
             _map = new MapGenerator().CreateMap();
             _trainDeck = new TrainDeck();
             _routeDeck = new RouteCardDeck(_map);
+            _gameRepository = new GameRepository();
+            _gameGuid = Guid.NewGuid();
         }
 
-        public void Start(int numberOfAi, int numberOfHumans)
+        public Game(TrainDeck trainDeck)
         {
+            _trainDeck = trainDeck;
+        }
+
+        public IGame Start(int numberOfAi, int numberOfHumans)
+        {
+
             _numberOfAi = numberOfAi;
             _numberOfHumans = numberOfHumans;
 
@@ -59,6 +102,7 @@ namespace Ticket_to_ride.Services
             PlayersBuilder playersBuilder = new PlayersBuilder(_trainDeck, _routeDeck, _turnCoordinator,_map, _gameLog);
             _players = playersBuilder.WithAi(_numberOfAi).WithHumans(_numberOfHumans).Build();
             _turnCoordinator.SetPlayers(_players);
+            return this;
         }
 
         public void SendTrainPlacement(Connection connection)
@@ -169,6 +213,26 @@ namespace Ticket_to_ride.Services
         public Logger getLog()
         {
             return _gameLog;
+        }
+
+        public Guid GetGameGuid()
+        {
+            return _gameGuid;
+        }
+
+
+
+
+        public GameDto Map()
+        {
+            return new GameDto
+            {
+                NumberOfAi =  _numberOfAi,
+                NumberOfHumans = _numberOfHumans,
+                RouteCardDeck = _routeDeck.Map(),
+                TrainDeckDto = _trainDeck.Map(),
+                TurnCoordinatorDto = _turnCoordinator.Map()
+            };
         }
     }
 }

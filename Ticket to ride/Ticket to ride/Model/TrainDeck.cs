@@ -14,7 +14,12 @@ namespace Ticket_to_ride.Model
         private const int NUMBER_OF_CARDS_PLAYERS_START_WITH = 5;
         private const int NUMBER_OF_EACH_TYPE_OF_CARD = 10;
         private const int NUMBER_OF_FACEUP_CARDS_ON_BOARD = 5;
-        
+
+        public TrainDeck(List<int> trainDeck)
+        {
+            _deck =  trainDeck.Select(card =>   (CardType)Enum.Parse(typeof(CardType), ""+card)).ToList(); 
+        }
+
         /// <summary>
         /// This builds a train deck
         /// </summary>
@@ -161,6 +166,11 @@ namespace Ticket_to_ride.Model
         public int CardsRemaining
         {
             get { return _deck.Count; }
+        }
+
+        public TrainDeckDto Map()
+        {
+            return new TrainDeckDto {TrainDeck = _deck.Select(card => (int) card).ToList()};
         }
     }
 }

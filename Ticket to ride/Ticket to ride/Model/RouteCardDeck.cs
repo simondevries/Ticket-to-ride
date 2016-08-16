@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Ticket_to_ride.Forms;
+using Ticket_to_ride.Services;
 
 namespace Ticket_to_ride.Model
 {
@@ -27,9 +28,25 @@ namespace Ticket_to_ride.Model
             //todo If ti si a hard route then make sure it is harder
             for (int i = 0; i < deckSize; i++)
             {
-                int startRouteNumber = random.Next(numberOfLocations);
-                int endRouteNumber = random.Next(numberOfLocations);
-                int points = random.Next(20);
+                int startRouteNumber;
+                int endRouteNumber;
+                int cost;
+
+                do
+                {
+                    startRouteNumber = random.Next(numberOfLocations);
+                    endRouteNumber = random.Next(numberOfLocations);
+
+                    ShortestPathGenerator shortestPathGenerator = new ShortestPathGenerator(map.getLocations(),
+                        map.getConnections());
+
+                    Dictionary<Location, Route> calculateMinCost =
+                        shortestPathGenerator.CalculateMinCost(map.getLocation(startRouteNumber), 0);
+                    cost = calculateMinCost[map.getLocation(endRouteNumber)].Cost;
+
+                } while (cost < 5 || ((cost < 15 && isHard) || (cost > 15 && !isHard)));
+
+                int points = cost;
 
                 RouteCard routeCard = new RouteCard(map.getLocation(startRouteNumber), map.getLocation(endRouteNumber), isHard, points);
                 deck.Add(routeCard);
@@ -66,6 +83,14 @@ namespace Ticket_to_ride.Model
                 _easyRouteCards.RemoveAt(0);
             }
             return routeCards;
+        }
+
+        public RouteCardDeckDto Map()
+        {
+            return new RouteCardDeckDto
+            {
+
+            };
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Ticket_to_ride.Services;
 using Ticket_to_ride.Model;
+using Ticket_to_ride.Repository;
 using Brush = System.Drawing.Brush;
 using Color = System.Drawing.Color;
 using FontFamily = System.Drawing.FontFamily;
@@ -21,6 +22,7 @@ namespace Ticket_to_ride
         private const string TXT_NUMBER_OF_AI_TEXT = "Please enter number of Ai";
         private const string TXT_NUMBER_OF_HUMANS_TEXT = "Please enter number of Humans";
         private  Size _pnlViewOriginalSize = new Size(1041, 720);
+        private GameRepository _gameRepository = new GameRepository();
         public Form1()
         {
             _game = new Game();
@@ -62,6 +64,8 @@ namespace Ticket_to_ride
                 aiActions.Text = _game.getLog().GetUserFriendly();
             }
             deckSize.Text = "Cards left: " + deck.CardsRemaining;
+
+            txtGameGuid.Text = _game.GetGameGuid().ToString();
 
             Brush brushBlack = new SolidBrush(Color.Black);
             Brush brushWhite = new SolidBrush(Color.White);
@@ -384,6 +388,21 @@ namespace Ticket_to_ride
 
         private void txtOutput_TextChanged(object sender, EventArgs e)
         {
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            _gameRepository.Update(_game);
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            _gameRepository.Load(new Guid(txtGameGuid.Text));
+        }
+
+        private void pnlGame_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 

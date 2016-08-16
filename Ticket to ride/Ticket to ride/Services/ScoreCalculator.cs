@@ -74,7 +74,15 @@ namespace Ticket_to_ride.Services
             //score for cards
             foreach (Player player in players)
             {
-                foreach (RouteCard route in player.PlayerRouteHand.GetRoutes())
+                PlayerRouteHand routeCards = player.PlayerRouteHand;
+                if (player._playerType == PlayerType.Ai)
+                {
+                    Ai.Ai ai = (Ai.Ai) player;
+                    routeCards.AddRoutes(ai.GetFinishedRouteHand);
+
+                }
+
+                foreach (RouteCard route in routeCards.GetRoutes())
                 {
                     if (_routeExistsBetweenLocationsValidator.DoesRouteExist(route.GetStartLocation(),
                         route.GetEndLocation(), _map, player))
@@ -83,6 +91,7 @@ namespace Ticket_to_ride.Services
                         _scoreBoard[player._id].AddMessage(route.ToString());
                     }
                 }
+
             }
         }
 

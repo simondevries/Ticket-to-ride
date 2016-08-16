@@ -5,6 +5,7 @@ using System.Web.Http.Dependencies;
 using Ninject.Activation;
 using Ninject.Parameters;
 using Ninject.Syntax;
+using Ticket_to_ride.Services;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(ConnectApi.App_Start.NinjectWebCommon), "Start")]
 [assembly: WebActivatorEx.ApplicationShutdownMethodAttribute(typeof(ConnectApi.App_Start.NinjectWebCommon), "Stop")]
@@ -71,6 +72,7 @@ namespace ConnectApi.App_Start
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
+            kernel.Bind<IGame>().To<Game>();
         }        
     }
     public class NinjectResolver : NinjectScope, IDependencyResolver

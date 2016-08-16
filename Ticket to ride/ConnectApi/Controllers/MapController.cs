@@ -4,15 +4,30 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Ticket_to_ride;
+using Ticket_to_ride.Model;
+using Ticket_to_ride.Services;
 
 namespace ConnectApi.Controllers
 {
-    public class ValuesController : ApiController
+    public class MapController : ApiController
     {
+        private IGame _game;
+
+
         // GET api/values
-        public IEnumerable<string> Get()
+        public MapController(IGame game)
         {
-            return new string[] { "value1", "value2" };
+            _game = game;
+        }
+
+        public string Get()
+        {
+            string output = "";
+
+
+
+            return _game.GetMap().getConnection(0).A.Identifier; ;
         }
 
         // GET api/values/5
