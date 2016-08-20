@@ -1,5 +1,6 @@
 ﻿using System.Web.Http;
 using Newtonsoft.Json;
+using Ticket_to_ride.Model;
 using Ticket_to_ride.Services;
 
 namespace ConnectApi.Controllers
@@ -16,7 +17,12 @@ namespace ConnectApi.Controllers
 
         public string Get()
         {
-            return JsonConvert.SerializeObject( _game.GetPlayersHand(0));
+            //in incorrect controller at the moment
+
+            TurnCoordinator turnCoordinator = new TurnCoordinator();
+
+            
+            return JsonConvert.SerializeObject( turnCoordinator.GetCurrentTurnPlayerType());
         }
 
         // GET api/values/5
