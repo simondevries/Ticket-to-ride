@@ -14,7 +14,7 @@ namespace Ticket_to_ride.Services
             {
                 
                 if (owner._availableTrains > connection.Weight &&
-                    owner.PlayerTrainHand.SpendCardsIfPossible(connection, owner._playerType, aiUndefindRouteCardSelector) ||
+                    owner._playerTrainHand.SpendCardsIfPossible(connection, owner._playerType, aiUndefindRouteCardSelector) ||
                     (Settings.PlayersCanAffordAnything))
                 {
                     owner.UseTrains(connection.Weight);

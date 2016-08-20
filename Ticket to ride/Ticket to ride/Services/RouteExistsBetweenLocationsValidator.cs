@@ -11,7 +11,7 @@ namespace Ticket_to_ride.Services
             Stack<Connection> routeStack = new Stack<Connection>();
             List<Connection> visitedLocations = new List<Connection>();
 
-            AddConnectionsToRouteStack(startLocation, routeStack, player);
+            AddConnectionsToRouteStack(startLocation, routeStack, player, map);
 
             while (routeStack.Any())
             {
@@ -25,8 +25,8 @@ namespace Ticket_to_ride.Services
                     }
 
                     
-                    AddConnectionsToRouteStack(currentConnection.A, routeStack, player);
-                    AddConnectionsToRouteStack(currentConnection.B, routeStack, player);
+                    AddConnectionsToRouteStack(currentConnection.A, routeStack, player, map);
+                    AddConnectionsToRouteStack(currentConnection.B, routeStack, player, map);
                         
                     visitedLocations.Add(currentConnection);
                 }
@@ -36,11 +36,13 @@ namespace Ticket_to_ride.Services
             return false;
         }
 
-        private static void AddConnectionsToRouteStack(Location startLocation, Stack<Connection> routeStack, Player player)
+        private static void AddConnectionsToRouteStack(Location startLocation, Stack<Connection> routeStack, Player player, Map map)
         {
             //Add initial connections
-            foreach (var connection in startLocation.AssociatedConnections)
+            foreach (string connectionIdentity in startLocation.AssociatedConnections)
             {
+                Connection connection = map.GetConnectionByIdentity(connectionIdentity);
+
                 if (connection.Owner == player)
                 {
                     routeStack.Push(connection);

@@ -32,10 +32,8 @@ namespace Ticket_to_ride.Repository
             FirebaseResponse response = client.Get("Turn");
             var messages = response.ResultAs<dynamic>(); //The response will contain the data being retreived
 
-            TurnCoordinator turnCoordinator = JsonConvert.DeserializeObject<TurnCoordinator>(messages);
-
-            //todo special mapping
-
+            TurnDto turnCoordinator = JsonConvert.DeserializeObject<TurnDto>(messages);
+            
             return turnCoordinator.Map();
         }
     }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Ticket_to_ride.Model;
+using Ticket_to_ride.Repository;
 
 namespace Ticket_to_ride.Services.Ai
 {
@@ -11,7 +12,7 @@ namespace Ticket_to_ride.Services.Ai
         private List<List<int>> _fourRouteCardCombinations;
         private AiRouteCoordinator _aiRouteCoordinator;
         private AiNumberOfCardsToPickUpDecider _aiNumberOfCardsToPickUpDecider;
-
+        private RouteDeckRepository _routeDeckRepository;
         public AiRouteCardPicker()
         {
             _aiRouteCoordinator = new AiRouteCoordinator();
@@ -27,6 +28,7 @@ namespace Ticket_to_ride.Services.Ai
                 new List<int>{1,2},
             };
             _aiNumberOfCardsToPickUpDecider = new AiNumberOfCardsToPickUpDecider();
+            _routeDeckRepository = new RouteDeckRepository();
         }
 
         public void PickThreeRouteCards()
@@ -34,9 +36,13 @@ namespace Ticket_to_ride.Services.Ai
             throw new NotImplementedException();
         }
 
-        public PlayerRouteHand PickFourRouteCards(Map riskMap, RouteCardDeck routeCardDeck, int aiId, List<int> numberOfTrainsOtherPlayersHave, AiPlayerPersonalities currentAiPersonality, Logger logger)
+        public PlayerRouteHand PickFourRouteCards(Map riskMap, int aiId, List<int> numberOfTrainsOtherPlayersHave, AiPlayerPersonalities currentAiPersonality, Logger logger)
         {
+            RouteCardDeck routeCardDeck = _routeDeckRepository.Load();
+
             List<RouteCard> cardsPulledFromTop = routeCardDeck.PullCardsFromTop(NumberOfRouteCardsToChooseFrom);
+            _routeDeckRepository.Update(routeCardDeck);
+
             List<List<Location>> allRouteCombinations = BuildAllRouteCombinations(cardsPulledFromTop, numberOfTrainsOtherPlayersHave, currentAiPersonality);
             List<Route> possibleSolutionRoute = new List<Route>();
 
@@ -76,9 +82,9 @@ namespace Ticket_to_ride.Services.Ai
             }
 
 
-//            int numberOfCardsToPickup =
-//_aiNumberOfCardsToPickUpDecider.ShouldPickUpMoreCards(numberOfTrainsOtherPlayersHave,
-//currentAiPersonality) - 1;
+            //            int numberOfCardsToPickup =
+            //_aiNumberOfCardsToPickUpDecider.ShouldPickUpMoreCards(numberOfTrainsOtherPlayersHave,
+            //currentAiPersonality) - 1;
             //wants a list of routeCards to be made froma  list of locations
             logger.Log(
                 string.Format("Player {0} selected the following routecards", aiId), LogType.Debug);
@@ -96,19 +102,19 @@ namespace Ticket_to_ride.Services.Ai
         {
             List<List<Location>> destinationLocations = new List<List<Location>>();
 
- 
+
 
             foreach (List<int> cardCombination in _fourRouteCardCombinations)
             {
 
-                    List<Location> possibleSolution = new List<Location>();
-                    foreach (int fourRouteCardCombination in cardCombination)
-                    {
-                        possibleSolution.Add(playerRouteHand[fourRouteCardCombination].GetStartLocation());
-                        possibleSolution.Add(playerRouteHand[fourRouteCardCombination].GetEndLocation());
+                List<Location> possibleSolution = new List<Location>();
+                foreach (int fourRouteCardCombination in cardCombination)
+                {
+                    possibleSolution.Add(playerRouteHand[fourRouteCardCombination].GetStartLocation());
+                    possibleSolution.Add(playerRouteHand[fourRouteCardCombination].GetEndLocation());
 
-                    }
-                    destinationLocations.Add(possibleSolution);
+                }
+                destinationLocations.Add(possibleSolution);
             }
 
             return destinationLocations;
@@ -116,14 +122,14 @@ namespace Ticket_to_ride.Services.Ai
 
         private static void LogPickedUpRouteCards(int aiId, Logger logger, List<RouteCard> cards)
         {
-            IEnumerable<string> enumerable = cards.Select(card => card.GetStartLocation() +" -> "+ card.GetEndLocation());
+            IEnumerable<string> enumerable = cards.Select(card => card.GetStartLocation() + " -> " + card.GetEndLocation());
             logger.Log(string.Format("Player {0} picked up {1}", aiId, string.Join(" ", enumerable.ToArray())), LogType.Debug);
         }
 
         private static void LogSelectedRouteCards(int aiId, Logger logger, RouteCard cards)
         {
             logger.Log(
-                string.Format("{0} -> {1}",cards.GetStartLocation(),
+                string.Format("{0} -> {1}", cards.GetStartLocation(),
                     cards.GetEndLocation()), LogType.Debug);
         }
     }

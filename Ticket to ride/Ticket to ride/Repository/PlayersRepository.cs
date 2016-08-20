@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using FireSharp;
 using FireSharp.Config;
 using FireSharp.Interfaces;
 using FireSharp.Response;
 using Newtonsoft.Json;
+using Ninject.Infrastructure.Language;
 using Ticket_to_ride.Model;
 using Ticket_to_ride.Services;
+using Ticket_to_ride.Services.Ai;
 
 namespace Ticket_to_ride.Repository
 {
@@ -25,22 +28,47 @@ namespace Ticket_to_ride.Repository
             client = new FirebaseClient(config);
         }
 
-        public void Update(Player player)
+        public void Update(List<Player> players)
         {
-            string serializeObject = JsonConvert.SerializeObject(player.Map());
-            client.Set("Players", serializeObject);
+            List<AiDto> aiPlayersDto = new List<AiDto>();
+            List<HumanDto> humanPlayersDto = new List<HumanDto>();
+            foreach (Player player in players)
+            {
+                if (player._playerType == PlayerType.Ai)
+                {
+                    Ai ai = (Ai) player;
+                    aiPlayersDto.Add(ai.Map());
+                }
+                else
+                {
+                    Human human = (Human)player;
+                    humanPlayersDto.Add(human.Map());
+                }
+            }
+
+            string serializeObject = JsonConvert.SerializeObject(aiPlayersDto);
+            client.Set("AiPlayers", serializeObject);
+             serializeObject = JsonConvert.SerializeObject(humanPlayersDto);
+             client.Set("HumanPlayers", serializeObject);
         }
 
-        public Player Load()
+        public List<Player> Load()
         {
-            FirebaseResponse response = client.Get("Players");
-            var messages = response.ResultAs<dynamic>(); //The response will contain the data being retreived
+            List<Player> players = new List<Player>();
 
-            List<PlayerDto> players = JsonConvert.DeserializeObject<List<PlayerDto>>(messages);
+            FirebaseResponse responseAi = client.Get("AiPlayers");
+            FirebaseResponse responseHuman = client.Get("HumanPlayers");
 
-            //todo special mapping
+            var aiDynamic = responseAi.ResultAs<dynamic>(); 
+            var humanDynamic = responseHuman.ResultAs<dynamic>();
 
-            return players.Map();
+            List<AiDto> aiDto = JsonConvert.DeserializeObject<List<AiDto>>(aiDynamic);
+            List<HumanDto> humanDto = JsonConvert.DeserializeObject<List<HumanDto>>(humanDynamic);
+
+            players.AddRange(aiDto.Select(ai => ai.Map()));
+            players.AddRange(humanDto.Select(human => human.Map()));
+
+            return players;
         }
     }
 }

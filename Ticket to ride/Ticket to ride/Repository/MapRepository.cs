@@ -26,13 +26,13 @@ namespace Ticket_to_ride.Repository
 
         public void Update(Map map)
         {
-            string serializeObject = JsonConvert.SerializeObject(map.Map());
+            string serializeObject = JsonConvert.SerializeObject(map.MapToDto());
             client.Set("Map", serializeObject);
         }
 
         public Map Load()
         {
-            FirebaseResponse response = client.Get("map");
+            FirebaseResponse response = client.Get("Map");
             var messages = response.ResultAs<dynamic>(); //The response will contain the data being retreived
 
             MapDto map = JsonConvert.DeserializeObject<MapDto>(messages);

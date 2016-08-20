@@ -1,16 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Ticket_to_ride.Forms;
 using Ticket_to_ride.Services;
 
 namespace Ticket_to_ride.Model
 {
+    public class RouteCardDeckDto
+    {
+        public List<RouteCardDto> EasyRouteCards { get; set; }
+        public List<RouteCardDto> HardRouteCards { get; set; }
+
+        public RouteCardDeck Map()
+        {
+            List<RouteCard> easyRouteCards = EasyRouteCards.Select(card => card.Map()).ToList();
+            List<RouteCard> hardRouteCards = HardRouteCards.Select(card => card.Map()).ToList();
+
+            return new RouteCardDeck(easyRouteCards, hardRouteCards);
+        }
+    }
+
     public class RouteCardDeck
     {
-        private List<RouteCard> _easyRouteCards;
-        private List<RouteCard> _hardRouteCards;
+        private readonly List<RouteCard> _easyRouteCards;
+        private readonly List<RouteCard> _hardRouteCards;
         private const int EASY_DECK_SIZE = 30;
         private const int HARD_DECK_SIZE = 10;
+
+        public RouteCardDeck(List<RouteCard> easyRouteCards, List<RouteCard> hardRouteCards)
+        {
+            _easyRouteCards = easyRouteCards;
+            _hardRouteCards = hardRouteCards;
+        }
+
         public RouteCardDeck(Map map)
         {
             int numberOfLocations = map.GetNumberOfLocations();
@@ -87,9 +109,14 @@ namespace Ticket_to_ride.Model
 
         public RouteCardDeckDto Map()
         {
+            List<RouteCardDto> easyRouteCards = _easyRouteCards.Select(card => card.Map()).ToList();
+            List<RouteCardDto> hardRouteCards = _hardRouteCards.Select(card => card.Map()).ToList();
+
+
             return new RouteCardDeckDto
             {
-
+                EasyRouteCards = easyRouteCards,
+                HardRouteCards = hardRouteCards
             };
         }
     }

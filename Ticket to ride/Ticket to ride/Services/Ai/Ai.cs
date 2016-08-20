@@ -1,64 +1,121 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using Ticket_to_ride.Model;
+using Ticket_to_ride.Repository;
 
 namespace Ticket_to_ride.Services.Ai
 {
+
+    public class AiDto
+    {
+        //Player
+        public PlayerRouteHandDto PlayerRouteHandDto { get; set; }
+        public int PlayerType { get; set; }
+        public int Id { get; set; }
+        public string Colour { get; set; }
+        public PlayerTrainHandDto PlayerTrainHandDto { get; set; }
+        public int AvailableTrains { get; set; }
+
+        //Ai Specific
+        public AiPlayerPersonalities AiPlayerPersonality { get; set; }
+        public PlayerRouteHandDto FinishedRouteCards { get; set; }
+
+        //Used for mapping
+        public Ai Map()
+        {
+            return new Ai(PlayerRouteHandDto.Map(), Id, new SolidBrush(Color.FromName(Colour)), AiPlayerPersonality,  
+                PlayerType, PlayerTrainHandDto.Map(), AvailableTrains, FinishedRouteCards.Map());
+        }
+
+        //Map requires route card train deck reference
+        //Map requires game train deck reference
+        //Map requres turn coordinator
+    }
+
+
     public class Ai : Player
     {
         private readonly AiRouteCoordinator _aiRouteCoordinator;
         private readonly AiPlayerPersonalities _aiPlayerPersonality;
         private readonly AiTurnDecider _aiTurnDecider;
-        private readonly AiTrainCardPicker _aiTrainCardPicker;
-        private readonly TrainDeck _gameTrainDeck;
-        private readonly TurnCoordinator _turnCoordinator;
-        private readonly RouteCardDeck _routeCardDeck;
         public readonly PlayerRouteHand _finishdRouteCards;
 
-        public Ai(PlayerRouteHand playerRouteHand, int id, Brush colour, TrainDeck trainDeck, AiPlayerPersonalities aiPlayerPersonality, TurnCoordinator turnCoordinator, RouteCardDeck routeCardDeck)
-            : base(trainDeck)
+        //Normal constructor
+        public Ai(PlayerRouteHand playerRouteHand, int id, Brush colour, TrainDeck trainDeck, AiPlayerPersonalities aiPlayerPersonality)
         {
-            PlayerRouteHand = playerRouteHand;
+            _playerRouteHand = playerRouteHand;
             _playerType = PlayerType.Ai;
             _id = id;
             _colour = colour;
             _aiRouteCoordinator = new AiRouteCoordinator();
             _aiTurnDecider = new AiTurnDecider();
-            _aiTrainCardPicker = new AiTrainCardPicker();
             _aiPlayerPersonality = aiPlayerPersonality;
-            _gameTrainDeck = trainDeck;
-            _turnCoordinator = turnCoordinator;
-            _routeCardDeck = routeCardDeck;
             _finishdRouteCards = new PlayerRouteHand();
+            _playerTrainHand = new PlayerTrainHand(trainDeck);
+            _availableTrains = NUMBER_OF_TRAINS_AT_START;
         }
 
-        public void PerformTurn(Map map, List<int> numberOfTrainsOtherPlayersHave, Logger gameLog)
+        //Dto Constructor
+        public Ai(PlayerRouteHand playerRouteHand, int id, SolidBrush colour, AiPlayerPersonalities aiPlayerPersonality,
+            int playerType, PlayerTrainHand playerTrainHand, int availableTrains, PlayerRouteHand finishedRouteCards)
+        {
+            _playerRouteHand = playerRouteHand;
+            _playerType = (PlayerType)playerType;
+            _id = id;
+            _colour = colour;
+            _aiRouteCoordinator = new AiRouteCoordinator();
+            _aiTurnDecider = new AiTurnDecider();
+            _aiPlayerPersonality = aiPlayerPersonality;
+            _playerTrainHand = playerTrainHand;
+            _availableTrains = availableTrains;
+            _finishdRouteCards = finishedRouteCards;
+        }
+
+        //todo I shouldn't be passing players around here
+        public void PerformTurn(Map map, List<int> numberOfTrainsOtherPlayersHave, Logger gameLog, List<Player> players)
         {
  
             //your sample code
-            Route choosenRoute = _aiRouteCoordinator.GenerateRoute(map, _id, PlayerRouteHand.GetAllLocations(), gameLog);
+            Route choosenRoute = _aiRouteCoordinator.GenerateRoute(map, _id, _playerRouteHand.GetAllLocations(), gameLog);
 
 
             Console.WriteLine(choosenRoute.ToString());
 
 
             RiskMapGenerator riskMapGenerator = new RiskMapGenerator(map);
-            riskMapGenerator.GetConnectionWithGreatestRisk(PlayerRouteHand, choosenRoute, _id);
+            riskMapGenerator.GetConnectionWithGreatestRisk(_playerRouteHand, choosenRoute, _id);
 
-            PlayerTrainHand = _aiTurnDecider.PerformTurn(_finishdRouteCards, map, PlayerTrainHand, _aiPlayerPersonality, this, _gameTrainDeck, _routeCardDeck, PlayerRouteHand, numberOfTrainsOtherPlayersHave, gameLog);
+            _playerTrainHand = _aiTurnDecider.PerformTurn(_finishdRouteCards, map, _playerTrainHand, _aiPlayerPersonality, this, _playerRouteHand, numberOfTrainsOtherPlayersHave, gameLog);
 
 
             if (Settings.AutoAiTurn)
             {
-                _turnCoordinator.NextTurn();
+                TurnCoordinator turnCoordinator = new TurnRepository().Load();
+                turnCoordinator.NextTurn(players);
+                new TurnRepository().Update(turnCoordinator);
             }
         }
 
         public PlayerRouteHand GetFinishedRouteHand
         {
             get { return  _finishdRouteCards; }
+        }
+
+        public AiDto Map()
+        {
+            //todo sdv test mapping
+            return new AiDto
+            {
+                PlayerRouteHandDto = _playerRouteHand.Map(),
+                PlayerType = (int) _playerType,
+                PlayerTrainHandDto = _playerTrainHand.MapToDto(),
+                AiPlayerPersonality = _aiPlayerPersonality,
+                Id = _id,
+                AvailableTrains = _availableTrains,
+                Colour = _colour.ToString(), //todo sdv test mapping
+                FinishedRouteCards = _finishdRouteCards.Map()
+            };
         }
 
 

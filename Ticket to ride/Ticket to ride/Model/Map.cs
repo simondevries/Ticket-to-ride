@@ -1,8 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Ticket_to_ride.Model
 {
+    public class MapDto
+    {
+        public List<ConnectionDto> Connections { get; set; }
+        public List<Location> Locations { get; set; }
+
+        public Map Map()
+        {
+            List<Connection> connectionDto = Connections.Select(conn => conn.Map(Locations)).ToList();
+
+            return new Map(connectionDto, Locations);
+        }
+    }
+
     public class Map : IMap
     {
         readonly List<Connection> _connections = new List<Connection>();
@@ -17,8 +31,8 @@ namespace Ticket_to_ride.Model
 
             foreach (Connection con in connection)
             {
-                con.A.AddToAssociatedConnections(con);
-                con.B.AddToAssociatedConnections(con);
+                con.A.AddToAssociatedConnections(con.Identity);
+                con.B.AddToAssociatedConnections(con.Identity);
             }
         }
 
@@ -69,6 +83,22 @@ namespace Ticket_to_ride.Model
         public int GetNumberOfLocations()
         {
             return _numberOfLocations;
+        }
+
+        public MapDto MapToDto()
+        {
+            List<ConnectionDto> connectionDtos = _connections.Select(conn => conn.Map()).ToList();
+
+            return new MapDto
+            {
+                Connections = connectionDtos,
+                Locations = _location
+            };
+        }
+
+        public Connection GetConnectionByIdentity(string connectionIdentity)
+        {
+            return _connections.First(connection => connection.Identity == connectionIdentity);
         }
     }
 }

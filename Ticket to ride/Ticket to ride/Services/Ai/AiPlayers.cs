@@ -1,23 +1,23 @@
 ﻿namespace Ticket_to_ride.Services.Ai
 {
-    public class AiPlayerPersonalities : IAiPlayerPersonality
+    public class AiPlayerPersonalities
     {
-        public int RiskDifferenceBetweenConnectionsToConsiderWorthOfSavingUpFor()
-        {
-            return 5;
+
+        public int RiskDifferenceBetweenConnectionsToConsiderWorthOfSavingUpFor {
+            get { return 5; }
         }
 
-        public int NumberOfTrainsOtherPlayersNeedToHaveInOrderToPickUpFourCards()
+        public int NumberOfTrainsOtherPlayersNeedToHaveInOrderToPickUpFourCards
         {
-            return 30;
+            get { return 30; }
         }
-        public int NumberOfTrainsOtherPlayersNeedToHaveInOrderToPickUpThreeCards()
+        public int NumberOfTrainsOtherPlayersNeedToHaveInOrderToPickUpThreeCards
         {
-            return 20;
+            get { return 20; }
         }
-        public int NumberOfTrainsOtherPlayersNeedToHaveInOrderToPickUpTwoCards()
+        public int NumberOfTrainsOtherPlayersNeedToHaveInOrderToPickUpTwoCards
         {
-            return 10;
+            get { return 10; }
         }
     }
 }

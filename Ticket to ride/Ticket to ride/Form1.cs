@@ -22,7 +22,7 @@ namespace Ticket_to_ride
         private const string TXT_NUMBER_OF_AI_TEXT = "Please enter number of Ai";
         private const string TXT_NUMBER_OF_HUMANS_TEXT = "Please enter number of Humans";
         private  Size _pnlViewOriginalSize = new Size(1041, 720);
-        private GameRepository _gameRepository = new GameRepository();
+        private GameLoader _gameLoader = new GameLoader();
         public Form1()
         {
             _game = new Game();
@@ -392,12 +392,12 @@ namespace Ticket_to_ride
 
         private void button3_Click(object sender, EventArgs e)
         {
-            _gameRepository.Update(_game);
+            _game.Update();
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
-            _gameRepository.Load(new Guid(txtGameGuid.Text));
+            _game.Load();
         }
 
         private void pnlGame_Paint(object sender, PaintEventArgs e)

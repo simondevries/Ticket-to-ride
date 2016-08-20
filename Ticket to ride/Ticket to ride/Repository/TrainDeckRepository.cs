@@ -36,9 +36,8 @@ namespace Ticket_to_ride.Repository
             FirebaseResponse response = client.Get("TrainDeck");
             var messages = response.ResultAs<dynamic>(); //The response will contain the data being retreived
 
-            TrainDeck trainDeck = JsonConvert.DeserializeObject<TrainDeck>(messages);
+            TrainDeckDto trainDeck = JsonConvert.DeserializeObject<TrainDeckDto>(messages);
 
-            //todo special mapping
 
             return trainDeck.Map();
         }

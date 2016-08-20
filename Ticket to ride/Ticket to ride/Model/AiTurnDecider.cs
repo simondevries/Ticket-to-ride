@@ -19,11 +19,11 @@ namespace Ticket_to_ride.Model
             _routeCardPicker = new AiRouteCardPicker();
         }
 
-        public PlayerTrainHand PerformTurn(PlayerRouteHand finishdRouteCards, Map riskMap, PlayerTrainHand playerTrainHand, AiPlayerPersonalities aiPlayerPersonality, Ai ai, TrainDeck trainDeck, RouteCardDeck routeCardDeck, PlayerRouteHand playerRouteHand, List<int> numberOfTrainsOtherPlayersHave, Logger logger){
+        public PlayerTrainHand PerformTurn(PlayerRouteHand finishdRouteCards, Map riskMap, PlayerTrainHand playerTrainHand, AiPlayerPersonalities aiPlayerPersonality, Ai ai, PlayerRouteHand playerRouteHand, List<int> numberOfTrainsOtherPlayersHave, Logger logger){
             _trainCardPicker = new AiTrainCardPicker();
             _aiUndefindRouteCardSelector = new AiUndefindRouteCardSelector(playerTrainHand);
 
-            bool pickedUpRouteCards = PickRouteCardsIfNecessairy(finishdRouteCards, riskMap, aiPlayerPersonality, ai, routeCardDeck, playerRouteHand, numberOfTrainsOtherPlayersHave, logger);
+            bool pickedUpRouteCards = PickRouteCardsIfNecessairy(finishdRouteCards, riskMap, aiPlayerPersonality, ai, playerRouteHand, numberOfTrainsOtherPlayersHave, logger);
             if (pickedUpRouteCards)
             {
                 //end turn
@@ -41,12 +41,12 @@ namespace Ticket_to_ride.Model
 
             if (!successfullyPlacedTrain)
             {
-                _trainCardPicker.PickCard(trainDeck, preferredConnections, playerTrainHand);
+                _trainCardPicker.PickCard(preferredConnections, playerTrainHand);
             }
             return playerTrainHand;
         }
 
-        private bool PickRouteCardsIfNecessairy(PlayerRouteHand finishdRouteCards, Map riskMap, AiPlayerPersonalities aiPlayerPersonality, Ai ai, RouteCardDeck routeCardDeck, PlayerRouteHand playerRouteHand, List<int> numberOfTrainsOtherPlayersHave, Logger logger)
+        private bool PickRouteCardsIfNecessairy(PlayerRouteHand finishdRouteCards, Map riskMap, AiPlayerPersonalities aiPlayerPersonality, Ai ai, PlayerRouteHand playerRouteHand, List<int> numberOfTrainsOtherPlayersHave, Logger logger)
         {
 //PickupRouteCards
             if (riskMap.getConnections().OrderByDescending(conn => conn.Risk).FirstOrDefault().Risk == 0)
@@ -58,7 +58,7 @@ namespace Ticket_to_ride.Model
                 playerRouteHand.ClearRoutes();
                 //todo make it pick three cards
                 List<RouteCard> newRouteCards =
-                    _routeCardPicker.PickFourRouteCards(riskMap, routeCardDeck, ai._id, numberOfTrainsOtherPlayersHave,
+                    _routeCardPicker.PickFourRouteCards(riskMap, ai._id, numberOfTrainsOtherPlayersHave,
                         aiPlayerPersonality, logger).GetRoutes();
                 playerRouteHand.AddRoutes(newRouteCards);
                 return true;
@@ -90,7 +90,7 @@ namespace Ticket_to_ride.Model
             return false;
         }
 
-        public List<Connection> GetPreferredRoutes(Map riskMap, IAiPlayerPersonality aiPlayerPersonality)
+        public List<Connection> GetPreferredRoutes(Map riskMap, AiPlayerPersonalities aiPlayerPersonality)
         {
 //cases
             //High, High, High, High => 4th High excluded
@@ -110,7 +110,7 @@ namespace Ticket_to_ride.Model
             for (int i = 1; i < connections.Count; i++)
             {
                 if (connections[i - 1].Risk - connections[i].Risk <
-                    aiPlayerPersonality.RiskDifferenceBetweenConnectionsToConsiderWorthOfSavingUpFor() && connections[i].Risk != 0)
+                    aiPlayerPersonality.RiskDifferenceBetweenConnectionsToConsiderWorthOfSavingUpFor && connections[i].Risk != 0)
                 {
                     urgentActionCards.Add(connections[i]);
                 }

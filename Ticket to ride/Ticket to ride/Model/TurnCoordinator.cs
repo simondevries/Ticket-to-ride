@@ -1,93 +1,119 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows;
+using Ticket_to_ride.Repository;
 using Ticket_to_ride.Services;
 using Ticket_to_ride.Services.Ai;
 
 namespace Ticket_to_ride.Model
 {
+    public class TurnDto
+    {
+        public int CurrentTurn { get; set; }
+        public int Turn { get; set; }
+        public bool IsLastTurn { get; set; }
+        public int LastRoundPlayerId { get; set; }
+        public int MovesLeftInTurn { get; set; }
+
+        public TurnCoordinator Map()
+        {
+            return new TurnCoordinator((PlayerType)CurrentTurn, Turn, IsLastTurn, LastRoundPlayerId, MovesLeftInTurn);
+        }
+    }
+
     public class TurnCoordinator
     {
         PlayerType _currentTurn;
-        List<Player> _players;
-        List<PlayerType> _playertypes;
         int _turn;
         private bool _isLastRound;
-        private int lastRoundPlayerId;
-        private readonly Map _map;
+        private int _lastRoundPlayerId;
         private int _movesLeftInTurn;
+
         private const int TOTAL_CARD_DRAWS = 2;
+        private readonly Map _map;
         private ScoreCalculator _scoreCalculator;
         private Logger _gameLog;
 
-        public TurnCoordinator( Map map, ScoreCalculator scoreCalculator, Logger gameLog)
+        public TurnCoordinator(PlayerType currentTurn, int turn, bool isLastRound, int lastRoundPlayerId,
+            int movesLeftInTurn)
+        {
+            _currentTurn = currentTurn;
+            _turn = turn;
+            _isLastRound = isLastRound;
+            _lastRoundPlayerId = lastRoundPlayerId;
+            _movesLeftInTurn = movesLeftInTurn;
+        }
+
+        public TurnCoordinator(Map map, ScoreCalculator scoreCalculator, Logger gameLog)
         {
             _scoreCalculator = scoreCalculator;
             _gameLog = gameLog;
-            _players = new List<Player>();
             _map = map;
             _movesLeftInTurn = TOTAL_CARD_DRAWS;
         }
 
+        public TurnCoordinator()
+        {
+        }
+
         public void SetPlayers(List<Player> players)
         {
-            _players = players;
             _currentTurn = players[0]._playerType;
         }
 
-        public void NextTurn()
+        public void NextTurn(List<Player> players)
         {
             MessageBox.Show("Next Turn");
 
-            CheckIfLastTurn();
-            IncrementTurn();
+            CheckIfLastTurn(players);
+            IncrementTurn(players);
             _movesLeftInTurn = 2;
-            _currentTurn = _players[_turn]._playerType;
+            _currentTurn = players[_turn]._playerType;
             if (Settings.AutoAiTurn)
             {
-                CheckIfNeedToPlayAiTurn();
+                CheckIfNeedToPlayAiTurn(players);
             }
         }
 
-        private void CheckIfNeedToPlayAiTurn()
+        private void CheckIfNeedToPlayAiTurn(List<Player> players)
         {
             if (_currentTurn == PlayerType.Ai)
             {
-                Ai a = (Ai) _players[_turn];
+                Ai a = (Ai) players[_turn];
 
-                List<int> numberOfTrainsOtherPlayersHave = GetNumberOfTrainsOtherPlayersHave();
+                List<int> numberOfTrainsOtherPlayersHave = GetNumberOfTrainsOtherPlayersHave(players);
 
-                a.PerformTurn(_map, numberOfTrainsOtherPlayersHave, _gameLog);
+                a.PerformTurn(_map, numberOfTrainsOtherPlayersHave, _gameLog,players);
             }
         }
 
-        private List<int> GetNumberOfTrainsOtherPlayersHave()
+        private List<int> GetNumberOfTrainsOtherPlayersHave(List<Player> players)
         {
             List<int> numberOfTrainsOtherPlayersHave = new List<int>();
-            foreach (Player player in _players)
+            foreach (Player player in players)
             {
                 numberOfTrainsOtherPlayersHave.Add(player._availableTrains);
             }
             return numberOfTrainsOtherPlayersHave;
         }
 
-        private void CheckIfLastTurn()
+        private void CheckIfLastTurn(List<Player> players)
         {
-            if (_isLastRound && lastRoundPlayerId == _players[_turn]._id)
+            if (_isLastRound && _lastRoundPlayerId == players[_turn]._id)
             {
                 MessageBox.Show("Game Over");
-                MessageBox.Show(_scoreCalculator.CalculateEndGameScore(_players));
+                MessageBox.Show(_scoreCalculator.CalculateEndGameScore(players));
             }
 
-            if (_players[_turn].HasFinished)
+            if (players[_turn].HasFinished)
             {
-                if (_players[_turn]._id == lastRoundPlayerId)
+                if (players[_turn]._id == _lastRoundPlayerId)
                 {
                     MessageBox.Show("Last round");
                     
                 }
                 _isLastRound = true;
-                lastRoundPlayerId = _players[_turn]._id;
+                _lastRoundPlayerId = players[_turn]._id;
             }
 
         }
@@ -107,18 +133,18 @@ namespace Ticket_to_ride.Model
             return false;
         }
 
-        public void DecrementMoveAndTryProgressTurn()
+        public void DecrementMoveAndTryProgressTurn(List<Player> players)
         {
             DecrementMove();
             if (_movesLeftInTurn <= 0)
             {
-                NextTurn();
+                NextTurn(players);
             }
         }
 
-        private void IncrementTurn()
+        private void IncrementTurn(List<Player> players)
         {
-            if (_turn + 1 >= _players.Count)
+            if (_turn + 1 >= players.Count)
             {
                 _turn = 0;
             }
@@ -134,22 +160,32 @@ namespace Ticket_to_ride.Model
 
         public PlayerType GetCurrentTurnPlayerType()
         {
-            return _currentTurn;
+            if (Settings.UsingApi)
+            {
+                TurnRepository repository = new TurnRepository();
+                TurnCoordinator turnCoordinator = repository.Load();
+
+                return turnCoordinator._currentTurn;
+            }
+            else
+            {
+                return _currentTurn;
+            }
         }
 
 
-        public Player GetCurrentTurnPlayer()
+        public Player GetCurrentTurnPlayer(List<Player> players)
         {
-            if (_turn < _players.Count)
+            if (_turn < players.Count)
             {
-                return _players[_turn];
+                return players[_turn];
             }
             return null;
         }
 
-        public TurnCoordinatorDto Map()
+        public TurnDto Map()
         {
-            return new TurnCoordinatorDto
+            return new TurnDto
             {
                 Turn = _turn
             };

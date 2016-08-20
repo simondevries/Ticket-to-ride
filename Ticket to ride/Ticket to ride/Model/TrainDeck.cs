@@ -4,6 +4,27 @@ using System.Linq;
 using Ticket_to_ride.Services;
 namespace Ticket_to_ride.Model
 {
+
+
+    public class TrainDeckDto
+    {
+        public List<int> Deck { get; set; }
+        public List<int> CardTypes { get; set; }
+        public List<int> FaceUpCards { get; set; }
+        public List<int> DiscardPile { get; set; }
+
+        public TrainDeck Map()
+        {
+
+            var deck = Deck.Select(card => (CardType)Enum.Parse(typeof(CardType), "" + card)).ToList(); 
+            var cardTypes = CardTypes.Select(card => (CardType)Enum.Parse(typeof(CardType), "" + card)).ToList(); 
+            var faceUpCards = FaceUpCards.Select(card => (CardType)Enum.Parse(typeof(CardType), "" + card)).ToList(); 
+            var discardPile = DiscardPile.Select(card => (CardType)Enum.Parse(typeof(CardType), "" + card)).ToList(); 
+
+            return new TrainDeck(deck, cardTypes, faceUpCards,discardPile);
+        }
+    }
+
     public class TrainDeck
     {
         private readonly List<CardType> _deck = new List<CardType>();
@@ -17,7 +38,6 @@ namespace Ticket_to_ride.Model
 
         public TrainDeck(List<int> trainDeck)
         {
-            _deck =  trainDeck.Select(card =>   (CardType)Enum.Parse(typeof(CardType), ""+card)).ToList(); 
         }
 
         /// <summary>
@@ -44,6 +64,14 @@ namespace Ticket_to_ride.Model
             }
 
             _deck.Shuffle();
+        }
+
+        public TrainDeck(List<CardType> trainDeck, List<CardType> cardTypes, List<CardType> faceUpCards, List<CardType> discardPile)
+        {
+            _deck = trainDeck;
+            _cardTypes = cardTypes;
+            _faceUpCards = faceUpCards;
+            _discardPile = discardPile;
         }
 
         public bool FaceUpBoardContains(CardType cardType)
@@ -109,7 +137,7 @@ namespace Ticket_to_ride.Model
             {
                 for (int i = 0; i < NUMBER_OF_CARDS_PLAYERS_START_WITH; i++)
                 {
-                    player.PlayerTrainHand.AddCard(PickTopCard());
+                    player._playerTrainHand.AddCard(PickTopCard());
                 }   
             }
         }
@@ -170,7 +198,13 @@ namespace Ticket_to_ride.Model
 
         public TrainDeckDto Map()
         {
-            return new TrainDeckDto {TrainDeck = _deck.Select(card => (int) card).ToList()};
+            return new TrainDeckDto
+            {
+                FaceUpCards = _faceUpCards.Select(card => (int)card).ToList(),
+                Deck = _deck.Select(card => (int)card).ToList(),
+                CardTypes = _cardTypes.Select(card => (int)card).ToList(),
+                DiscardPile = _discardPile.Select(card => (int)card).ToList()
+            };
         }
     }
 }

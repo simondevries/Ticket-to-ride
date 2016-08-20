@@ -1,7 +1,21 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Ticket_to_ride.Model
 {
+
+    public class PlayerRouteHandDto
+    {
+        public List<RouteCardDto> RouteCardDto { get; set; }
+
+        public PlayerRouteHand Map()
+        {
+            List<RouteCard> routeCards = RouteCardDto.Select(card => card.Map()).ToList();
+
+            return new PlayerRouteHand(routeCards);
+        }
+    }
+
     public class PlayerRouteHand
     {
         private readonly List<RouteCard> _routes;
@@ -56,6 +70,14 @@ namespace Ticket_to_ride.Model
         public void AddRoutes(PlayerRouteHand routeHand)
         {
             _routes.AddRange(routeHand._routes);
+        }
+
+        public PlayerRouteHandDto Map()
+        {
+            return new PlayerRouteHandDto
+            {
+                RouteCardDto = _routes.Select(route => route.Map()).ToList()
+            };
         }
     }
 }

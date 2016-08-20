@@ -74,7 +74,7 @@ namespace Ticket_to_ride.Services
             //score for cards
             foreach (Player player in players)
             {
-                PlayerRouteHand routeCards = player.PlayerRouteHand;
+                PlayerRouteHand routeCards = player._playerRouteHand;
                 if (player._playerType == PlayerType.Ai)
                 {
                     Ai.Ai ai = (Ai.Ai) player;

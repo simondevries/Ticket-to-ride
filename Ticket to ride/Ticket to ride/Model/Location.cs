@@ -1,7 +1,19 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Ticket_to_ride.Model
 {
+    //this dto is used for Connection -> location
+    public class LocationDto
+    {
+        public string Identifier { get; set; }
+
+        public Location Map(List<Location> locations)
+        {
+            return locations.First(loc => loc.Identifier == Identifier);
+        }
+    }
+
     public class Location
     {
 
@@ -9,18 +21,18 @@ namespace Ticket_to_ride.Model
         string _identifier;
         public Location()
         {
-            AssociatedConnections = new List<Connection>();
+            AssociatedConnections = new List<string>();
         }
 
-        public List<Connection> AssociatedConnections
+        public List<string> AssociatedConnections
         {
             get;
             set;
         }
 
-        public void AddToAssociatedConnections(Connection connection)
+        public void AddToAssociatedConnections(string connectionIdentity)
         {
-            AssociatedConnections.Add(connection);
+            AssociatedConnections.Add(connectionIdentity);
         }
 
         public string Identifier
@@ -49,7 +61,11 @@ namespace Ticket_to_ride.Model
         {
             get { return x; }
             set { x = value; }
-        }   
+        }
 
+        public LocationDto Map()
+        {
+            return new LocationDto {Identifier = Identifier};
+        }
     }
 }

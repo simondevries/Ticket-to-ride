@@ -1,12 +1,20 @@
 ﻿using System.Collections.Generic;
 using Ticket_to_ride.Model;
+using Ticket_to_ride.Repository;
 
 namespace Ticket_to_ride.Services.Ai
 {
     public class AiTrainCardPicker
     {
-        public void PickCard(TrainDeck trainDeck, List<Connection> connectionsOverRiskTollerance, PlayerTrainHand hand)
+        private TrainDeckRepository _trainDeckRepository;
+        public AiTrainCardPicker()
         {
+            _trainDeckRepository = new TrainDeckRepository();
+        }
+
+        public void PickCard(List<Connection> connectionsOverRiskTollerance, PlayerTrainHand hand)
+        {
+            TrainDeck trainDeck = _trainDeckRepository.Load();
             int moves = 0;
             List<Connection> cardsToRemove = new List<Connection>();
             foreach (Connection connection in connectionsOverRiskTollerance)
@@ -28,6 +36,8 @@ namespace Ticket_to_ride.Services.Ai
             {
                 hand.AddCard(trainDeck.PickTopCard());
             }
+
+            _trainDeckRepository.Update(trainDeck);
         }
     }
 }

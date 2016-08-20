@@ -5,11 +5,30 @@ using Ticket_to_ride.Forms;
 
 namespace Ticket_to_ride.Model
 {
+
+    public class PlayerTrainHandDto
+    {
+        public TrainDeckDto TrainDeckDto { get; set; }
+        public List<int> cards { get; set; }
+
+        public PlayerTrainHand Map()
+        {
+            List<CardType> cardTypes = cards.Select(card => (CardType) card).ToList();
+
+            return new PlayerTrainHand(TrainDeckDto.Map(), cardTypes);
+        }
+    }
+
     public class PlayerTrainHand
     {
-        public Player _owner;
-        public List<CardType> _cards;
         public TrainDeck _trainDeck;
+        public List<CardType> _cards;
+
+        public PlayerTrainHand(TrainDeck trainDeck, List<CardType> cards)
+        {
+            _cards = cards;
+            _trainDeck = trainDeck;
+        }
 
         public PlayerTrainHand(TrainDeck trainDeck)
         {
@@ -140,6 +159,17 @@ namespace Ticket_to_ride.Model
             }
             return false;
         }
+
+
+
+        public PlayerTrainHandDto MapToDto()
+        {
+            return new PlayerTrainHandDto()
+            {
+                TrainDeckDto = _trainDeck.Map(),
+                cards = _cards.Select(card => (int)card).ToList()
+            };
+        }
     }
 
     public class AiUndefindRouteCardSelector
@@ -184,5 +214,7 @@ namespace Ticket_to_ride.Model
                 PreferredCards = new List<CardType>();
             }
         }
+
+
     }
 }

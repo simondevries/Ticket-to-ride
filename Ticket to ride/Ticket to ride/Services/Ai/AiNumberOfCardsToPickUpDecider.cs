@@ -10,17 +10,17 @@ namespace Ticket_to_ride.Services.Ai
             int minNumberOfTrainsOtherPlayersHave = numberOfTrainsOtherPlayersHave.Min();
 
             if (minNumberOfTrainsOtherPlayersHave <
-                aiPlayerPersonality.NumberOfTrainsOtherPlayersNeedToHaveInOrderToPickUpTwoCards())
+                aiPlayerPersonality.NumberOfTrainsOtherPlayersNeedToHaveInOrderToPickUpTwoCards)
             {
                 return 2;
             }
             if (minNumberOfTrainsOtherPlayersHave <
-                aiPlayerPersonality.NumberOfTrainsOtherPlayersNeedToHaveInOrderToPickUpThreeCards())
+                aiPlayerPersonality.NumberOfTrainsOtherPlayersNeedToHaveInOrderToPickUpThreeCards)
             {
                 return 3;
             }
             if (minNumberOfTrainsOtherPlayersHave <
-                aiPlayerPersonality.NumberOfTrainsOtherPlayersNeedToHaveInOrderToPickUpFourCards())
+                aiPlayerPersonality.NumberOfTrainsOtherPlayersNeedToHaveInOrderToPickUpFourCards)
             {
                 return 4;
             }
