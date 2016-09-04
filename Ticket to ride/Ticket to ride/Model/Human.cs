@@ -16,13 +16,13 @@ namespace Ticket_to_ride.Model
 
         public Human Map()
         {
-            return new Human(PlayerRouteHandDto.Map(), Id, new SolidBrush(Color.FromName(Colour)), PlayerTrainHandDto.Map(), PlayerType, AvailableTrains);
+            return new Human(PlayerRouteHandDto.Map(), Id, Color.FromName(Colour), PlayerTrainHandDto.Map(), PlayerType, AvailableTrains);
         }
     }
 
    public  class Human : Player
     {
-        public Human(PlayerRouteHand playerRouteHand, int id, Brush colour, TrainDeck trainDeck)
+        public Human(PlayerRouteHand playerRouteHand, int id, Color colour, TrainDeck trainDeck)
         {
             _playerRouteHand = playerRouteHand;
             _playerType = PlayerType.Human;
@@ -33,7 +33,7 @@ namespace Ticket_to_ride.Model
 
         }
         //For DTO mappinmg
-        public Human(PlayerRouteHand playerRouteHand, int id, SolidBrush colour, PlayerTrainHand playerTrainHand, int playerType, int availableTrains)
+        public Human(PlayerRouteHand playerRouteHand, int id, Color colour, PlayerTrainHand playerTrainHand, int playerType, int availableTrains)
         {
             _playerRouteHand = playerRouteHand;
             _playerType = (PlayerType)playerType;
@@ -48,7 +48,8 @@ namespace Ticket_to_ride.Model
             //TODO sdv validate cards here instead
             if (TrianPlacer.CanSuccessfullyPlaceTrain(trainPlacement, map, this, null))
             {
-                turn.NextTurn(players);
+                //todo clean up logger
+                turn.NextTurn(players, new Logger());
             }
         }
 
@@ -62,7 +63,7 @@ namespace Ticket_to_ride.Model
                 PlayerTrainHandDto = _playerTrainHand.MapToDto(),
                 Id = _id,
                 AvailableTrains = _availableTrains,
-                Colour = _colour.ToString()
+                Colour = _colour.Name
             };
         }
     }

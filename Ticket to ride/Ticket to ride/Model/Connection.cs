@@ -12,11 +12,12 @@ namespace Ticket_to_ride.Model
         public LocationDto B { get; set; }
         public LocationDto A { get; set; }
         public int Weight { get; set; }
-
+        public string Color { get; set; }
         public int OriginalWeight { get; set; }
 
         public Connection Map(List<Location> locations)
         {
+            ConnectionColourMapper connectionColourMapper = new ConnectionColourMapper();
             return new Connection
             {
                 Owner = Owner,
@@ -27,6 +28,7 @@ namespace Ticket_to_ride.Model
                 B = B.Map(locations),
                 Risk = Risk,
                 Selected = Selected,
+                _colour = connectionColourMapper.Map(Color)
             };
         }
     }
@@ -118,7 +120,8 @@ namespace Ticket_to_ride.Model
                 Selected = selected,
                 Risk = Risk,
                 OriginalWeight = OriginalWeight,
-                Identitity = Identity
+                Identitity = Identity,
+                Color = _colour.ToString()
             };
         }
     }

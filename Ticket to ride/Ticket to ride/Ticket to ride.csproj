@@ -148,6 +148,7 @@
     <Compile Include="Model\NoCardsException.cs" />
     <Compile Include="Model\PlayerScore.cs" />
     <Compile Include="Model\RouteCardDeck.cs" />
+    <Compile Include="Model\RouteCardDeckCoordinator.cs" />
     <Compile Include="Model\RouteCardSelectorState.cs" />
     <Compile Include="Model\RouteCombinationMap.cs" />
     <Compile Include="Model\TrainDeck.cs" />

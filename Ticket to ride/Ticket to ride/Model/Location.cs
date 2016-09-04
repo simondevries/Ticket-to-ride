@@ -63,9 +63,25 @@ namespace Ticket_to_ride.Model
             set { x = value; }
         }
 
+
         public LocationDto Map()
         {
             return new LocationDto {Identifier = Identifier};
+        }
+    }
+    class LocationEqualityComparer : IEqualityComparer<Location>
+    {
+
+
+        public bool Equals(Location x, Location y)
+        {
+            return x.Identifier == y.Identifier;
+        }
+
+        public int GetHashCode(Location obj)
+        {
+            int hash = obj.X ^ obj.Y;
+            return hash.GetHashCode();
         }
     }
 }

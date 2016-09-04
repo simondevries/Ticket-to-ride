@@ -3,25 +3,25 @@ using System.Drawing;
 
 namespace Ticket_to_ride.Model
 {
-    public class BrushBuilder
+    public class ColourBuilder
     {
         private int _currentPlayerColourIndex = 0;
 
-        public Brush GetNextColour()
+        public Color GetNextColour()
         {
-            return brushes[_currentPlayerColourIndex++];
+            return colours[_currentPlayerColourIndex++];
         }
 
-        private List<Brush> brushes = new List<Brush>
+        private List<Color> colours = new List<Color>
         {
-            new SolidBrush(Color.Blue),
-            new SolidBrush(Color.Green),
-            new SolidBrush(Color.SaddleBrown),
-            new SolidBrush(Color.Red),
-            new SolidBrush(Color.LimeGreen),
-            new SolidBrush(Color.Gold),
-            new SolidBrush(Color.MediumPurple),
-            new SolidBrush(Color.Black)
+            Color.Blue,
+            Color.Green,
+            Color.SaddleBrown,
+            Color.Red,
+            Color.LimeGreen,
+            Color.Gold,
+            Color.MediumPurple,
+            Color.Black
         };
     }
 }

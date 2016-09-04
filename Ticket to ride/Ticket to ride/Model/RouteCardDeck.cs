@@ -43,6 +43,7 @@ namespace Ticket_to_ride.Model
             Random random = new Random();
             CreateDeck(map, numberOfLocations, EASY_DECK_SIZE, _easyRouteCards, false, random);
             CreateDeck(map, numberOfLocations, HARD_DECK_SIZE, _hardRouteCards, true, random);
+
         }
 
         private void CreateDeck(Map map, int numberOfLocations, int deckSize, List<RouteCard> deck, bool isHard, Random random)

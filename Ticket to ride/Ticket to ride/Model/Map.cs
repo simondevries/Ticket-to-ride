@@ -13,15 +13,15 @@ namespace Ticket_to_ride.Model
         {
             List<Connection> connectionDto = Connections.Select(conn => conn.Map(Locations)).ToList();
 
-            return new Map(connectionDto, Locations);
+            return new Map().FromDto(connectionDto, Locations);
         }
     }
 
     public class Map : IMap
     {
-        readonly List<Connection> _connections = new List<Connection>();
-        readonly List<Location> _location = new List<Location>();
-        private readonly int _numberOfLocations;
+        List<Connection> _connections = new List<Connection>();
+        List<Location> _location = new List<Location>();
+        private int _numberOfLocations;
 
         public Map(List<Connection> connection, List<Location> location)
         {
@@ -34,6 +34,22 @@ namespace Ticket_to_ride.Model
                 con.A.AddToAssociatedConnections(con.Identity);
                 con.B.AddToAssociatedConnections(con.Identity);
             }
+        }
+
+        public Map(){}
+
+        public Map FromDto(List<Connection> connection, List<Location> location)
+        {
+            _connections = connection;
+            _location = location;
+            _numberOfLocations = _location.Count;
+
+            foreach (Connection con in connection)
+            {
+                con.A.AssociatedConnections =con.A.AssociatedConnections;
+                con.B.AssociatedConnections = con.B.AssociatedConnections;
+            }
+            return this;
         }
 
         public void setWeight(Connection connectionToSet, int weight){

@@ -33,6 +33,7 @@ namespace Ticket_to_ride.Model
         private readonly Map _map;
         private ScoreCalculator _scoreCalculator;
         private Logger _gameLog;
+        private MapRepository _mapRepository;
 
         public TurnCoordinator(PlayerType currentTurn, int turn, bool isLastRound, int lastRoundPlayerId,
             int movesLeftInTurn)
@@ -42,6 +43,7 @@ namespace Ticket_to_ride.Model
             _isLastRound = isLastRound;
             _lastRoundPlayerId = lastRoundPlayerId;
             _movesLeftInTurn = movesLeftInTurn;
+            _mapRepository=new MapRepository();
         }
 
         public TurnCoordinator(Map map, ScoreCalculator scoreCalculator, Logger gameLog)
@@ -50,6 +52,7 @@ namespace Ticket_to_ride.Model
             _gameLog = gameLog;
             _map = map;
             _movesLeftInTurn = TOTAL_CARD_DRAWS;
+            _mapRepository = new MapRepository();
         }
 
         public TurnCoordinator()
@@ -61,8 +64,10 @@ namespace Ticket_to_ride.Model
             _currentTurn = players[0]._playerType;
         }
 
-        public void NextTurn(List<Player> players)
+        public void NextTurn(List<Player> players, Logger gameLog)
         {
+            //todo clean up game log
+            _gameLog = gameLog;
             MessageBox.Show("Next Turn");
 
             CheckIfLastTurn(players);
@@ -79,11 +84,13 @@ namespace Ticket_to_ride.Model
         {
             if (_currentTurn == PlayerType.Ai)
             {
-                Ai a = (Ai) players[_turn];
+                Ai ai = (Ai) players[_turn];
 
                 List<int> numberOfTrainsOtherPlayersHave = GetNumberOfTrainsOtherPlayersHave(players);
 
-                a.PerformTurn(_map, numberOfTrainsOtherPlayersHave, _gameLog,players);
+                Map map = _mapRepository.Load();
+                ai.PerformTurn(map, numberOfTrainsOtherPlayersHave, _gameLog, players);
+                _mapRepository.Update(map);
             }
         }
 
@@ -138,7 +145,7 @@ namespace Ticket_to_ride.Model
             DecrementMove();
             if (_movesLeftInTurn <= 0)
             {
-                NextTurn(players);
+                NextTurn(players, _gameLog);
             }
         }
 

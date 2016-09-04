@@ -13,6 +13,8 @@ namespace Ticket_to_ride.Repository
 {
     public class RouteDeckRepository
     {
+        public static int Count = 0;
+
         private IFirebaseClient client;
         public RouteDeckRepository()
         {
@@ -27,12 +29,14 @@ namespace Ticket_to_ride.Repository
 
         public void Update(RouteCardDeck routeDeck)
         {
+            Count++;
             string serializeObject = JsonConvert.SerializeObject(routeDeck.Map());
             client.Set("RouteDeck", serializeObject);
         }
 
         public RouteCardDeck Load()
         {
+            Count++;
             FirebaseResponse response = client.Get("RouteDeck");
             var messages = response.ResultAs<dynamic>(); //The response will contain the data being retreived
 

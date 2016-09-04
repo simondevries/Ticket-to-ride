@@ -42,7 +42,7 @@ namespace Ticket_to_ride.Services
         public Dictionary<Location, Route> CalculateMinCost(Location _startLocation, int currentUserId)
         {
             //Initialise a new empty route list
-            Dictionary<Location, Route> _shortestPaths = new Dictionary<Location, Route>();            
+            Dictionary<Location, Route> _shortestPaths = new Dictionary<Location, Route>(new LocationEqualityComparer());            
             //Initialise a new empty handled locations list
             List<Location> _handledLocations = new List<Location>();
             

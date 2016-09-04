@@ -35,19 +35,24 @@ namespace Ticket_to_ride.Services
         List<Player> _players;
         TrainDeck _trainDeck;
         Map _map;
-        RouteCardDeck _routeDeck;
         ScoreCalculator _scoreCalculator;
         private Logger _gameLog;
         private Guid _gameGuid;
         private GameLoader _gameLoader;
+        private RouteCardDeckCoordinator _routeCardDeckCoordinator;
+        private readonly RouteDeckRepository _routeDeckRepository;
+
 
         public Game()
-        {   
+        {
+            _routeCardDeckCoordinator = new RouteCardDeckCoordinator();
+            _routeDeckRepository = new RouteDeckRepository();
+
             _players = new List<Player>();
             _gameLog = new Logger();
             _map = new MapGenerator().CreateMap();
             _trainDeck = new TrainDeck();
-            _routeDeck = new RouteCardDeck(_map);
+            _routeCardDeckCoordinator.BuildRouteCardDeck();
             _gameGuid = Guid.NewGuid();
             _gameLoader = new GameLoader();
         }
@@ -66,7 +71,7 @@ namespace Ticket_to_ride.Services
 
             _scoreCalculator = new ScoreCalculator(_map, numberOfHumans + numberOfAi);
             _turnCoordinator = new TurnCoordinator(_map, _scoreCalculator, _gameLog);
-            PlayersBuilder playersBuilder = new PlayersBuilder(_trainDeck, _routeDeck,_map, _gameLog);
+            PlayersBuilder playersBuilder = new PlayersBuilder(_trainDeck,_map, _gameLog);
             _players = playersBuilder.WithAi(numberOfAi).WithHumans(numberOfHumans).Build();
             _turnCoordinator.SetPlayers(_players);
             return this;
@@ -107,7 +112,7 @@ namespace Ticket_to_ride.Services
 
         public void NextTurn()
         {
-            _turnCoordinator.NextTurn(_players);
+            _turnCoordinator.NextTurn(_players, _gameLog);
         }
 
 
@@ -153,8 +158,11 @@ namespace Ticket_to_ride.Services
 
         public void PickRouteCards()
         {
-            _turnCoordinator.GetCurrentTurnPlayer(_players)._playerRouteHand.AddRoutes(_routeDeck.PullNonStartingFourRouteCardsForHuman());
-            _turnCoordinator.NextTurn(_players);
+            RouteCardDeck routeDeck = _routeDeckRepository.Load();
+
+            _turnCoordinator.GetCurrentTurnPlayer(_players)._playerRouteHand.AddRoutes(routeDeck.PullNonStartingFourRouteCardsForHuman());
+            _turnCoordinator.NextTurn(_players,_gameLog); 
+            _routeDeckRepository.Update(routeDeck);
         }
 
         public void PickFaceUpCard(int index)
@@ -190,17 +198,18 @@ namespace Ticket_to_ride.Services
 
         public void Update()
         {
-            _gameLoader.Update(_map, _routeDeck, _trainDeck, _turnCoordinator, _players);
+
+
+            _gameLoader.Update(_map, _trainDeck, _turnCoordinator, _players);
         }
 
         public void Load()
         {
-           Tuple<Map,RouteCardDeck,TrainDeck,TurnCoordinator,List<Player>>  game = _gameLoader.Load(_map, _routeDeck, _trainDeck, _turnCoordinator, _players);
+           Tuple<Map,TrainDeck,TurnCoordinator,List<Player>>  game = _gameLoader.Load(_map, _trainDeck, _turnCoordinator, _players);
             _map = game.Item1;
-            _routeDeck = game.Item2;
-            _trainDeck = game.Item3;
-            _turnCoordinator = game.Item4;
-            _players = game.Item5;
+            _trainDeck = game.Item2;
+            _turnCoordinator = game.Item3;
+            _players = game.Item4;
         }
     }
 }

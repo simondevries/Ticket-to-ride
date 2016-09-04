@@ -13,7 +13,7 @@ namespace Ticket_to_ride.Model
         public PlayerRouteHand _playerRouteHand;
         public PlayerType _playerType;
         public int _id;
-        public Brush _colour;
+        public Color _colour;
         public PlayerTrainHand _playerTrainHand;
         public int _availableTrains;
 

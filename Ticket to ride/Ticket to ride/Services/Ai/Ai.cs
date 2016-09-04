@@ -24,13 +24,10 @@ namespace Ticket_to_ride.Services.Ai
         //Used for mapping
         public Ai Map()
         {
-            return new Ai(PlayerRouteHandDto.Map(), Id, new SolidBrush(Color.FromName(Colour)), AiPlayerPersonality,  
+            return new Ai(PlayerRouteHandDto.Map(), Id,Color.FromName(Colour), AiPlayerPersonality,  
                 PlayerType, PlayerTrainHandDto.Map(), AvailableTrains, FinishedRouteCards.Map());
         }
 
-        //Map requires route card train deck reference
-        //Map requires game train deck reference
-        //Map requres turn coordinator
     }
 
 
@@ -42,7 +39,7 @@ namespace Ticket_to_ride.Services.Ai
         public readonly PlayerRouteHand _finishdRouteCards;
 
         //Normal constructor
-        public Ai(PlayerRouteHand playerRouteHand, int id, Brush colour, TrainDeck trainDeck, AiPlayerPersonalities aiPlayerPersonality)
+        public Ai(PlayerRouteHand playerRouteHand, int id, Color colour, TrainDeck trainDeck, AiPlayerPersonalities aiPlayerPersonality)
         {
             _playerRouteHand = playerRouteHand;
             _playerType = PlayerType.Ai;
@@ -57,7 +54,7 @@ namespace Ticket_to_ride.Services.Ai
         }
 
         //Dto Constructor
-        public Ai(PlayerRouteHand playerRouteHand, int id, SolidBrush colour, AiPlayerPersonalities aiPlayerPersonality,
+        public Ai(PlayerRouteHand playerRouteHand, int id, Color colour, AiPlayerPersonalities aiPlayerPersonality,
             int playerType, PlayerTrainHand playerTrainHand, int availableTrains, PlayerRouteHand finishedRouteCards)
         {
             _playerRouteHand = playerRouteHand;
@@ -92,7 +89,8 @@ namespace Ticket_to_ride.Services.Ai
             if (Settings.AutoAiTurn)
             {
                 TurnCoordinator turnCoordinator = new TurnRepository().Load();
-                turnCoordinator.NextTurn(players);
+               
+                turnCoordinator.NextTurn(players, gameLog);
                 new TurnRepository().Update(turnCoordinator);
             }
         }
@@ -113,7 +111,7 @@ namespace Ticket_to_ride.Services.Ai
                 AiPlayerPersonality = _aiPlayerPersonality,
                 Id = _id,
                 AvailableTrains = _availableTrains,
-                Colour = _colour.ToString(), //todo sdv test mapping
+                Colour = _colour.Name, //todo sdv test mapping
                 FinishedRouteCards = _finishdRouteCards.Map()
             };
         }
