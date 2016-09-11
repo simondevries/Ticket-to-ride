@@ -31,7 +31,7 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="app.ts" />
-    <TypeScriptCompile Include="HomeController.ts" />
+    <TypeScriptCompile Include="SimpleController.ts" />
     <TypeScriptCompile Include="Scripts\angular-animate.d.ts" />
     <TypeScriptCompile Include="Scripts\angular-component-router.d.ts" />
     <TypeScriptCompile Include="Scripts\angular-cookies.d.ts" />
