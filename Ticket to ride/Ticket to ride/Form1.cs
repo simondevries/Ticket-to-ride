@@ -16,17 +16,24 @@ namespace Ticket_to_ride
     public partial class Form1 : Form
     {
         private double zoomScale = 1.0;
-        private Game _game;
         private readonly Map _map;
         private bool _hasGameBegun;
         private const string TXT_NUMBER_OF_AI_TEXT = "Please enter number of Ai";
         private const string TXT_NUMBER_OF_HUMANS_TEXT = "Please enter number of Humans";
         private  Size _pnlViewOriginalSize = new Size(1041, 720);
-        private GameLoader _gameLoader = new GameLoader();
+        private readonly GameRepository _gameRepository = new GameRepository();
         public Form1()
         {
-            _game = new Game();
-            _map = _game.GetMap();
+            Game game;
+            if (Settings.LoadGame)
+            {
+                game = new GameRepository().Build();
+            }
+            else
+            {
+                game = new Game();
+            }
+            _map = game.GetMap();
             InitializeComponent();
             pnlView.Size = _pnlViewOriginalSize;
 
@@ -43,9 +50,10 @@ namespace Ticket_to_ride
             txtNumberOfAi.Text = TXT_NUMBER_OF_AI_TEXT;
             txtNumberOfHumans.Text = TXT_NUMBER_OF_HUMANS_TEXT;
 
-            Map map  = _game.GetMap();
+            Game game = _gameRepository.Build();
+            Map map  = game.GetMap();
 
-            TrainDeck deck = _game.GetDeck();
+            TrainDeck deck = game.GetDeck();
             if (deck.FaceUpCards.Count > 0)
             {
                 boardCardOne.Text = deck.FaceUpCards[0].ToString();
@@ -57,15 +65,16 @@ namespace Ticket_to_ride
 
             if (Settings.ShowDebugLog)
             {
-                aiActions.Text = _game.getLog().GetDebug();
+            //todo add a logs repo
+                // aiActions.Text = game.getLog().GetDebug();
             }
             else
             {
-                aiActions.Text = _game.getLog().GetUserFriendly();
+                aiActions.Text = game.getLog().GetUserFriendly();
             }
             deckSize.Text = "Cards left: " + deck.CardsRemaining;
 
-            txtGameGuid.Text = _game.GetGameGuid().ToString();
+            txtGameGuid.Text = game.GetGameGuid().ToString();
 
             Brush brushBlack = new SolidBrush(Color.Black);
             Brush brushWhite = new SolidBrush(Color.White);
@@ -77,20 +86,20 @@ namespace Ticket_to_ride
             {
                 DisplayTrainCards();
 
-                playerTrainHand = _game.GetPlayersRouteHand(_game.GetPlayerId());
+                playerTrainHand = game.GetPlayersRouteHand(game.GetPlayerId());
                 LstRouteCards.Items.Clear();
                 foreach (RouteCard card in playerTrainHand.GetRoutes())
                 {
                     LstRouteCards.Items.Add(card);
                 }
 
-                lblScore.Text = _game.GetScoreBoard();
-                LblTrainsRemaining.Text = string.Format("Remaining trains: {0}", _game.TrainsRemaining());
+                lblScore.Text = game.GetScoreBoard();
+                LblTrainsRemaining.Text = string.Format("Remaining trains: {0}", game.TrainsRemaining());
                 pnlView.BackColor = Color.White;
 
-                string turnText = _game.GetTurnPlayerType() == PlayerType.Ai ? "Ai's turn" : "Your turn";
+                string turnText = game.GetTurnPlayerType() == PlayerType.Ai ? "Ai's turn" : "Your turn";
                 Text = turnText;
-                lblCurrentTurn.Text = string.Format("Turn: Player {0}, {1}", _game.GetPlayerId() + 1, turnText);
+                lblCurrentTurn.Text = string.Format("Turn: Player {0}, {1}", game.GetPlayerId() + 1, turnText);
             }
 
             _currentRouteLocationColour = -1;
@@ -224,7 +233,9 @@ namespace Ticket_to_ride
 
         private void DisplayTrainCards()
         {
-            PlayerTrainHand hand = _game.GetPlayersHand(_game.GetPlayerId());
+
+            Game game = _gameRepository.Build();
+            PlayerTrainHand hand = game.GetPlayersHand(game.GetPlayerId());
             playersCards.Items.Clear();
             List<CardType> cardTypes = hand._cards;
             cardTypes = cardTypes.OrderBy(card => card).ToList();
@@ -237,16 +248,18 @@ namespace Ticket_to_ride
 
         private void button1_Click(object sender, EventArgs e)
         {
-            _game.NextTurn();
+            Game game = _gameRepository.Build();
+            game.NextTurn();
             PaintGui();
         }
 
         private void pnlView_MouseDown(object sender, MouseEventArgs e)
         {
+            Game game = _gameRepository.Build();
             Connection connection;
-            if ((connection = GetConnectionAtPoint(e.X, e.Y)) != null && _game.GetTurnPlayerType() == PlayerType.Human)
+            if ((connection = GetConnectionAtPoint(e.X, e.Y)) != null && game.GetTurnPlayerType() == PlayerType.Human)
             {
-                _game.SendTrainPlacement(connection);
+                game.SendTrainPlacement(connection);
                 //  _game.nextTurn();
                 PaintGui();
                 
@@ -257,7 +270,8 @@ namespace Ticket_to_ride
 
         Connection GetConnectionAtPoint(int x, int y)
         {
-            Map map = _game.GetMap();
+            Game game = _gameRepository.Build();
+            Map map = game.GetMap();
             foreach (Connection connection in map.getConnections())
             {
                 int aX = (int)(connection.A.X * zoomScale);
@@ -276,43 +290,50 @@ namespace Ticket_to_ride
 
         private void fromTop_Click(object sender, EventArgs e)
         {
-            _game.PlayerPickedFromTop();
+            Game game = _gameRepository.Build();
+            game.PlayerPickedFromTop();
             PaintGui();
         }
 
         private void BtnPickRouteCard_Click(object sender, EventArgs e)
         {
-            _game.PickRouteCards();
+            Game game = _gameRepository.Build();
+            game.PickRouteCards();
             PaintGui();
         }
 
         private void boardCardOne_Click(object sender, EventArgs e)
         {
-            _game.PickFaceUpCard(0);
+            Game game = _gameRepository.Build();
+            game.PickFaceUpCard(0);
             PaintGui();
         }
 
         private void boardCardTwo_Click(object sender, EventArgs e)
         {
-            _game.PickFaceUpCard(1);
+            Game game = _gameRepository.Build();
+            game.PickFaceUpCard(1);
             PaintGui();
         }
 
         private void boardCardThree_Click(object sender, EventArgs e)
         {
-            _game.PickFaceUpCard(2);
+            Game game = _gameRepository.Build();
+           game.PickFaceUpCard(2);
             PaintGui();
         }
 
         private void boardCardFour_Click(object sender, EventArgs e)
         {
-            _game.PickFaceUpCard(3);
+            Game game = _gameRepository.Build();
+            game.PickFaceUpCard(3);
             PaintGui();
         }
 
         private void boardCardFive_Click(object sender, EventArgs e)
         {
-            _game.PickFaceUpCard(4);
+            Game game = _gameRepository.Build();
+            game.PickFaceUpCard(4);
             PaintGui();
         }
         private void pnlNumberOfPlayers_Paint(object sender, PaintEventArgs e)
@@ -322,12 +343,21 @@ namespace Ticket_to_ride
 
         private void button2_Click(object sender, EventArgs e)
         {
+            Game game;
+            if (Settings.LoadGame)
+            {
+                game = new GameRepository().Build();
+            }
+            else
+            {
+                game = new Game();
+            }
             int numberOfAi = txtNumberOfAi.Text == TXT_NUMBER_OF_AI_TEXT ? 0 : Convert.ToInt32(txtNumberOfAi.Text);
             int numberOfHumans = txtNumberOfHumans.Text == TXT_NUMBER_OF_HUMANS_TEXT ? 0 : Convert.ToInt32(txtNumberOfHumans.Text);
             if (numberOfAi + numberOfHumans < 8 && numberOfHumans + numberOfAi > 0)
             {
                 pnlNumberOfPlayers.Visible = false;
-                _game.Start(numberOfAi, numberOfHumans);
+                game.Start(numberOfAi, numberOfHumans);
                 pnlGame.Enabled = true;
                 _hasGameBegun = true;
                 PaintGui();
@@ -382,7 +412,8 @@ namespace Ticket_to_ride
 
         private void btnPerformAiTurn_Click(object sender, EventArgs e)
         {
-            _game.PerformAiTurn();
+            Game game = _gameRepository.Build();
+            game.PerformAiTurn();
             PaintGui();
         }
 
@@ -392,12 +423,13 @@ namespace Ticket_to_ride
 
         private void button3_Click(object sender, EventArgs e)
         {
-            _game.Update();
+
+            Game game = _gameRepository.Build();
+            game.Save();
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
-            _game.Load();
         }
 
         private void pnlGame_Paint(object sender, PaintEventArgs e)

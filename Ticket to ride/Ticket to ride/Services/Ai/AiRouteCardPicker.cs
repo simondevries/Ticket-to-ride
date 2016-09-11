@@ -36,12 +36,10 @@ namespace Ticket_to_ride.Services.Ai
             throw new NotImplementedException();
         }
 
-        public PlayerRouteHand PickFourRouteCards(Map riskMap, int aiId, List<int> numberOfTrainsOtherPlayersHave, AiPlayerPersonalities currentAiPersonality, Logger logger)
+        public PlayerRouteHand PickFourRouteCards(Map riskMap,RouteCardDeck routeCardDeck, int aiId, List<int> numberOfTrainsOtherPlayersHave, AiPlayerPersonalities currentAiPersonality, Logger logger)
         {
-            RouteCardDeck routeCardDeck = _routeDeckRepository.Load();
 
             List<RouteCard> cardsPulledFromTop = routeCardDeck.PullCardsFromTop(NumberOfRouteCardsToChooseFrom);
-            _routeDeckRepository.Update(routeCardDeck);
 
             List<List<Location>> allRouteCombinations = BuildAllRouteCombinations(cardsPulledFromTop, numberOfTrainsOtherPlayersHave, currentAiPersonality);
             List<Route> possibleSolutionRoute = new List<Route>();

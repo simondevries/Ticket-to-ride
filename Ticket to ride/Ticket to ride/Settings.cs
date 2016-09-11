@@ -6,5 +6,6 @@
         public const bool AutoAiTurn = true;
         public const bool ShowDebugLog = true;
         public const bool UsingApi = true;
+        public const bool LoadGame = true;
     }
 }

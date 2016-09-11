@@ -31,36 +31,40 @@ namespace Ticket_to_ride.Services
     public class Game : IGame
     {
 
-        TurnCoordinator _turnCoordinator;
-        List<Player> _players;
-        TrainDeck _trainDeck;
-        Map _map;
+        public TurnCoordinator _turnCoordinator;
+        public List<Player> _players;
+        public TrainDeck _trainDeck;
+        public Map _map;
+        public RouteCardDeck _routeCardDeck;
         ScoreCalculator _scoreCalculator;
         private Logger _gameLog;
         private Guid _gameGuid;
-        private GameLoader _gameLoader;
-        private RouteCardDeckCoordinator _routeCardDeckCoordinator;
-        private readonly RouteDeckRepository _routeDeckRepository;
+        private readonly GameRepository _gameRepository = new GameRepository();
 
+        public Game(TurnCoordinator turnCoordinator, List<Player> players, TrainDeck trainDeck, Map map, RouteCardDeck routeCardDeck)
+        {
+            _turnCoordinator = turnCoordinator;
+            _players = players;
+            _trainDeck = trainDeck;
+            _map = map;
+            _routeCardDeck = routeCardDeck;
+
+
+            _scoreCalculator = new ScoreCalculator(_map, _turnCoordinator.GetNumberOfHumans(_players) + _turnCoordinator.GetNumberOfAi(_players));
+        }
 
         public Game()
         {
-            _routeCardDeckCoordinator = new RouteCardDeckCoordinator();
-            _routeDeckRepository = new RouteDeckRepository();
-
             _players = new List<Player>();
             _gameLog = new Logger();
             _map = new MapGenerator().CreateMap();
             _trainDeck = new TrainDeck();
-            _routeCardDeckCoordinator.BuildRouteCardDeck();
+            _routeCardDeck = new RouteCardDeck(_map);
             _gameGuid = Guid.NewGuid();
-            _gameLoader = new GameLoader();
+            _turnCoordinator = new TurnCoordinator(_map, _scoreCalculator, _gameLog);
+            _gameRepository.CacheSave(this);
         }
 
-        public Game(TrainDeck trainDeck)
-        {
-            _trainDeck = trainDeck;
-        }
 
         //todo make load
 
@@ -72,15 +76,17 @@ namespace Ticket_to_ride.Services
             _scoreCalculator = new ScoreCalculator(_map, numberOfHumans + numberOfAi);
             _turnCoordinator = new TurnCoordinator(_map, _scoreCalculator, _gameLog);
             PlayersBuilder playersBuilder = new PlayersBuilder(_trainDeck,_map, _gameLog);
-            _players = playersBuilder.WithAi(numberOfAi).WithHumans(numberOfHumans).Build();
+            _players = playersBuilder.WithAi(numberOfAi).WithHumans(numberOfHumans).Build(_routeCardDeck);
             _turnCoordinator.SetPlayers(_players);
+            _gameRepository.CacheSave(this);
             return this;
         }
 
         public void SendTrainPlacement(Connection connection)
         {
             Human currentTurnPlayer = (Human)_turnCoordinator.GetCurrentTurnPlayer(_players);
-            currentTurnPlayer.PerformTurn(_map, connection, _turnCoordinator,_players);
+            currentTurnPlayer.PerformTurn(_map, connection, _turnCoordinator, _players, _turnCoordinator, _routeCardDeck);
+            _gameRepository.CacheSave(this);
         }
 
         public Map GetMap()
@@ -112,7 +118,8 @@ namespace Ticket_to_ride.Services
 
         public void NextTurn()
         {
-            _turnCoordinator.NextTurn(_players, _gameLog);
+            _turnCoordinator.NextTurn(_players, _gameLog, _routeCardDeck, _map);
+            _gameRepository.CacheSave(this);
         }
 
 
@@ -127,7 +134,8 @@ namespace Ticket_to_ride.Services
             }
 
 
-            a.PerformTurn(_map, numberOfTrainsOtherPlayersHave, _gameLog, _players);
+            a.PerformTurn(_map, numberOfTrainsOtherPlayersHave, _gameLog, _players, _turnCoordinator, _routeCardDeck);
+            _gameRepository.CacheSave(this);
         }
 
         public PlayerType GetTurn()
@@ -151,18 +159,18 @@ namespace Ticket_to_ride.Services
             bool tryPickFromTopSucceeds = _turnCoordinator.GetCurrentTurnPlayer(_players)._playerTrainHand.TryPickFromTop(_trainDeck);
             if (tryPickFromTopSucceeds)
             {
-                _turnCoordinator.DecrementMoveAndTryProgressTurn(_players);
+                _turnCoordinator.DecrementMoveAndTryProgressTurn(_players, _routeCardDeck, _map);
             }
             Console.WriteLine("No cards in Deck");
+            _gameRepository.CacheSave(this);
         }
 
         public void PickRouteCards()
         {
-            RouteCardDeck routeDeck = _routeDeckRepository.Load();
 
-            _turnCoordinator.GetCurrentTurnPlayer(_players)._playerRouteHand.AddRoutes(routeDeck.PullNonStartingFourRouteCardsForHuman());
-            _turnCoordinator.NextTurn(_players,_gameLog); 
-            _routeDeckRepository.Update(routeDeck);
+            _turnCoordinator.GetCurrentTurnPlayer(_players)._playerRouteHand.AddRoutes(_routeCardDeck.PullNonStartingFourRouteCardsForHuman());
+            _turnCoordinator.NextTurn(_players, _gameLog, _routeCardDeck, _map);
+            _gameRepository.CacheSave(this);
         }
 
         public void PickFaceUpCard(int index)
@@ -170,8 +178,9 @@ namespace Ticket_to_ride.Services
             bool tryPickFaceUpCard = _turnCoordinator.GetCurrentTurnPlayer(_players)._playerTrainHand.TryPickFaceUpCard(index);
             if (tryPickFaceUpCard)
             {
-                _turnCoordinator.DecrementMoveAndTryProgressTurn(_players);
+                _turnCoordinator.DecrementMoveAndTryProgressTurn(_players, _routeCardDeck,_map);
             }
+            _gameRepository.CacheSave(this);
         }
 
         public int TrainsRemaining()
@@ -195,21 +204,9 @@ namespace Ticket_to_ride.Services
             return _gameGuid;
         }
 
-
-        public void Update()
+        public void Save()
         {
-
-
-            _gameLoader.Update(_map, _trainDeck, _turnCoordinator, _players);
-        }
-
-        public void Load()
-        {
-           Tuple<Map,TrainDeck,TurnCoordinator,List<Player>>  game = _gameLoader.Load(_map, _trainDeck, _turnCoordinator, _players);
-            _map = game.Item1;
-            _trainDeck = game.Item2;
-            _turnCoordinator = game.Item3;
-            _players = game.Item4;
+            new GameRepository().Save(this);
         }
     }
 }

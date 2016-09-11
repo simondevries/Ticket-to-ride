@@ -1,32 +1,18 @@
 ﻿using System.Web.Http;
+using Newtonsoft.Json;
+using Ticket_to_ride.Repository;
 using Ticket_to_ride.Services;
 
 namespace ConnectApi.Controllers
 {
-    public class MapController : ApiController
+    public class PlayerHandController : ApiController
     {
-        private IGame _game;
-
-
-        // GET api/values
-        public MapController(IGame game)
-        {
-            _game = game;
-        }
-
-        public string Get()
-        {
-            string output = "";
-
-
-
-            return _game.GetMap().getConnection(0).A.Identifier; ;
-        }
-
         // GET api/values/5
-        public string Get(int id)
+        public string GetPlayersHand(int id)
         {
-            return "value";
+            Game game = new GameRepository().Build();
+
+            return JsonConvert.SerializeObject(game.GetPlayersHand(id));
         }
 
         // POST api/values

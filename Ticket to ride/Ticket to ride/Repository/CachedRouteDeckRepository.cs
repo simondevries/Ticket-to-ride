@@ -15,10 +15,10 @@ namespace Ticket_to_ride.Repository
             _memoryCache =  MemoryCache.Default;
         }
 
-        public RouteCardDeck Update(RouteCardDeck routeCardDeck)
+        public RouteCardDeck TryUpdate(RouteCardDeck routeCardDeck)
         {
             DateTimeOffset dateTimeOffset = new DateTimeOffset(DateTime.Now.AddMinutes(30));
-            _memoryCache.Add(CacheKeys.RouteDeckCacheKey, routeCardDeck, dateTimeOffset);
+            _memoryCache.Set(CacheKeys.RouteDeckCacheKey, routeCardDeck, dateTimeOffset);
             return routeCardDeck;
         }
 
@@ -29,7 +29,7 @@ namespace Ticket_to_ride.Repository
                 return (RouteCardDeck)_memoryCache.Get(CacheKeys.RouteDeckCacheKey);
             }
             RouteCardDeck routeCardDeck = _routeDeckRepository.Load();
-            return Update(routeCardDeck);
+            return TryUpdate(routeCardDeck);
         }
     }
 }

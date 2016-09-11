@@ -19,11 +19,12 @@ namespace Ticket_to_ride.Model
             _routeCardPicker = new AiRouteCardPicker();
         }
 
-        public PlayerTrainHand PerformTurn(PlayerRouteHand finishdRouteCards, Map riskMap, PlayerTrainHand playerTrainHand, AiPlayerPersonalities aiPlayerPersonality, Ai ai, PlayerRouteHand playerRouteHand, List<int> numberOfTrainsOtherPlayersHave, Logger logger){
+        public PlayerTrainHand PerformTurn(PlayerRouteHand finishdRouteCards, Map riskMap, PlayerTrainHand playerTrainHand, AiPlayerPersonalities aiPlayerPersonality, Ai ai, PlayerRouteHand playerRouteHand, List<int> numberOfTrainsOtherPlayersHave, Logger logger, RouteCardDeck routeCardDeck)
+        {
             _trainCardPicker = new AiTrainCardPicker();
             _aiUndefindRouteCardSelector = new AiUndefindRouteCardSelector(playerTrainHand);
 
-            bool pickedUpRouteCards = PickRouteCardsIfNecessairy(finishdRouteCards, riskMap, aiPlayerPersonality, ai, playerRouteHand, numberOfTrainsOtherPlayersHave, logger);
+            bool pickedUpRouteCards = PickRouteCardsIfNecessairy(finishdRouteCards, riskMap, aiPlayerPersonality, ai, playerRouteHand, numberOfTrainsOtherPlayersHave, logger, routeCardDeck);
             if (pickedUpRouteCards)
             {
                 //end turn
@@ -46,7 +47,7 @@ namespace Ticket_to_ride.Model
             return playerTrainHand;
         }
 
-        private bool PickRouteCardsIfNecessairy(PlayerRouteHand finishdRouteCards, Map riskMap, AiPlayerPersonalities aiPlayerPersonality, Ai ai, PlayerRouteHand playerRouteHand, List<int> numberOfTrainsOtherPlayersHave, Logger logger)
+        private bool PickRouteCardsIfNecessairy(PlayerRouteHand finishdRouteCards, Map riskMap, AiPlayerPersonalities aiPlayerPersonality, Ai ai, PlayerRouteHand playerRouteHand, List<int> numberOfTrainsOtherPlayersHave, Logger logger, RouteCardDeck routeCardDeck)
         {
 //PickupRouteCards
             if (riskMap.getConnections().OrderByDescending(conn => conn.Risk).FirstOrDefault().Risk == 0)
@@ -58,7 +59,7 @@ namespace Ticket_to_ride.Model
                 playerRouteHand.ClearRoutes();
                 //todo make it pick three cards
                 List<RouteCard> newRouteCards =
-                    _routeCardPicker.PickFourRouteCards(riskMap, ai._id, numberOfTrainsOtherPlayersHave,
+                    _routeCardPicker.PickFourRouteCards(riskMap, routeCardDeck, ai._id, numberOfTrainsOtherPlayersHave,
                         aiPlayerPersonality, logger).GetRoutes();
                 playerRouteHand.AddRoutes(newRouteCards);
                 return true;

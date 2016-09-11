@@ -15,10 +15,10 @@ namespace Ticket_to_ride.Repository
             _memoryCache =  MemoryCache.Default;
         }
 
-        public TurnCoordinator Update(TurnCoordinator turnCoordinator)
+        public TurnCoordinator TryUpdate(TurnCoordinator turnCoordinator)
         {
             DateTimeOffset dateTimeOffset = new DateTimeOffset(DateTime.Now.AddMinutes(30));
-            _memoryCache.Add(CacheKeys.TurnCacheKey, turnCoordinator, dateTimeOffset);
+            _memoryCache.Set(CacheKeys.TurnCacheKey, turnCoordinator, dateTimeOffset);
             return turnCoordinator;
         }
 
@@ -29,7 +29,7 @@ namespace Ticket_to_ride.Repository
                 return (TurnCoordinator)_memoryCache.Get(CacheKeys.TurnCacheKey);
             }
             TurnCoordinator  turnCoordinator = _turnRepository.Load();
-            return Update(turnCoordinator);
+            return TryUpdate(turnCoordinator);
         }
     }
 }

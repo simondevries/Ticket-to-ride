@@ -43,13 +43,13 @@ namespace Ticket_to_ride.Model
             _availableTrains = availableTrains;
         }
 
-        public void PerformTurn(Map map, Connection trainPlacement, TurnCoordinator turn, List<Player> players)
+        public void PerformTurn(Map map, Connection trainPlacement, TurnCoordinator turn, List<Player> players, TurnCoordinator turnCoordinator, RouteCardDeck routeCardDeck)
         {
             //TODO sdv validate cards here instead
             if (TrianPlacer.CanSuccessfullyPlaceTrain(trainPlacement, map, this, null))
             {
                 //todo clean up logger
-                turn.NextTurn(players, new Logger());
+                turn.NextTurn(players, new Logger(), routeCardDeck, map);
             }
         }
 

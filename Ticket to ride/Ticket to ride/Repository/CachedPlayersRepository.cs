@@ -16,21 +16,35 @@ namespace Ticket_to_ride.Repository
             _memoryCache =  MemoryCache.Default;
         }
 
-        public List<Player> Update(List<Player> players)
+        public List<Player> TryUpdate(List<Player> players)
         {
+
+            PlayersDto playersDto = new PlayersDto(players);
+
             DateTimeOffset dateTimeOffset = new DateTimeOffset(DateTime.Now.AddMinutes(30));
-            _memoryCache.Add(CacheKeys.PlayersCacheKey, players, dateTimeOffset);
+            _memoryCache.Set(CacheKeys.PlayersCacheKey, playersDto, dateTimeOffset);
             return players;
         }
 
         public List<Player> Load()
         {
+
             if (_memoryCache.Contains(CacheKeys.PlayersCacheKey))
             {
-                return (List<Player>)_memoryCache.Get(CacheKeys.PlayersCacheKey);
+                return ((PlayersDto)_memoryCache.Get(CacheKeys.PlayersCacheKey)).Players;
             }
             List<Player> players = _playersRepository.Load();
-            return Update(players);
+            return TryUpdate(players);
+        }
+    }
+
+    public class PlayersDto
+    {
+        public List<Player> Players;
+
+        public PlayersDto(List<Player> players)
+        {
+            Players = players;
         }
     }
 }

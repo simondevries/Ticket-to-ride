@@ -148,6 +148,7 @@
     <Compile Include="Model\Logger.cs" />
     <Compile Include="Model\NoCardsException.cs" />
     <Compile Include="Model\PlayerScore.cs" />
+    <Compile Include="Model\PlayerTrainHandDto.cs" />
     <Compile Include="Model\RouteCardDeck.cs" />
     <Compile Include="Model\RouteCardSelectorState.cs" />
     <Compile Include="Model\RouteCombinationMap.cs" />
@@ -184,6 +185,7 @@
     <Compile Include="Services\Ai\AiRouteGenerator.cs" />
     <Compile Include="Services\DestinationPair.cs" />
     <Compile Include="Services\Game.cs" />
+    <Compile Include="Repository\GameRepository.cs" />
     <Compile Include="Services\MyExtensions.cs" />
     <Compile Include="Services\PlayersBuilder.cs" />
     <Compile Include="Services\PointMapper.cs" />
@@ -238,7 +240,11 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <TypeScriptCompile Include="Model\PlayerTrainHandDto.cs.d.ts">
+      <DependentUpon>PlayerTrainHandDto.cs</DependentUpon>
+    </TypeScriptCompile>
+  </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>

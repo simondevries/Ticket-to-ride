@@ -1,29 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 using Ticket_to_ride.Forms;
 
 namespace Ticket_to_ride.Model
 {
-
-    public class PlayerTrainHandDto
-    {
-        public TrainDeckDto TrainDeckDto { get; set; }
-        public List<int> cards { get; set; }
-
-        public PlayerTrainHand Map()
-        {
-            List<CardType> cardTypes = cards.Select(card => (CardType) card).ToList();
-
-            return new PlayerTrainHand(TrainDeckDto.Map(), cardTypes);
-        }
-    }
-
     public class PlayerTrainHand
     {
         public TrainDeck _trainDeck;
         public List<CardType> _cards;
 
+        [JsonConstructor]
         public PlayerTrainHand(TrainDeck trainDeck, List<CardType> cards)
         {
             _cards = cards;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using Ticket_to_ride.Repository;
 using Ticket_to_ride.Services;
@@ -33,7 +34,6 @@ namespace Ticket_to_ride.Model
         private readonly Map _map;
         private ScoreCalculator _scoreCalculator;
         private Logger _gameLog;
-        private MapRepository _mapRepository;
 
         public TurnCoordinator(PlayerType currentTurn, int turn, bool isLastRound, int lastRoundPlayerId,
             int movesLeftInTurn)
@@ -43,7 +43,6 @@ namespace Ticket_to_ride.Model
             _isLastRound = isLastRound;
             _lastRoundPlayerId = lastRoundPlayerId;
             _movesLeftInTurn = movesLeftInTurn;
-            _mapRepository=new MapRepository();
         }
 
         public TurnCoordinator(Map map, ScoreCalculator scoreCalculator, Logger gameLog)
@@ -52,7 +51,6 @@ namespace Ticket_to_ride.Model
             _gameLog = gameLog;
             _map = map;
             _movesLeftInTurn = TOTAL_CARD_DRAWS;
-            _mapRepository = new MapRepository();
         }
 
         public TurnCoordinator()
@@ -64,7 +62,7 @@ namespace Ticket_to_ride.Model
             _currentTurn = players[0]._playerType;
         }
 
-        public void NextTurn(List<Player> players, Logger gameLog)
+        public void NextTurn(List<Player> players, Logger gameLog, RouteCardDeck routeCardDeck, Map map)
         {
             //todo clean up game log
             _gameLog = gameLog;
@@ -76,11 +74,12 @@ namespace Ticket_to_ride.Model
             _currentTurn = players[_turn]._playerType;
             if (Settings.AutoAiTurn)
             {
-                CheckIfNeedToPlayAiTurn(players);
+                CheckIfNeedToPlayAiTurn(players, routeCardDeck, map);
             }
+
         }
 
-        private void CheckIfNeedToPlayAiTurn(List<Player> players)
+        private void CheckIfNeedToPlayAiTurn(List<Player> players, RouteCardDeck routeCardDeck, Map map )
         {
             if (_currentTurn == PlayerType.Ai)
             {
@@ -88,9 +87,7 @@ namespace Ticket_to_ride.Model
 
                 List<int> numberOfTrainsOtherPlayersHave = GetNumberOfTrainsOtherPlayersHave(players);
 
-                Map map = _mapRepository.Load();
-                ai.PerformTurn(map, numberOfTrainsOtherPlayersHave, _gameLog, players);
-                _mapRepository.Update(map);
+                ai.PerformTurn(map, numberOfTrainsOtherPlayersHave, _gameLog, players, this, routeCardDeck);
             }
         }
 
@@ -140,12 +137,12 @@ namespace Ticket_to_ride.Model
             return false;
         }
 
-        public void DecrementMoveAndTryProgressTurn(List<Player> players)
+        public void DecrementMoveAndTryProgressTurn(List<Player> players, RouteCardDeck routeCardDeck, Map map)
         {
             DecrementMove();
             if (_movesLeftInTurn <= 0)
             {
-                NextTurn(players, _gameLog);
+                NextTurn(players, _gameLog, routeCardDeck, map);
             }
         }
 
@@ -167,17 +164,7 @@ namespace Ticket_to_ride.Model
 
         public PlayerType GetCurrentTurnPlayerType()
         {
-            if (Settings.UsingApi)
-            {
-                TurnRepository repository = new TurnRepository();
-                TurnCoordinator turnCoordinator = repository.Load();
-
-                return turnCoordinator._currentTurn;
-            }
-            else
-            {
                 return _currentTurn;
-            }
         }
 
 
@@ -194,8 +181,22 @@ namespace Ticket_to_ride.Model
         {
             return new TurnDto
             {
-                Turn = _turn
+                Turn = _turn,
+                CurrentTurn = (int)_currentTurn,
+                IsLastTurn = _isLastRound,
+                LastRoundPlayerId = _lastRoundPlayerId,
+                MovesLeftInTurn = _movesLeftInTurn
             };
+        }
+
+        public int GetNumberOfHumans(List<Player> players)
+        {
+            return players.Count(pl => pl._playerType == PlayerType.Human);
+        }
+
+        public int GetNumberOfAi(List<Player> players)
+        {
+            return players.Count(pl => pl._playerType == PlayerType.Ai);
         }
     }
 }

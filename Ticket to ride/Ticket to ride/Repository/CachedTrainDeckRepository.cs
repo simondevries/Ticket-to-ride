@@ -15,10 +15,10 @@ namespace Ticket_to_ride.Repository
             _memoryCache =  MemoryCache.Default;
         }
 
-        public TrainDeck Update(TrainDeck trainDeck)
+        public TrainDeck TryUpdate(TrainDeck trainDeck)
         {
             DateTimeOffset dateTimeOffset = new DateTimeOffset(DateTime.Now.AddMinutes(30));
-            _memoryCache.Add(CacheKeys.TrainDeckCacheKey, trainDeck, dateTimeOffset);
+            _memoryCache.Set(CacheKeys.TrainDeckCacheKey, trainDeck, dateTimeOffset);
             return trainDeck;
         }
 
@@ -29,7 +29,7 @@ namespace Ticket_to_ride.Repository
                 return (TrainDeck)_memoryCache.Get(CacheKeys.TrainDeckCacheKey);
             }
             TrainDeck trainDeck = _trainDeckRepository.Load();
-            return Update(trainDeck);
+            return TryUpdate(trainDeck);
         }
     }
 }

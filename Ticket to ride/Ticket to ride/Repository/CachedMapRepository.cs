@@ -15,10 +15,10 @@ namespace Ticket_to_ride.Repository
             _memoryCache =  MemoryCache.Default;
         }
 
-        public Map Update(Map map)
+        public Map TryUpdate(Map map)
         {
             DateTimeOffset dateTimeOffset = new DateTimeOffset(DateTime.Now.AddMinutes(30));
-            _memoryCache.Add(CacheKeys.MapCacheKey, map, dateTimeOffset);
+            _memoryCache.Set(CacheKeys.MapCacheKey, map, dateTimeOffset);
             return map;
         }
 
@@ -29,7 +29,7 @@ namespace Ticket_to_ride.Repository
                 return (Map) _memoryCache.Get(CacheKeys.MapCacheKey);
             }
             Map map = _mapRepository.Load();
-            return Update(map);
+            return TryUpdate(map);
         }
     }
 }
