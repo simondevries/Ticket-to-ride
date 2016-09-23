@@ -42,3 +42,4 @@ C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\obj\D
 C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\obj\Debug\Ticket to ride.exe
 C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\obj\Debug\Ticket to ride.pdb
 C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\obj\Debug\Ticket to ride.csprojResolveAssemblyReference.cache
+C:\Users\simon\Documents\GitHub\TicketToRide\Ticket to ride\Ticket to ride\bin\Debug\Ticket to ride.pdb

@@ -1,45 +1,175 @@
 ﻿<!doctype html>
 <html ng-app="myApp">
 <head>
+    <link rel="stylesheet" type="text/css" href="Scripts/angular-material.min.css">
+
+    <script src="Scripts/collie.min.js"></script>
     <script src="Scripts/angular.js"></script>
     <script src="app.js"></script>
+    <link rel="stylesheet" type="text/css" href="app.css">
+    <script src="Game.js"></script>
+    <script src="Services\CardMapper.js"></script>
+    <script src="Repositories/PlayerRouteHandRepository.js"></script>
+    <script src="Repositories/PlayerTrainHandRepository.js"></script>
+    <script src="Repositories/MapRepository.js"></script>
     <script src="SimpleController.js"></script>
+    <script src="Scripts/angular-aria.min.js"></script>
+    <script src="Scripts/angular-animate.min.js"></script>
+    <script src="Scripts/angular-material.min.js"></script>
+
 </head>
 <body>
 
     <div ng-controller="SimpleController as c">
-        <h1 ng-bind="c.header"></h1>
-        <p ng-bind="c.text"></p>
-        <ul>
-            <li ng-repeat="tip in c.tips" ng-bind="item"></li>
-        </ul>
-        <button ng-click='c.signUpNow()'>Sign up now!</button>
-    </div>
 
-    <!--<div>
-        <label>Name:</label>
-        <input type="text" ng-model="yourName" placeholder="Enter a name here">
-        <hr>
-        <h1>Hello {{yourName}}!</h1>
+        <div class="screen-size">
+
+            <div class="top-half">
+                <div class="left-control-panel">
+                    <div class="top-half-left-container">
+                        <div class="other-players">
+                            <div class="other-player">
+                                <div class="other-player-content">John</div>
+                                <div class="other-player-content">Green</div>
+                                <div class="other-player-content">10 trains</div>
+                                <div class="other-player-content">50 Points</div>
+                            </div>
+                        </div>
+
+
+                        <div class="pickup-cards">
+                            <div class="routecards">
+                                <div>
+                                    <div class="route-card-pile">Route Cards</div>
+                                    <div>10 Cards Left</div>
+                                </div>
+                            </div>
+                            <div class="traincards">
+                                <md-button onclick="myFunction()" class="md-raised md-warn">
+                                    From Pile
+                                </md-button>
+                                <div class="cardsRemaining">
+                                    <i>30 Cards Left</i>
+                                </div>
+                                <md-button onclick="myFunction()" class="md-raised md-warn">
+                                    1
+                                </md-button>
+                                <md-button onclick="myFunction()" class="md-raised md-warn">
+                                    2
+                                </md-button>
+                                <md-button onclick="myFunction()" class="md-raised md-warn">
+                                    3
+                                </md-button>
+                                <md-button onclick="myFunction()" class="md-raised md-warn">
+                                    4
+                                </md-button>
+                                <md-button onclick="myFunction()" class="md-raised md-warn">
+                                    5
+                                </md-button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="top-half-right-container">
+                    <div id="container"></div>
+                </div>
+            </div>
+
+
+            <div class="bottom-half">
+
+                <div class="actions">
+                    <md-button onclick="myFunction()" class="md-raised md-warn">
+                        Next Turn
+                    </md-button>
+                    <md-button onclick="myFunction()" class="md-raised md-warn">
+                        Pickup Route Cards
+                    </md-button>
+                </div>
+
+                <div class="player-cards">
+                    <div class="player-route-cards">
+                        <div class="route-card">A -> B for 12 points</div>
+                        <div class="route-card">C -> B for 34 points</div>
+                        <div class="route-card">D -> B for 34 points</div>
+                    </div>
+
+                    <div class="player-train-cards">
+                        <md-button onclick="
+myFunction()" class="md-raised md-warn">
+                            RED
+                        </md-button>
+                        <md-button onclick="myFunction()" class="md-raised md-warn">
+                            BLUE
+                        </md-button>
+                        <md-button onclick="myFunction()" class="md-raised md-warn">
+                            GREEN
+                        </md-button>
+                        <md-button onclick="myFunction()" class="md-raised md-warn">
+                            ORANGE
+                        </md-button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </div>
-    <div ng-controller="HomeController as todoList">
-        {{todoList.Welcome()}}
-        <span>{{todoList.remaining()}} of {{todoList.todos.length}} remaining</span>
-        [ <a href="" ng-click="todoList.archive()">archive</a> ]
-        <ul class="unstyled">
-            <li ng-repeat="todo in todoList.todos">
-                <label class="checkbox">
-                    <input type="checkbox" ng-model="todo.done">
-                    <span class="done-{{todo.done}}">{{todo.text}}</span>
-                </label>
-            </li>
-        </ul>
-        <form ng-submit="todoList.addTodo()">
-            <input type="text" ng-model="todoList.todoText" size="30"
-                   placeholder="add new todo here">
-            <input class="btn-primary" type="submit" value="add">
-        </form>
-    </div>-->
+    <!--<div id="container"></div>
+
+            <b>Your Train Hand</b>
+            <ul>
+                <li ng-repeat="playerHand in c.game.playerTrainHand track by $index" ng-bind="playerHand"></li>
+            </ul>
+
+            <b>Your Route Hand</b>
+            <ul>
+
+                <li ng-repeat="x in c.game.playerRouteHand track by $index">
+                    From {{ x.StartLocation.Identifier }} To {{ x.EndLocation.Identifier }} For {{ x.Points }} Points
+                </li>
+            </ul>
+
+
+            <b>Map</b>
+            {{c.game.map}}
+
+
+    <!--        <button ng-click='c.signUpNow()'>Sign up now!</button>-->
+    -->
+    <!--  </div>-->
+    <!--    <!-->
+    <!--        ---->
+    <!--    </div>-->
+    <!---->
+    <!--    <!-->
+    <!--    ---->
+    <!--    <div>-->
+    <!--            <label>Name:</label>-->
+    <!--            <input type="text" ng-model="yourName" placeholder="Enter a name here">-->
+    <!--            <hr>-->
+    <!--            <h1>Hello {{yourName}}!</h1>-->
+    <!--        </div>-->
+    <!--        <div ng-controller="HomeController as todoList">-->
+    <!--            {{todoList.Welcome()}}-->
+    <!--            <span>{{todoList.remaining()}} of {{todoList.todos.length}} remaining</span>-->
+    <!--            [ <a href="" ng-click="todoList.archive()">archive</a> ]-->
+    <!--            <ul class="unstyled">-->
+    <!--                <li ng-repeat="todo in todoList.todos">-->
+    <!--                    <label class="checkbox">-->
+    <!--                        <input type="checkbox" ng-model="todo.done">-->
+    <!--                        <span class="done-{{todo.done}}">{{todo.text}}</span>-->
+    <!--                    </label>-->
+    <!--                </li>-->
+    <!--            </ul>-->
+    <!--            <form ng-submit="todoList.addTodo()">-->
+    <!--                <input type="text" ng-model="todoList.todoText" size="30"-->
+    <!--                       placeholder="add new todo here">-->
+    <!--                <input class="btn-primary" type="submit" value="add">-->
+    <!--            </form>-->
+    <!--        </div>-->-->
+    <!--    </-->
+    <!--    bo-->
 </body>
 </html>
 

@@ -24,13 +24,27 @@
   <ItemGroup>
     <Content Include="app.css" />
     <Content Include="index.html" />
+    <Content Include="Scripts\angular-animate.min.js" />
+    <Content Include="Scripts\angular-aria.min.js" />
+    <Content Include="Scripts\angular-material.min.css" />
+    <Content Include="Scripts\angular-material.min.js" />
     <Content Include="Scripts\angular-mocks.js" />
     <Content Include="Scripts\angular.js" />
     <Content Include="Scripts\angular.min.js" />
+    <Content Include="Scripts\collie.js" />
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="app.ts" />
+    <TypeScriptCompile Include="Repositories\MapRepository.ts" />
+    <TypeScriptCompile Include="Scripts\collie.d.ts" />
+    <TypeScriptCompile Include="Scripts\Connection.cs.d.ts" />
+    <TypeScriptCompile Include="Scripts\Location.cs.d.ts" />
+    <TypeScriptCompile Include="Scripts\Map.cs.d.ts" />
+    <TypeScriptCompile Include="Services\CardMapper.ts" />
+    <TypeScriptCompile Include="Game.ts" />
+    <TypeScriptCompile Include="Repositories\PlayerTrainHandRepository.ts" />
+    <TypeScriptCompile Include="Repositories\PlayerRouteHandRepository.ts" />
     <TypeScriptCompile Include="SimpleController.ts" />
     <TypeScriptCompile Include="Scripts\angular-animate.d.ts" />
     <TypeScriptCompile Include="Scripts\angular-component-router.d.ts" />
@@ -45,6 +59,7 @@
   <ItemGroup>
     <Content Include="Scripts\angular.min.js.map" />
     <Content Include="packages.config" />
+    <Content Include="tsconfig.json" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

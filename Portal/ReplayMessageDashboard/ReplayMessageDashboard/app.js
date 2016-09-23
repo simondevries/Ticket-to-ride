@@ -1,2 +1,2 @@
-var myApp = angular.module('myApp', []);
+var myApp = angular.module('myApp', ['ngMaterial']);
 //# sourceMappingURL=app.js.map

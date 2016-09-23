@@ -18,7 +18,7 @@ namespace Ticket_to_ride.Model
 
     public class PlayerRouteHand
     {
-        private readonly List<RouteCard> _routes;
+        public readonly List<RouteCard> _routes;
 
         public PlayerRouteHand()
         {

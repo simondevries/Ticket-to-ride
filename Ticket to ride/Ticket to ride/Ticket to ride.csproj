@@ -241,12 +241,32 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="Model\Connection.cs.d.ts">
+      <DependentUpon>Connection.cs</DependentUpon>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Model\Location.cs.d.ts">
+      <DependentUpon>Location.cs</DependentUpon>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Model\Map.cs.d.ts">
+      <DependentUpon>Map.cs</DependentUpon>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Model\PlayerRouteHand.cs.d.ts">
+      <DependentUpon>PlayerRouteHand.cs</DependentUpon>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Model\PlayerTrainHandDto.cs.d.ts">
       <DependentUpon>PlayerTrainHandDto.cs</DependentUpon>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Model\RouteCard.cs.d.ts">
+      <DependentUpon>RouteCard.cs</DependentUpon>
     </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Model\Location.cs.js">
+      <DependentUpon>Location.cs</DependentUpon>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />

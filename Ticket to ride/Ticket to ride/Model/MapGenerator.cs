@@ -14,12 +14,12 @@ namespace Ticket_to_ride.Model
         public Map CreateMap()
         {
 
-            _location.Add(new Location { Identifier = "0", X = 68, Y = 607 });
-            _location.Add(new Location { Identifier = "1", X = 162, Y = 662 });
-            _location.Add(new Location { Identifier = "2", X = 94, Y = 501 });
-            _location.Add(new Location { Identifier = "3", X = 202, Y = 518 });
-            _location.Add(new Location { Identifier = "4", X = 274, Y = 462 });
-            _location.Add(new Location { Identifier = "5", X = 269, Y = 522 });
+            _location.Add(new Location { Identifier = "Russia", X = 68, Y = 607 });
+            _location.Add(new Location { Identifier = "France", X = 162, Y = 662 });
+            _location.Add(new Location { Identifier = "Germany", X = 94, Y = 501 });
+            _location.Add(new Location { Identifier = "Belgium", X = 202, Y = 518 });
+            _location.Add(new Location { Identifier = "Holland", X = 274, Y = 462 });
+            _location.Add(new Location { Identifier = "UK", X = 269, Y = 522 });
             _location.Add(new Location { Identifier = "6", X = 281, Y = 356 });
             _location.Add(new Location { Identifier = "7", X = 163, Y = 353 });
             _location.Add(new Location { Identifier = "8", X = 278, Y = 247 });

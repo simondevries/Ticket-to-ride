@@ -7,7 +7,9 @@ namespace Ticket_to_ride.Model
     public class LocationDto
     {
         public string Identifier { get; set; }
-
+        public int X { get; set; }
+        public int Y { get; set; }
+        
         public Location Map(List<Location> locations)
         {
             return locations.First(loc => loc.Identifier == Identifier);
@@ -66,7 +68,7 @@ namespace Ticket_to_ride.Model
 
         public LocationDto Map()
         {
-            return new LocationDto {Identifier = Identifier};
+            return new LocationDto {Identifier = Identifier, X =  x, Y = y};
         }
     }
     class LocationEqualityComparer : IEqualityComparer<Location>
