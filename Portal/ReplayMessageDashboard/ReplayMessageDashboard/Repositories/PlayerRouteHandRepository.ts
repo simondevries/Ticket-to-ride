@@ -1,5 +1,4 @@
 ﻿/// <reference path="..\Scripts/angular.d.ts" />
-/// <reference path="..\Scripts/RouteCard.cs.d.ts" />
 /// <reference path="..\app.ts" />
 class PlayerRouteHandRepository {
 

@@ -1,5 +1,4 @@
-﻿/// <reference path="..\Scripts/angular.d.ts" />
-/// <reference path="..\app.ts" />
+﻿
 class MapRepository {
 
     private http: any;
@@ -12,6 +11,13 @@ class MapRepository {
     public getMap(playerIndex: number): ng.IPromise<server.Map> {
         return this.http.get("http://localhost:52850/api/Map").then(
             response => {
+
+                angular.forEach(response.data.Connections, (connection => {
+                    if (connection.Color === 'Undefined') {
+                        connection.Color = 'Gray';
+                    }
+                }));
+
                 return response.data;
             });
 

@@ -36,7 +36,21 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="app.ts" />
+    <TypeScriptCompile Include="Repositories\StartRepository.ts" />
+    <TypeScriptCompile Include="Repositories\PlayersRepository.ts" />
+    <TypeScriptCompile Include="Repositories\NextTurnRepository.ts" />
+    <TypeScriptCompile Include="Repositories\CardSelectorRepository.ts" />
+    <TypeScriptCompile Include="Repositories\TurnRepository.ts" />
+    <TypeScriptCompile Include="Repositories\TrainPlacementRepository.ts" />
+    <TypeScriptCompile Include="Scripts\Ai.d.ts" />
+    <TypeScriptCompile Include="Scripts\Human.d.ts" />
+    <TypeScriptCompile Include="Scripts\PlayerTrainHand.ts" />
+    <TypeScriptCompile Include="Scripts\RouteCard.d.ts" />
+    <TypeScriptCompile Include="Services\TrainSelector.ts" />
+    <TypeScriptCompile Include="Services\MapLoader.ts" />
+    <TypeScriptCompile Include="Services\GameLoader.ts" />
     <TypeScriptCompile Include="Repositories\MapRepository.ts" />
+    <TypeScriptCompile Include="Repositories\TrainDeckRepository.ts" />
     <TypeScriptCompile Include="Scripts\collie.d.ts" />
     <TypeScriptCompile Include="Scripts\Connection.cs.d.ts" />
     <TypeScriptCompile Include="Scripts\Location.cs.d.ts" />
@@ -66,6 +80,9 @@
     <None Include="web.Release.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="Scripts\PlayerRouteHand.d.ts" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">12.0</VisualStudioVersion>

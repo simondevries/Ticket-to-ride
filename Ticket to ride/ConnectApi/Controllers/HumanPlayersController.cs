@@ -6,22 +6,13 @@ using Ticket_to_ride.Services;
 
 namespace ConnectApi.Controllers
 {
-    public class PlayerIdController : ApiController
+    public class HumanPlayersController : ApiController
     {
-
-
-        // GET api/values
-        public PlayerIdController()
-        {
-        }
-
         public HttpResponseMessage Get()
         {
             Game game = new GameRepository().Build();
 
-            return Request.CreateResponse(HttpStatusCode.OK, game.GetPlayerId());
+            return Request.CreateResponse(HttpStatusCode.OK, game.GetHumanPlayers());
         }
-
-
     }
 }

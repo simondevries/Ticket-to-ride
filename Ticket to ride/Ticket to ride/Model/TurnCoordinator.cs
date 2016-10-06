@@ -62,17 +62,17 @@ namespace Ticket_to_ride.Model
             _currentTurn = players[0]._playerType;
         }
 
-        public void NextTurn(List<Player> players, Logger gameLog, RouteCardDeck routeCardDeck, Map map)
+        public void NextTurn(List<Player> players, Logger gameLog, RouteCardDeck routeCardDeck, Map map, bool performAiTurn)
         {
             //todo clean up game log
             _gameLog = gameLog;
-            MessageBox.Show("Next Turn");
+            //MessageBox.Show("Next Turn");
 
             CheckIfLastTurn(players);
             IncrementTurn(players);
             _movesLeftInTurn = 2;
             _currentTurn = players[_turn]._playerType;
-            if (Settings.AutoAiTurn)
+            if (performAiTurn)
             {
                 CheckIfNeedToPlayAiTurn(players, routeCardDeck, map);
             }
@@ -137,13 +137,15 @@ namespace Ticket_to_ride.Model
             return false;
         }
 
-        public void DecrementMoveAndTryProgressTurn(List<Player> players, RouteCardDeck routeCardDeck, Map map)
+        public bool DecrementMoveAndTryProgressTurn(List<Player> players, RouteCardDeck routeCardDeck, Map map)
         {
             DecrementMove();
             if (_movesLeftInTurn <= 0)
             {
-                NextTurn(players, _gameLog, routeCardDeck, map);
+                NextTurn(players, _gameLog, routeCardDeck, map, false);
+                return true;
             }
+            return false;   
         }
 
         private void IncrementTurn(List<Player> players)

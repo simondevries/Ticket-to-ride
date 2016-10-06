@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Ticket_to_ride.Repository;
@@ -22,6 +23,18 @@ namespace ConnectApi.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, game.GetDeck().Map());
         }
 
+        // POST train placement
+        [HttpPost]
+        public HttpResponseMessage Post([FromBody]string value)
+        {
+            value = value.Replace("\"", "");
+            Game game = new GameRepository().Build();
+
+
+            string response = game.SendTrainPlacement(value);
+
+            return Request.CreateResponse(HttpStatusCode.OK, response);
+        }
 
     }
 }

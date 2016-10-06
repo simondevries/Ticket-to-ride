@@ -65,8 +65,8 @@ namespace Ticket_to_ride.Repository
             List<AiDto> aiDto = JsonConvert.DeserializeObject<List<AiDto>>(aiDynamic);
             List<HumanDto> humanDto = JsonConvert.DeserializeObject<List<HumanDto>>(humanDynamic);
 
-            players.AddRange(aiDto.Select(ai => ai.Map()));
             players.AddRange(humanDto.Select(human => human.Map()));
+            players.AddRange(aiDto.Select(ai => ai.Map()));
 
             return players;
         }

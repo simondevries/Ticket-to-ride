@@ -13,7 +13,7 @@ body {
 
 .top-half {
     display: flex;
-    height: 70%;
+    height: 90%;
     border-bottom: black 3px dashed;
 }
 
@@ -21,7 +21,6 @@ body {
     width: 90%;
     margin: 5%;
     background-color: gray;
-    height: 71px;
     /* position: absolute; */
     display: flex;
     justify-content: space-between;
@@ -38,12 +37,24 @@ body {
     height: 100%;
 }
 
-.left-control-panel {
+.top-half-left-container{
     width: 20%;
     border: black 3px dashed;
     height: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+.trainCardsList {
+    
+    display: flex;
+    flex-wrap: wrap;
 }
 
+#container {
+    height: 100%;
+    width: 100%;
+}
 
 .ticket-to-ride-button {
     background-color: cornflowerblue !important;
@@ -63,21 +74,10 @@ body {
 }
 
 .bottom-half {
-    height: 30%;
+    height: 10%;
 }
 
 
-.routecards {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-}
-
-.traincards {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-}
 
 .pickup-cards {
 
@@ -94,16 +94,52 @@ body {
     display: flex
 }
 
+.Orange {
+    background-color: orange !important;
+}
+
+
+.Pink {
+    color: black  !important;
+    background-color: pink !important;
+}
+
+
+.Black {
+    background-color: Black !important;
+}
+
+.Wildcard {
+    background-color: purple !important;
+}
+
+
+.White {
+    color: black  !important;
+    background-color: white !important;
+}
 
 .player-route-cards {
     background-color: silver;
 }
 
+
+
+.train-deck {
+    padding: 0;
+      list-style-type: none;
+          flex-wrap: wrap;
+}
+
+.train-deck {
+        display: flex;
+    justify-content: center;
+}
+
 .train-card-pile {
-    margin: 10px;
-    background-color: silver;
-    width: 60px;
-    height: 25px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
 .route-card-pile {

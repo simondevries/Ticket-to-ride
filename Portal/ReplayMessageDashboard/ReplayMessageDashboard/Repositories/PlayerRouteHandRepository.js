@@ -1,5 +1,4 @@
 /// <reference path="..\Scripts/angular.d.ts" />
-/// <reference path="..\Scripts/RouteCard.cs.d.ts" />
 /// <reference path="..\app.ts" />
 var PlayerRouteHandRepository = (function () {
     // Dependency injection via construstor

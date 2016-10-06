@@ -20,7 +20,7 @@ namespace Ticket_to_ride
         private bool _hasGameBegun;
         private const string TXT_NUMBER_OF_AI_TEXT = "Please enter number of Ai";
         private const string TXT_NUMBER_OF_HUMANS_TEXT = "Please enter number of Humans";
-        private  Size _pnlViewOriginalSize = new Size(1041, 720);
+        private Size _pnlViewOriginalSize = new Size(1041, 720);
         private readonly GameRepository _gameRepository = new GameRepository();
         public Form1()
         {
@@ -51,7 +51,7 @@ namespace Ticket_to_ride
             txtNumberOfHumans.Text = TXT_NUMBER_OF_HUMANS_TEXT;
 
             Game game = _gameRepository.Build();
-            Map map  = game.GetMap();
+            Map map = game.GetMap();
 
             TrainDeck deck = game.GetDeck();
             if (deck.FaceUpCards.Count > 0)
@@ -65,7 +65,7 @@ namespace Ticket_to_ride
 
             if (Settings.ShowDebugLog)
             {
-            //todo add a logs repo
+                //todo add a logs repo
                 // aiActions.Text = game.getLog().GetDebug();
             }
             else
@@ -86,7 +86,7 @@ namespace Ticket_to_ride
             {
                 DisplayTrainCards();
 
-                playerTrainHand = game.GetPlayersRouteHand(game.GetPlayerId());
+                playerTrainHand = game.GetPlayersRouteHand(game.GetPlayerIdForCurrentTurn());
                 LstRouteCards.Items.Clear();
                 foreach (RouteCard card in playerTrainHand.GetRoutes())
                 {
@@ -99,11 +99,11 @@ namespace Ticket_to_ride
 
                 string turnText = game.GetTurnPlayerType() == PlayerType.Ai ? "Ai's turn" : "Your turn";
                 Text = turnText;
-                lblCurrentTurn.Text = string.Format("Turn: Player {0}, {1}", game.GetPlayerId() + 1, turnText);
+                lblCurrentTurn.Text = string.Format("Turn: Player {0}, {1}", game.GetPlayerIdForCurrentTurn() + 1, turnText);
             }
 
             _currentRouteLocationColour = -1;
-            Dictionary<int, Brush> locationPair = new Dictionary<int, Brush>();
+            Dictionary<string, Brush> locationPair = new Dictionary<string, Brush>();
 
             foreach (RouteCard routeCard in playerTrainHand.GetRoutes())
             {
@@ -112,13 +112,13 @@ namespace Ticket_to_ride
                 //todo when two cards are at the same start- this will beome redundat once we have proper cards
                 try
                 {
-                    locationPair.Add(Convert.ToInt32(routeCard.GetStartLocation().Identifier),
+                    locationPair.Add(routeCard.GetStartLocation().Identifier,
                         locationColourForRoutePair);
-                    locationPair.Add(Convert.ToInt32(routeCard.GetEndLocation().Identifier), locationColourForRoutePair);
+                    locationPair.Add(routeCard.GetEndLocation().Identifier, locationColourForRoutePair);
                 }
-                catch 
+                catch
                 {
-                    
+
                 }
             }
 
@@ -130,25 +130,18 @@ namespace Ticket_to_ride
                 int _y = (int)(loction.Y * zoomScale - loction.Width / 2);
 
 
-                if (locationPair.ContainsKey(Convert.ToInt32(loction.Identifier)))
+                if (locationPair.ContainsKey(loction.Identifier))
                 {
-                    pnlView.CreateGraphics().FillEllipse(locationPair[Convert.ToInt32(loction.Identifier)], _x-3, _y-3, loction.Width+6, loction.Width+6);
+                    pnlView.CreateGraphics().FillEllipse(locationPair[loction.Identifier], _x - 3, _y - 3, loction.Width + 6, loction.Width + 6);
                 }
                 else
                 {
-                    pnlView.CreateGraphics().FillEllipse(brushBlack, _x-3, _y-3, loction.Width+6, loction.Width+6);
+                    pnlView.CreateGraphics().FillEllipse(brushBlack, _x - 3, _y - 3, loction.Width + 6, loction.Width + 6);
                 }
 
-                pnlView.CreateGraphics().FillEllipse(brushWhite, _x+2, _y+2, loction.Width-4, loction.Width-4);
+                pnlView.CreateGraphics().FillEllipse(brushWhite, _x + 2, _y + 2, loction.Width - 4, loction.Width - 4);
 
-                if (Convert.ToInt32(loction.Identifier) < 10)
-                {
-                    pnlView.CreateGraphics().DrawString(loction.Identifier, font, brushBlack, _x + (5), _y + 3);
-                }
-                else
-                {
-                    pnlView.CreateGraphics().DrawString(loction.Identifier, font, brushBlack, _x + (1), _y + 2);
-                }
+                pnlView.CreateGraphics().DrawString(loction.Identifier, font, brushBlack, _x + (5), _y + 3);
             }
 
             DrawConnections(map, brushWhite);
@@ -173,10 +166,10 @@ namespace Ticket_to_ride
                 }
                 processedConnections.Add(connection);
 
-                int connectionAX = (int) (connection.A.X*zoomScale);
-                int connectionAY = (int) (connection.A.Y*zoomScale);
-                int connectionBX = (int) (connection.B.X*zoomScale);
-                int connectionBY = (int) (connection.B.Y*zoomScale);
+                int connectionAX = (int)(connection.A.X * zoomScale);
+                int connectionAY = (int)(connection.A.Y * zoomScale);
+                int connectionBX = (int)(connection.B.X * zoomScale);
+                int connectionBY = (int)(connection.B.Y * zoomScale);
 
                 Point point1 = new Point(connectionAX, connectionAY);
                 Point point2 = new Point(connectionBX, connectionBY);
@@ -190,11 +183,11 @@ namespace Ticket_to_ride
                 double siny2 = Math.Sin(degrees + Math.PI);
 
 
-                int newx = (int) (cosx1*(connection.A).Width + point1.X);
-                int newy = (int) (siny1*(connection.A).Width + point1.Y);
+                int newx = (int)(cosx1 * (connection.A).Width + point1.X);
+                int newy = (int)(siny1 * (connection.A).Width + point1.Y);
 
-                int newx2 = (int) (cosx2*(connection.B).Width + point2.X);
-                int newy2 = (int) (siny2*(connection.B).Width + point2.Y);
+                int newx2 = (int)(cosx2 * (connection.B).Width + point2.X);
+                int newy2 = (int)(siny2 * (connection.B).Width + point2.Y);
 
                 if (connection.Weight == 0)
                 {
@@ -216,8 +209,8 @@ namespace Ticket_to_ride
 
                     for (int i = 1; i < connection.Weight; i++)
                     {
-                        double gapSizePosive = (((1.00 / connection.Weight ) * i )- 0.05) ;
-                        double gapSizeNegative = ((1.00 / connection.Weight *i)+ 0.05);
+                        double gapSizePosive = (((1.00 / connection.Weight) * i) - 0.05);
+                        double gapSizeNegative = ((1.00 / connection.Weight * i) + 0.05);
                         int halfwayX = newx + (int)((newx2 - newx) * gapSizePosive);
                         int halfwayY = newy + (int)((newy2 - newy) * gapSizePosive);
                         int endX = newx + (int)((newx2 - newx) * gapSizeNegative);
@@ -235,7 +228,7 @@ namespace Ticket_to_ride
         {
 
             Game game = _gameRepository.Build();
-            PlayerTrainHand hand = game.GetPlayersHand(game.GetPlayerId());
+            PlayerTrainHand hand = game.GetPlayersHand(game.GetPlayerIdForCurrentTurn());
             playersCards.Items.Clear();
             List<CardType> cardTypes = hand._cards;
             cardTypes = cardTypes.OrderBy(card => card).ToList();
@@ -259,10 +252,10 @@ namespace Ticket_to_ride
             Connection connection;
             if ((connection = GetConnectionAtPoint(e.X, e.Y)) != null && game.GetTurnPlayerType() == PlayerType.Human)
             {
-                game.SendTrainPlacement(connection);
+                game.SendTrainPlacement(connection.Identity);
                 //  _game.nextTurn();
                 PaintGui();
-                
+
             }
         }
 
@@ -319,7 +312,7 @@ namespace Ticket_to_ride
         private void boardCardThree_Click(object sender, EventArgs e)
         {
             Game game = _gameRepository.Build();
-           game.PickFaceUpCard(2);
+            game.PickFaceUpCard(2);
             PaintGui();
         }
 
@@ -392,7 +385,7 @@ namespace Ticket_to_ride
 
         public Brush GetLocationColourForRoutePair()
         {
-            if (_currentRouteLocationColour >= LocationColourForRoutePair.Count() )
+            if (_currentRouteLocationColour >= LocationColourForRoutePair.Count())
             {
                 _currentRouteLocationColour = -1;
             }
@@ -402,9 +395,9 @@ namespace Ticket_to_ride
 
         private void trackBar1_Scroll(object sender, EventArgs e)
         {
-            double scale = 1+ (0.30/trackBar1.Value);
+            double scale = 1 + (0.30 / trackBar1.Value);
             zoomScale = scale;
-            Size zoomedPanelView = new Size((int)(_pnlViewOriginalSize.Width*scale), (int)(_pnlViewOriginalSize.Height * scale));
+            Size zoomedPanelView = new Size((int)(_pnlViewOriginalSize.Width * scale), (int)(_pnlViewOriginalSize.Height * scale));
 
             pnlView.Size = zoomedPanelView;
             pnlView.Refresh();

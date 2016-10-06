@@ -19,7 +19,7 @@ namespace ConnectApi.Controllers
         {
             Game game = new GameRepository().Build();
 
-            return Request.CreateResponse(HttpStatusCode.OK, game.GetTurn());
+            return Request.CreateResponse(HttpStatusCode.OK, game.GetPlayerIdForCurrentTurn());
         }
 
 

@@ -2,15 +2,24 @@
 <html ng-app="myApp">
 <head>
     <link rel="stylesheet" type="text/css" href="Scripts/angular-material.min.css">
-
     <script src="Scripts/collie.min.js"></script>
     <script src="Scripts/angular.js"></script>
     <script src="app.js"></script>
+    <script src="Repositories/CardSelectorRepository.js"></script>
     <link rel="stylesheet" type="text/css" href="app.css">
     <script src="Game.js"></script>
+    <script src="Services\TrainSelector.js"></script>
     <script src="Services\CardMapper.js"></script>
+    <script src="Services\MapLoader.js"></script>
+    <script src="Repositories/TrainPlacementRepository.js"></script>
+    <script src="Services\GameLoader.js"></script>
     <script src="Repositories/PlayerRouteHandRepository.js"></script>
+    <script src="Repositories/StartRepository.js"></script>
     <script src="Repositories/PlayerTrainHandRepository.js"></script>
+    <script src="Repositories/TurnRepository.js"></script>
+    <script src="Repositories/PlayersRepository.js"></script>
+    <script src="Repositories/TrainDeckRepository.js"></script>
+    <script src="Repositories/NextTurnRepository.js"></script>
     <script src="Repositories/MapRepository.js"></script>
     <script src="SimpleController.js"></script>
     <script src="Scripts/angular-aria.min.js"></script>
@@ -25,51 +34,68 @@
         <div class="screen-size">
 
             <div class="top-half">
-                <div class="left-control-panel">
-                    <div class="top-half-left-container">
-                        <div class="other-players">
-                            <div class="other-player">
-                                <div class="other-player-content">John</div>
-                                <div class="other-player-content">Green</div>
-                                <div class="other-player-content">10 trains</div>
-                                <div class="other-player-content">50 Points</div>
-                            </div>
-                        </div>
+                <div class="top-half-left-container">
 
 
-                        <div class="pickup-cards">
-                            <div class="routecards">
-                                <div>
-                                    <div class="route-card-pile">Route Cards</div>
-                                    <div>10 Cards Left</div>
-                                </div>
-                            </div>
-                            <div class="traincards">
-                                <md-button onclick="myFunction()" class="md-raised md-warn">
-                                    From Pile
-                                </md-button>
-                                <div class="cardsRemaining">
-                                    <i>30 Cards Left</i>
-                                </div>
-                                <md-button onclick="myFunction()" class="md-raised md-warn">
-                                    1
-                                </md-button>
-                                <md-button onclick="myFunction()" class="md-raised md-warn">
-                                    2
-                                </md-button>
-                                <md-button onclick="myFunction()" class="md-raised md-warn">
-                                    3
-                                </md-button>
-                                <md-button onclick="myFunction()" class="md-raised md-warn">
-                                    4
-                                </md-button>
-                                <md-button onclick="myFunction()" class="md-raised md-warn">
-                                    5
-                                </md-button>
-                            </div>
 
+
+                    <div class="other-player">
+                        <div class="train-card-pile">
+                            <ul class="train-deck">
+                                Human Players
+                                <li ng-repeat="humanPlayer in c.game.humanPlayers track by $index">
+                                    <div class="other-player-content">Type:{{c.getPlayerTypeStringFromEnum(humanPlayer.PlayerType)}}</div>
+                                    <div class="other-player-content">Id{{humanPlayer.Id}}</div>
+                                    <div class="other-player-content">Col:{{humanPlayer.Colour}}s</div>
+                                    <div class="other-player-content">Avl:{{humanPlayer.AvailableTrains}}</div>
+                                </li>
+                            </ul>
+
+
+                            <ul class="train-deck">
+                                Ai Players
+                                <li ng-repeat="aiPlayer in c.game.aiPlayers track by $index">
+                                    <div class="other-player-content">T: {{aiPlayer.PlayerType}}</div>
+                                    <div class="other-player-content">Id:{{aiPlayer.Id}}</div>
+                                    <div class="other-player-content">Col:{{aiPlayer.Colour}}s</div>
+                                    <div class="other-player-content">Avl:{{aiPlayer.AvailableTrains}}</div>
+                                </li>
+                            </ul>
                         </div>
                     </div>
+
+                    <div class="currentTurn"> Current Turn:  {{c.game.turnIndex}}</div>
+
+                    <md-button ng-click="c.startGame()" class="md-raised md-warn">
+                        New Game
+                    </md-button>
+
+                    <md-button ng-click="c.nextTurn()" class="md-raised md-warn">
+                        Next Turn
+                    </md-button>
+
+                    <md-button onclick="myFunction()" class="md-raised md-warn">
+                        Pickup RouteCard
+                    </md-button>
+                    <div class="cardsRemaining">
+                        <i>30 Cards Left</i>
+                    </div>
+                    <md-button onclick="myFunction()" class="md-raised md-warn">
+                        From Pile
+                    </md-button>
+                    <div class="cardsRemaining">
+                        <i>30 Cards Left</i>
+                    </div>
+                        <div class="train-card-pile">
+                            <ul class="train-deck">
+                                <li ng-repeat="traincard in c.game.trainDeck track by $index">
+                                    <md-button ng-click="c.faceupCardSelected($index)" class="md-raised md-warn {{traincard}}">
+                                        {{traincard}}
+                                    </md-button>
+                                </li>
+                            </ul>
+                        </div>
+
                 </div>
                 <div class="top-half-right-container">
                     <div id="container"></div>
@@ -78,99 +104,138 @@
 
 
             <div class="bottom-half">
-
-                <div class="actions">
-                    <md-button onclick="myFunction()" class="md-raised md-warn">
-                        Next Turn
-                    </md-button>
-                    <md-button onclick="myFunction()" class="md-raised md-warn">
-                        Pickup Route Cards
-                    </md-button>
-                </div>
-
                 <div class="player-cards">
                     <div class="player-route-cards">
-                        <div class="route-card">A -> B for 12 points</div>
-                        <div class="route-card">C -> B for 34 points</div>
-                        <div class="route-card">D -> B for 34 points</div>
+
+                        <ul class="unstyled">
+                            <li ng-repeat="routeCard in c.game.playerRouteHand track by $index">
+
+                                <label class="checkbox">
+
+                                    <span>From {{routeCard.StartLocation.Identifier}} to {{routeCard.StartLocation.Identifier}} for {{routeCard.Points}} points</span>
+
+                                </label>
+
+                            </li>
+                        </ul>
                     </div>
 
                     <div class="player-train-cards">
-                        <md-button onclick="
-myFunction()" class="md-raised md-warn">
-                            RED
-                        </md-button>
-                        <md-button onclick="myFunction()" class="md-raised md-warn">
-                            BLUE
-                        </md-button>
-                        <md-button onclick="myFunction()" class="md-raised md-warn">
-                            GREEN
-                        </md-button>
-                        <md-button onclick="myFunction()" class="md-raised md-warn">
-                            ORANGE
-                        </md-button>
+
+
+                        <div class="player-route-cards">
+
+                            <ul class="trainCardsList">
+                                <li ng-repeat="trainCard in c.game.playerTrainHand track by $index">
+
+                                    <md-button class="md-raised md-warn {{trainCard}}">
+                                        {{trainCard}}
+                                    </md-button>
+
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
-    <!--<div id="container"></div>
-
-            <b>Your Train Hand</b>
-            <ul>
-                <li ng-repeat="playerHand in c.game.playerTrainHand track by $index" ng-bind="playerHand"></li>
-            </ul>
-
-            <b>Your Route Hand</b>
-            <ul>
-
-                <li ng-repeat="x in c.game.playerRouteHand track by $index">
-                    From {{ x.StartLocation.Identifier }} To {{ x.EndLocation.Identifier }} For {{ x.Points }} Points
-                </li>
-            </ul>
-
-
-            <b>Map</b>
-            {{c.game.map}}
-
-
-    <!--        <button ng-click='c.signUpNow()'>Sign up now!</button>-->
-    -->
-    <!--  </div>-->
-    <!--    <!-->
-    <!--        ---->
-    <!--    </div>-->
-    <!---->
-    <!--    <!-->
-    <!--    ---->
-    <!--    <div>-->
-    <!--            <label>Name:</label>-->
-    <!--            <input type="text" ng-model="yourName" placeholder="Enter a name here">-->
-    <!--            <hr>-->
-    <!--            <h1>Hello {{yourName}}!</h1>-->
-    <!--        </div>-->
-    <!--        <div ng-controller="HomeController as todoList">-->
-    <!--            {{todoList.Welcome()}}-->
-    <!--            <span>{{todoList.remaining()}} of {{todoList.todos.length}} remaining</span>-->
-    <!--            [ <a href="" ng-click="todoList.archive()">archive</a> ]-->
-    <!--            <ul class="unstyled">-->
-    <!--                <li ng-repeat="todo in todoList.todos">-->
-    <!--                    <label class="checkbox">-->
-    <!--                        <input type="checkbox" ng-model="todo.done">-->
-    <!--                        <span class="done-{{todo.done}}">{{todo.text}}</span>-->
-    <!--                    </label>-->
-    <!--                </li>-->
-    <!--            </ul>-->
-    <!--            <form ng-submit="todoList.addTodo()">-->
-    <!--                <input type="text" ng-model="todoList.todoText" size="30"-->
-    <!--                       placeholder="add new todo here">-->
-    <!--                <input class="btn-primary" type="submit" value="add">-->
-    <!--            </form>-->
-    <!--        </div>-->-->
-    <!--    </-->
-    <!--    bo-->
 </body>
 </html>
+<!--<div id="container"></div>
+
+        <b>Your Train Hand</b>
+        <ul>
+            <li ng-repeat="playerHand in c.game.playerTrainHand track by $index" ng-bind="playerHand"></li>
+        </ul>
+
+        <b>Your Route Hand</b>
+        <ul>
+
+            <li ng-repeat="x in c.game.playerRouteHand track by $index">
+                From {{ x.StartLocation.Identifier }} To {{ x.EndLocation.Identifier }} For {{ x.Points }} Points
+            </li>
+        </ul>
 
 
+        <b>Map</b>
+        {{c.game.map}}
+
+
+<!--        <button ng-click='c.signUpNow()'>Sign up now!</button>-->
+    
+<!--  </div>-->
+<!--    <!-->
+<!--
+---->
+<!--
+</
+div>-->
+<!--
+-->
+<!--    <!
+-->
+<!--
+--
+-->
+<!--
+<d
+iv>-->
+<!--
+<label>Name:</label>-->
+<!--
+<input type="text" ng-model="yourName" placeholder="Enter a name here">-->
+<!--
+<hr>-->
+<!--
+<h1>Hello {{yourName}}!</h1>-->
+<!--
+</div>-->
+<!--
+<div ng-controller="HomeController as todoList">-->
+<!--
+{{todoList.Welcome()}}-->
+<!--
+<span>{{todoList.remaining()}} of {{todoList.todos.length}} remaining</span>-->
+<!--
+[ <a href="" ng-click="todoList.archive()">archive</a> ]-->
+<!--
+<ul class="unstyled">-->
+<!--
+<li ng-repeat="todo in todoList.todos">-->
+<!--
+<label class="checkbox">-->
+<!--
+<input type="checkbox" ng-model="todo.done">-->
+<!--
+<span class="done-{{todo.done}}">{{todo.text}}</span>-->
+<!--
+</label>-->
+<!--
+</li>-->
+<!--
+</ul>-->
+<!--
+<f
+orm ng-submit="todoList.addTodo()">-->
+<!--
+<input type="text" ng-model="todoList.todoText" size="30"-->
+<!--
+placeholder="add new todo here">-->
+<!--
+<input class="btn-primary" type="submit" value="add">-->
+<!--
+</
+form>-->
+<!--
+</div>
+-->
+-->
+<!--    <
+/-->
+<!--    bo-->
+<!--    </body></html>-->
+<!--</body>-->
+<!--ody>-->
+<!--</html>-->
+<!--</html>-->

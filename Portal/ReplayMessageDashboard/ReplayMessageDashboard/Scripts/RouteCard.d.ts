@@ -1,5 +1,5 @@
 ﻿declare module server {
-	interface RouteCardDto {
+	interface RouteCard {
 		startLocation: {
 			associatedConnections: string[];
 			identifier: string;
@@ -16,7 +16,5 @@
 		};
 		required: boolean;
 		points: number;
-	}
-	interface RouteCard {
 	}
 }

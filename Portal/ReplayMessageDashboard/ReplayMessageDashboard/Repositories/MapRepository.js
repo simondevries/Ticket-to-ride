@@ -1,5 +1,3 @@
-/// <reference path="..\Scripts/angular.d.ts" />
-/// <reference path="..\app.ts" />
 var MapRepository = (function () {
     // Dependency injection via construstor
     function MapRepository($http) {
@@ -7,6 +5,11 @@ var MapRepository = (function () {
     }
     MapRepository.prototype.getMap = function (playerIndex) {
         return this.http.get("http://localhost:52850/api/Map").then(function (response) {
+            angular.forEach(response.data.Connections, (function (connection) {
+                if (connection.Color === 'Undefined') {
+                    connection.Color = 'Gray';
+                }
+            }));
             return response.data;
         });
     };

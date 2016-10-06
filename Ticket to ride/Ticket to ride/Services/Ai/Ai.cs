@@ -24,7 +24,7 @@ namespace Ticket_to_ride.Services.Ai
         //Used for mapping
         public Ai Map()
         {
-            return new Ai(PlayerRouteHandDto.Map(), Id,Color.FromName(Colour), AiPlayerPersonality,  
+            return new Ai(PlayerRouteHandDto.Map(), Id, Color.FromName(Colour), AiPlayerPersonality,
                 PlayerType, PlayerTrainHandDto.Map(), AvailableTrains, FinishedRouteCards.Map());
         }
 
@@ -72,7 +72,7 @@ namespace Ticket_to_ride.Services.Ai
         //todo I shouldn't be passing players around here
         public void PerformTurn(Map map, List<int> numberOfTrainsOtherPlayersHave, Logger gameLog, List<Player> players, TurnCoordinator turnCoordinator, RouteCardDeck routeCardDeck)
         {
- 
+
             //your sample code
             Route choosenRoute = _aiRouteCoordinator.GenerateRoute(map, _id, _playerRouteHand.GetAllLocations(), gameLog);
 
@@ -86,15 +86,13 @@ namespace Ticket_to_ride.Services.Ai
             _playerTrainHand = _aiTurnDecider.PerformTurn(_finishdRouteCards, map, _playerTrainHand, _aiPlayerPersonality, this, _playerRouteHand, numberOfTrainsOtherPlayersHave, gameLog, routeCardDeck);
 
 
-            if (Settings.AutoAiTurn)
-            {
-                turnCoordinator.NextTurn(players, gameLog, routeCardDeck, map);
-            }
+            turnCoordinator.NextTurn(players, gameLog, routeCardDeck, map, true);
+
         }
 
         public PlayerRouteHand GetFinishedRouteHand
         {
-            get { return  _finishdRouteCards; }
+            get { return _finishdRouteCards; }
         }
 
         public AiDto Map()
@@ -103,7 +101,7 @@ namespace Ticket_to_ride.Services.Ai
             return new AiDto
             {
                 PlayerRouteHandDto = _playerRouteHand.Map(),
-                PlayerType = (int) _playerType,
+                PlayerType = (int)_playerType,
                 PlayerTrainHandDto = _playerTrainHand.MapToDto(),
                 AiPlayerPersonality = _aiPlayerPersonality,
                 Id = _id,

@@ -191,8 +191,11 @@
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\CardSelectorController.cs" />
+    <Compile Include="Controllers\NextTurnController.cs" />
+    <Compile Include="Controllers\HumanPlayersController.cs" />
     <Compile Include="Controllers\MapController.cs" />
-    <Compile Include="Controllers\PlayerIdController.cs" />
+    <Compile Include="Controllers\AiPlayersController.cs" />
     <Compile Include="Controllers\RouteHandController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PlayerHandController.cs" />
@@ -300,7 +303,7 @@
     <Content Include="Scripts\_references.js" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\NextTurn\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
   </ItemGroup>

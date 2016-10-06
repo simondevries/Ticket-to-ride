@@ -1,22 +1,26 @@
-﻿using System.Web.Http;
+﻿using System.Net;
+using System.Net.Http;
+using System.Web.Http;
+using System.Web.Management;
 using Ticket_to_ride.Services;
 
 namespace ConnectApi.Controllers
 {
     public class StartController : ApiController
     {
-        private IGame _game;
 
 
         // POST api/values
-        public StartController(IGame game)
+        public StartController()
         {
-            _game = game;
         }
 
-        public void Post([FromBody] PlayersDto players)//intnumberOfAi, int numberOfHumans)
+        public HttpResponseMessage Post([FromBody] PlayersDto players)//intnumberOfAi, int numberOfHumans)
         {
-           _game = _game.Start(players.NumberOfAi, players.NumberOfHumans); //numberOfAi, numberOfHumans);
+            Game game = new Game();
+            game.Start(players.NumberOfAi, players.NumberOfHumans); //numberOfAi, numberOfHumans);
+
+            return Request.CreateResponse(HttpStatusCode.OK, "Success");
         }
 
         public class PlayersDto

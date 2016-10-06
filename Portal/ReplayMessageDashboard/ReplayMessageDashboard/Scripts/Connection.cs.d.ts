@@ -19,6 +19,7 @@ declare module server {
     interface Connection {
         Owner: {
             HasFinished: boolean;
+            _colour: string;
         };
         Identitity: string;
         Color: string;
