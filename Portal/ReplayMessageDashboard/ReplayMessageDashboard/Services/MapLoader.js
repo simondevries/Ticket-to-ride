@@ -41,9 +41,9 @@ var MapLoader = (function () {
         var connections = this.game.map.Connections;
         var locations = this.game.map.Locations;
         var zoom = this.game.zoom;
-        //        collie.ImageManager.add({
-        //            test: "ab.png"
-        //        });
+        collie.ImageManager.add({
+            test: "a.png"
+        });
         new collie.DisplayObject({
             x: 10,
             y: 10,
@@ -113,7 +113,8 @@ var MapLoader = (function () {
                     var trainline = new collie.Polyline({
                         name: connection.Identitity,
                         strokeColor: connection.Owner._colour,
-                        strokeWidth: 5
+                        strokeWidth: 5,
+                        dashArray: "-."
                     });
                     trainline.setPointData([
                         [point1AX, point1AY],

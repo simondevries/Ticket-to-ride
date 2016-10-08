@@ -14,7 +14,7 @@ body {
 .top-half {
     display: flex;
     height: 90%;
-    border-bottom: black 3px dashed;
+    border-bottom: black 3px solid;
 }
 
 .other-player {
@@ -33,17 +33,17 @@ body {
 
 .top-half-right-container {
     width: 80%;
-    border: black 3px dashed;
     height: 100%;
 }
 
 .top-half-left-container{
     width: 20%;
-    border: black 3px dashed;
+    border-right: black 3px solid;
     height: 100%;
     display: flex;
     justify-content: center;
     flex-direction: column;
+    background: silver;
 }
 .trainCardsList {
     
@@ -62,7 +62,8 @@ body {
 
 
 .screen-size {
-    height: 625px
+    //600px
+    height: 740px
 }
 
 .action-button {
@@ -74,6 +75,7 @@ body {
 }
 
 .bottom-half {
+    background: silver;
     height: 10%;
 }
 

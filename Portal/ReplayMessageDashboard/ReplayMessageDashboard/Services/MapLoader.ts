@@ -45,9 +45,9 @@
 
 
 
-        //        collie.ImageManager.add({
-        //            test: "ab.png"
-        //        });
+                collie.ImageManager.add({
+                    test: "a.png"
+                });
 
         new collie.DisplayObject({
             x: 10,
@@ -136,8 +136,8 @@
                         var trainline = new collie.Polyline({
                             name: connection.Identitity,
                             strokeColor: connection.Owner._colour,
-                            strokeWidth: 5
-                           // dashArray: "-."
+                            strokeWidth: 5,
+                            dashArray: "-."
                         });
                         trainline.setPointData([
                             [point1AX, point1AY],
