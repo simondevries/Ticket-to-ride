@@ -34,6 +34,5 @@ var PlayersRepository = (function () {
     };
     ;
     return PlayersRepository;
-})();
+}());
 angular.module('myApp').service('playersRepository', PlayersRepository);
-//# sourceMappingURL=PlayersRepository.js.map

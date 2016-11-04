@@ -15,6 +15,5 @@ var MapRepository = (function () {
     };
     ;
     return MapRepository;
-})();
+}());
 angular.module('myApp').service('mapRepository', MapRepository);
-//# sourceMappingURL=MapRepository.js.map

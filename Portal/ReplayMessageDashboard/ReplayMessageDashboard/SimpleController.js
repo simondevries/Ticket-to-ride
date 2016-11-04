@@ -1,6 +1,6 @@
 var SimpleController = (function () {
     // Dependency injection via construstor
-    function SimpleController(game, gameLoader, trainDeckRepository, nextTurnRepository, playerTrainHandRepository, turnRepository, mapLoader, cardSelectorRespository, startRepository) {
+    function SimpleController(game, gameLoader, trainDeckRepository, nextTurnRepository, playerTrainHandRepository, turnRepository, mapLoader, babylonMapLoader, cardSelectorRespository, startRepository) {
         this.game = game;
         this.gameLoader = gameLoader;
         this.trainDeckRepository = trainDeckRepository;
@@ -8,6 +8,7 @@ var SimpleController = (function () {
         this.playerTrainHandRepository = playerTrainHandRepository;
         this.turnRepository = turnRepository;
         this.mapLoader = mapLoader;
+        this.babylonMapLoader = babylonMapLoader;
         this.cardSelectorRespository = cardSelectorRespository;
         this.startRepository = startRepository;
         gameLoader.load();
@@ -35,6 +36,5 @@ var SimpleController = (function () {
         });
     };
     return SimpleController;
-})();
+}());
 angular.module('myApp').controller('SimpleController', SimpleController);
-//# sourceMappingURL=SimpleController.js.map

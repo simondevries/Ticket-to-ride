@@ -14,6 +14,5 @@ var TrainDeckRepository = (function () {
     };
     ;
     return TrainDeckRepository;
-})();
+}());
 angular.module('myApp').service('trainDeckRepository', TrainDeckRepository);
-//# sourceMappingURL=TrainDeckRepository.js.map

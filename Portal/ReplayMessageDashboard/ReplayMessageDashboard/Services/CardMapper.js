@@ -28,6 +28,5 @@ var CardMapper = (function () {
         };
     }
     return CardMapper;
-})();
+}());
 angular.module('myApp').service('cardMapper', CardMapper);
-//# sourceMappingURL=CardMapper.js.map

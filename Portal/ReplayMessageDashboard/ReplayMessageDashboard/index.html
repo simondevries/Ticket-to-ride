@@ -10,6 +10,7 @@
     <script src="Game.js"></script>
     <script src="Services\TrainSelector.js"></script>
     <script src="Services\CardMapper.js"></script>
+    <script src="Services\BabylonMapLoader.js"></script>
     <script src="Services\MapLoader.js"></script>
     <script src="Repositories/TrainPlacementRepository.js"></script>
     <script src="Services\GameLoader.js"></script>
@@ -21,6 +22,7 @@
     <script src="Repositories/TrainDeckRepository.js"></script>
     <script src="Repositories/NextTurnRepository.js"></script>
     <script src="Repositories/MapRepository.js"></script>
+    <script src="Scripts/babylon.js"></script>
     <script src="SimpleController.js"></script>
     <script src="Scripts/angular-aria.min.js"></script>
     <script src="Scripts/angular-animate.min.js"></script>
@@ -98,7 +100,7 @@
 
                 </div>
                 <div class="top-half-right-container">
-                    <div id="container"></div>
+                    <canvas id="renderCanvas"></canvas>
                 </div>
             </div>
 
@@ -142,100 +144,3 @@
     </div>
 </body>
 </html>
-<!--<div id="container"></div>
-
-        <b>Your Train Hand</b>
-        <ul>
-            <li ng-repeat="playerHand in c.game.playerTrainHand track by $index" ng-bind="playerHand"></li>
-        </ul>
-
-        <b>Your Route Hand</b>
-        <ul>
-
-            <li ng-repeat="x in c.game.playerRouteHand track by $index">
-                From {{ x.StartLocation.Identifier }} To {{ x.EndLocation.Identifier }} For {{ x.Points }} Points
-            </li>
-        </ul>
-
-
-        <b>Map</b>
-        {{c.game.map}}
-
-
-<!--        <button ng-click='c.signUpNow()'>Sign up now!</button>-->
-    
-<!--  </div>-->
-<!--    <!-->
-<!--
----->
-<!--
-</
-div>-->
-<!--
--->
-<!--    <!
--->
-<!--
---
--->
-<!--
-<d
-iv>-->
-<!--
-<label>Name:</label>-->
-<!--
-<input type="text" ng-model="yourName" placeholder="Enter a name here">-->
-<!--
-<hr>-->
-<!--
-<h1>Hello {{yourName}}!</h1>-->
-<!--
-</div>-->
-<!--
-<div ng-controller="HomeController as todoList">-->
-<!--
-{{todoList.Welcome()}}-->
-<!--
-<span>{{todoList.remaining()}} of {{todoList.todos.length}} remaining</span>-->
-<!--
-[ <a href="" ng-click="todoList.archive()">archive</a> ]-->
-<!--
-<ul class="unstyled">-->
-<!--
-<li ng-repeat="todo in todoList.todos">-->
-<!--
-<label class="checkbox">-->
-<!--
-<input type="checkbox" ng-model="todo.done">-->
-<!--
-<span class="done-{{todo.done}}">{{todo.text}}</span>-->
-<!--
-</label>-->
-<!--
-</li>-->
-<!--
-</ul>-->
-<!--
-<f
-orm ng-submit="todoList.addTodo()">-->
-<!--
-<input type="text" ng-model="todoList.todoText" size="30"-->
-<!--
-placeholder="add new todo here">-->
-<!--
-<input class="btn-primary" type="submit" value="add">-->
-<!--
-</
-form>-->
-<!--
-</div>
--->
--->
-<!--    <
-/-->
-<!--    bo-->
-<!--    </body></html>-->
-<!--</body>-->
-<!--ody>-->
-<!--</html>-->
-<!--</html>-->

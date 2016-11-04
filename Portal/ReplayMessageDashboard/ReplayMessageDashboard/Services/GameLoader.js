@@ -40,6 +40,5 @@ var GameLoader = (function () {
         });
     };
     return GameLoader;
-})();
+}());
 angular.module('myApp').service('gameLoader', GameLoader);
-//# sourceMappingURL=GameLoader.js.map

@@ -24,6 +24,5 @@ var TrainSelector = (function () {
         });
     };
     return TrainSelector;
-})();
+}());
 angular.module('myApp').service('trainSelector', TrainSelector);
-//# sourceMappingURL=TrainSelector.js.map

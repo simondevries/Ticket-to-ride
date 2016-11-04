@@ -14,6 +14,5 @@ var PlayerRouteHandRepository = (function () {
     };
     ;
     return PlayerRouteHandRepository;
-})();
+}());
 angular.module('myApp').service('playerRouteHandRepository', PlayerRouteHandRepository);
-//# sourceMappingURL=PlayerRouteHandRepository.js.map

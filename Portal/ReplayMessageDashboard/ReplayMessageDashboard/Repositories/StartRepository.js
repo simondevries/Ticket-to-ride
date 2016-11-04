@@ -19,6 +19,5 @@ var StartRepository = (function () {
     };
     ;
     return StartRepository;
-})();
+}());
 angular.module('myApp').service('startRepository', StartRepository);
-//# sourceMappingURL=StartRepository.js.map

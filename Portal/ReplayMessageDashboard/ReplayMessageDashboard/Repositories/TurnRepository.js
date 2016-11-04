@@ -12,6 +12,5 @@ var TurnRepository = (function () {
     };
     ;
     return TurnRepository;
-})();
+}());
 angular.module('myApp').service('turnRepository', TurnRepository);
-//# sourceMappingURL=TurnRepository.js.map

@@ -15,6 +15,5 @@ var PlayerTrainHandRepository = (function () {
     };
     ;
     return PlayerTrainHandRepository;
-})();
+}());
 angular.module('myApp').service('playerTrainHandRepository', PlayerTrainHandRepository);
-//# sourceMappingURL=PlayerTrainHandRepository.js.map

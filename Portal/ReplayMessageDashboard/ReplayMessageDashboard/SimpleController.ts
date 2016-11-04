@@ -10,6 +10,7 @@ class SimpleController {
         private playerTrainHandRepository: PlayerTrainHandRepository,
         private turnRepository: TurnRepository,
         private mapLoader: MapLoader,
+        private babylonMapLoader: BabylonMapLoader,
         private cardSelectorRespository: CardSelectorRespository,
         private startRepository: StartRepository
     ) {

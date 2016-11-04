@@ -10,6 +10,5 @@ var NextTurnRepository = (function () {
     };
     ;
     return NextTurnRepository;
-})();
+}());
 angular.module('myApp').service('nextTurnRepository', NextTurnRepository);
-//# sourceMappingURL=NextTurnRepository.js.map

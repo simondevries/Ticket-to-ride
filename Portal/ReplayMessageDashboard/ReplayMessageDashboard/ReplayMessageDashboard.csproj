@@ -10,7 +10,7 @@
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
-    <TypeScriptToolsVersion>1.8</TypeScriptToolsVersion>
+    <TypeScriptToolsVersion>2.0</TypeScriptToolsVersion>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
@@ -31,6 +31,7 @@
     <Content Include="Scripts\angular-mocks.js" />
     <Content Include="Scripts\angular.js" />
     <Content Include="Scripts\angular.min.js" />
+    <Content Include="Scripts\babylon.js" />
     <Content Include="Scripts\collie.js" />
     <Content Include="web.config" />
   </ItemGroup>
@@ -43,6 +44,8 @@
     <TypeScriptCompile Include="Repositories\TurnRepository.ts" />
     <TypeScriptCompile Include="Repositories\TrainPlacementRepository.ts" />
     <TypeScriptCompile Include="Scripts\Ai.d.ts" />
+    <TypeScriptCompile Include="Scripts\babylon.d.ts" />
+    <TypeScriptCompile Include="Services\BabylonMapLoader.ts" />
     <TypeScriptCompile Include="Scripts\Human.d.ts" />
     <TypeScriptCompile Include="Scripts\PlayerTrainHand.ts" />
     <TypeScriptCompile Include="Scripts\RouteCard.d.ts" />

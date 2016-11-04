@@ -16,6 +16,5 @@ var CardSelectorRespository = (function () {
     };
     ;
     return CardSelectorRespository;
-})();
+}());
 angular.module('myApp').service('cardSelectorRespository', CardSelectorRespository);
-//# sourceMappingURL=CardSelectorRepository.js.map

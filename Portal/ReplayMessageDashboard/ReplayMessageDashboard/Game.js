@@ -34,6 +34,5 @@ var Game = (function () {
         return foundColour;
     };
     return Game;
-})();
+}());
 angular.module('myApp').service('game', Game);
-//# sourceMappingURL=Game.js.map

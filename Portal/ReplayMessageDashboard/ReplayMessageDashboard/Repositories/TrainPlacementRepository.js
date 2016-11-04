@@ -18,6 +18,5 @@ var TrainPlacementRepository = (function () {
         });
     };
     return TrainPlacementRepository;
-})();
+}());
 angular.module('myApp').service('trainPlacementRepository', TrainPlacementRepository);
-//# sourceMappingURL=TrainPlacementRepository.js.map
