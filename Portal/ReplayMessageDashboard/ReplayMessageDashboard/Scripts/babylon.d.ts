@@ -1443,7 +1443,10 @@ declare module BABYLON {
     }
     class ExecuteCodeAction extends Action {
         func: (evt: ActionEvent) => void;
+
         constructor(triggerOptions: any, func: (evt: ActionEvent) => void, condition?: Condition);
+        constructor(triggerOptions: number, func: void);
+        constructor(triggerOptions: any, func: ((evt: BABYLON.ActionEvent) => void) | void, condition?: Condition);
         execute(evt: ActionEvent): void;
     }
     class SetParentAction extends Action {
