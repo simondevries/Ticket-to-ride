@@ -31,6 +31,21 @@ var BabylonMapLoader = (function () {
                     return BABYLON.Color3.Red();
                 case "Gray":
                     return BABYLON.Color3.Gray();
+                //
+                case "Blue":
+                    return BABYLON.Color3.Blue();
+                case "Green":
+                    return BABYLON.Color3.Green();
+                case "MediumPurple":
+                    return BABYLON.Color3.Purple();
+                case "Black":
+                    return BABYLON.Color3.Black();
+                case "Gold":
+                    return BABYLON.Color3.FromHexString("ffd700");
+                case "SaddleBrown":
+                    return BABYLON.Color3.FromHexString("#8b4513");
+                case "LimeGreen1":
+                    return BABYLON.Color3.FromHexString("#32cd32");
             }
         };
         this.buildLocation = function (location) {
@@ -41,15 +56,11 @@ var BabylonMapLoader = (function () {
             materialSphere2.diffuseColor = BABYLON.Color3.Blue();
             ;
             var id = "location" + location.Identifier;
-            var lane = BABYLON.Mesh.CreateBox(id, 2, _this.scene);
-            lane.material = materialSphere2;
-            lane.position.x = x;
-            lane.position.y = y;
-            lane.position.z = -1;
-            var foo = function () {
-                alert('foo');
-            };
-            var self = _this;
+            var station = BABYLON.Mesh.CreateBox(id, 1.4, _this.scene);
+            station.material = materialSphere2;
+            station.position.x = x;
+            station.position.y = y * -1;
+            station.position.z = 0;
         };
         angular.element(document)
             .ready(function () {
@@ -78,7 +89,7 @@ var BabylonMapLoader = (function () {
         // Create the camera
         var camera = new BABYLON.ArcRotateCamera("Camera", 50, 35, 60, BABYLON.Vector3.Zero(), this.scene);
         // This targets the camera to scene origin
-        camera.setTarget(new BABYLON.Vector3(50, 35, 0));
+        camera.setTarget(new BABYLON.Vector3(50, -35, 0));
         // This attaches the camera to the canvas
         camera.attachControl(this.canvas, false);
         // Create light
@@ -122,7 +133,7 @@ var BabylonMapLoader = (function () {
         this.plane = BABYLON.Mesh.CreatePlane("plane", 100, this.scene);
         this.plane.position.z = 2;
         this.plane.position.x = 50;
-        this.plane.position.y = 50;
+        this.plane.position.y = -50;
         this.plane.onclick = function () { alert("Chicken Sauce!"); };
         //Creation of a repeated textured material
         var materialPlane = new BABYLON.StandardMaterial("texturePlane", this.scene);
@@ -131,10 +142,11 @@ var BabylonMapLoader = (function () {
     };
     BabylonMapLoader.prototype.buildConnection = function (connection, color) {
         var _this = this;
+        var self = this;
         var x1 = connection.A.X / 10;
         var x2 = connection.B.X / 10;
-        var y1 = connection.A.Y / 10;
-        var y2 = connection.B.Y / 10;
+        var y1 = connection.A.Y / 10 * -1;
+        var y2 = connection.B.Y / 10 * -1;
         if (connection.Owner == null) {
             var materialSphere2 = new BABYLON.StandardMaterial("texture2", this.scene);
             materialSphere2.diffuseColor = color;
@@ -146,22 +158,25 @@ var BabylonMapLoader = (function () {
                 var nx2 = x1 + (k1) * (x2 - x1);
                 var ny2 = y1 + (k1) * (y2 - y1);
                 var path = [new BABYLON.Vector3(nx1, ny1, 1), new BABYLON.Vector3(nx2, ny2, 1)];
-                var id = "connection" + connection.Identitity;
-                var tube = BABYLON.Mesh.CreateTube(id, path, 1, 10, null, 0, this.scene, false, BABYLON.Mesh.FRONTSIDE);
+                var id = connection.Identitity;
+                var tube = BABYLON.Mesh.CreateTube(id, path, 0.4, 10, null, 0, this.scene, false, BABYLON.Mesh.FRONTSIDE);
                 tube.material = materialSphere2;
                 tube.actionManager = new BABYLON.ActionManager(this.scene);
                 tube.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickTrigger, function (evt) {
-                    alert('gl.l');
-                    _this.gameLoader.load();
+                    self.trainSelector.selectTrain(evt.meshUnderPointer.name).then(function (resp) {
+                        if (resp) {
+                            _this.gameLoader.load();
+                        }
+                    });
                 }));
             }
         }
         else {
-            var path = [new BABYLON.Vector3(connection.A.X, connection.A.Y, 1), new BABYLON.Vector3(connection.B.X, connection.B.Y, 1)];
+            var path = [new BABYLON.Vector3((connection.A.X / 10), (connection.A.Y / 10) * -1, 1), new BABYLON.Vector3((connection.B.X / 10), (connection.B.Y / 10) * -1, 1)];
             var ownerColor = new BABYLON.StandardMaterial("texture2", this.scene);
             ownerColor.diffuseColor = this.convertToBabylonColour(connection.Owner._colour);
-            var id = "connection" + connection.Identitity;
-            var tube = BABYLON.Mesh.CreateTube(id, path, 1, 10, null, 0, this.scene, false, BABYLON.Mesh.FRONTSIDE);
+            var id = connection.Identitity;
+            var tube = BABYLON.Mesh.CreateTube(id, path, 0.8, 10, null, 0, this.scene, false, BABYLON.Mesh.FRONTSIDE);
             tube.material = ownerColor;
         }
     };

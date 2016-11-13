@@ -8,18 +8,22 @@ namespace ConnectApi.Controllers
 {
     public class TurnController : ApiController
     {
+        private readonly ILogger _logger;
 
-
-        // GET api/values
-        public TurnController()
+        public TurnController(ILogger logger)
         {
+            _logger = logger;
         }
 
         public HttpResponseMessage Get()
         {
             Game game = new GameRepository().Build();
 
-            return Request.CreateResponse(HttpStatusCode.OK, game.GetPlayerIdForCurrentTurn());
+            int playerIdForCurrentTurn = game.GetPlayerIdForCurrentTurn();
+
+            _logger.AddLog("Current turn ID " + playerIdForCurrentTurn);
+
+            return Request.CreateResponse(HttpStatusCode.OK, playerIdForCurrentTurn);
         }
 
 

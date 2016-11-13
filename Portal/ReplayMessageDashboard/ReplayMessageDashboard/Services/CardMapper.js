@@ -15,7 +15,7 @@ var CardMapper = (function () {
                     return "White";
                 case 5:
                     return "Wildcard";
-                case 5:
+                case 6:
                     return "Empty";
             }
         };

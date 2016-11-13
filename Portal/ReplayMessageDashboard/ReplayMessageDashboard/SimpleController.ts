@@ -39,9 +39,7 @@ class SimpleController {
 
     public faceupCardSelected(cardIndex: any) {
         this.cardSelectorRespository.sendCardPickedUp(cardIndex).then((resp) => {
-
                 this.gameLoader.load();
-
         });
     }
 

@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Management;
@@ -8,17 +9,19 @@ namespace ConnectApi.Controllers
 {
     public class StartController : ApiController
     {
+        private readonly ILogger _logger;
 
-
-        // POST api/values
-        public StartController()
+        public StartController(ILogger logger)
         {
+            _logger = logger;
         }
 
         public HttpResponseMessage Post([FromBody] PlayersDto players)//intnumberOfAi, int numberOfHumans)
         {
             Game game = new Game();
             game.Start(players.NumberOfAi, players.NumberOfHumans); //numberOfAi, numberOfHumans);
+
+            _logger.AddLog("Starting game for " + players.NumberOfAi + " ai and " + players.NumberOfHumans + " humans");
 
             return Request.CreateResponse(HttpStatusCode.OK, "Success");
         }

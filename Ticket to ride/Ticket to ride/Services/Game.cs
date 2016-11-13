@@ -216,6 +216,9 @@ namespace Ticket_to_ride.Services
             _gameRepository.CacheSave(this);
         }
 
+        /// <summary>
+        /// Returns if the turn has progressed
+        /// </summary>
         public bool PickFaceUpCard(int index)
         {
             bool tryPickFaceUpCard = _turnCoordinator.GetCurrentTurnPlayer(_players)._playerTrainHand.TryPickFaceUpCard(index);

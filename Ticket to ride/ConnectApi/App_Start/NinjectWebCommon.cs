@@ -72,7 +72,7 @@ namespace ConnectApi.App_Start
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
-            kernel.Bind<IGame>().To<Game>();
+            kernel.Bind<ILogger>().To<Logger>().InSingletonScope();
         }        
     }
     public class NinjectResolver : NinjectScope, IDependencyResolver
