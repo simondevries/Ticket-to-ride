@@ -61,6 +61,28 @@ var BabylonMapLoader = (function () {
             station.position.x = x;
             station.position.y = y * -1;
             station.position.z = 0;
+            //Location text
+            var dynTexture = new BABYLON.DynamicTexture("dyn_texture", 512, _this.scene, true);
+            var context = dynTexture.getContext();
+            context.save();
+            var size = dynTexture.getSize();
+            var text = "" + location.Identifier;
+            context.clearRect(0, 0, size.width, size.height);
+            context.font = "bold 40pt Arial";
+            context.fillStyle = "#00000";
+            context.textAlign = "center";
+            context.fillText(text, size.width / 2, size.height / 2);
+            context.restore();
+            dynTexture.update(true);
+            var materialPlane = new BABYLON.StandardMaterial("texturePlane", _this.scene);
+            materialPlane.diffuseTexture = dynTexture; //new BABYLON.Texture("textures/grass.jpg", scene);
+            materialPlane.backFaceCulling = false; //Allways show the front and the back of an element
+            materialPlane.diffuseTexture.hasAlpha = true; //Have an alpha
+            var plane = BABYLON.Mesh.CreatePlane("plane", 20, _this.scene);
+            plane.material = materialPlane;
+            plane.position.x = x;
+            plane.position.y = (y * -1) - 3;
+            plane.position.z = 1.8;
         };
         angular.element(document)
             .ready(function () {
@@ -138,6 +160,7 @@ var BabylonMapLoader = (function () {
         //Creation of a repeated textured material
         var materialPlane = new BABYLON.StandardMaterial("texturePlane", this.scene);
         materialPlane.diffuseTexture = new BABYLON.Texture("LiDARPositions.png", this.scene);
+        materialPlane.backFaceCulling = false; //Allways show the front and the back of an element
         this.plane.material = materialPlane;
     };
     BabylonMapLoader.prototype.buildConnection = function (connection, color) {
