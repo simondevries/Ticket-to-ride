@@ -49,7 +49,7 @@ namespace Ticket_to_ride.Services.Ai
             _aiTurnDecider = new AiTurnDecider();
             _aiPlayerPersonality = aiPlayerPersonality;
             _finishdRouteCards = new PlayerRouteHand();
-            _playerTrainHand = new PlayerTrainHand(trainDeck);
+            _playerTrainHand = new PlayerTrainHand();
             _availableTrains = NUMBER_OF_TRAINS_AT_START;
         }
 
@@ -70,7 +70,7 @@ namespace Ticket_to_ride.Services.Ai
         }
 
         //todo I shouldn't be passing players around here
-        public void PerformTurn(Map map, List<int> numberOfTrainsOtherPlayersHave, Logger gameLog, List<Player> players, TurnCoordinator turnCoordinator, RouteCardDeck routeCardDeck)
+        public void PerformTurn(Map map, List<int> numberOfTrainsOtherPlayersHave, Logger gameLog, List<Player> players, TurnCoordinator turnCoordinator, RouteCardDeck routeCardDeck, TrainDeck trainDeck)
         {
 
             //your sample code
@@ -83,10 +83,10 @@ namespace Ticket_to_ride.Services.Ai
             RiskMapGenerator riskMapGenerator = new RiskMapGenerator(map);
             riskMapGenerator.GetConnectionWithGreatestRisk(_playerRouteHand, choosenRoute, _id);
 
-            _playerTrainHand = _aiTurnDecider.PerformTurn(_finishdRouteCards, map, _playerTrainHand, _aiPlayerPersonality, this, _playerRouteHand, numberOfTrainsOtherPlayersHave, gameLog, routeCardDeck);
+            _playerTrainHand = _aiTurnDecider.PerformTurn(_finishdRouteCards, map, _playerTrainHand, _aiPlayerPersonality, this, _playerRouteHand, numberOfTrainsOtherPlayersHave, gameLog, routeCardDeck, trainDeck);
 
 
-            turnCoordinator.NextTurn(players, gameLog, routeCardDeck, map, true);
+            turnCoordinator.NextTurn(players, gameLog, routeCardDeck, map, true, trainDeck);
 
         }
 

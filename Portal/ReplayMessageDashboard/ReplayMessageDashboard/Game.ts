@@ -11,6 +11,7 @@
     public map: server.Map;
     public connectionIdMap: string[][];
     public zoom: number = 0.8;
+    public inTurn: boolean = true;
 
     //current turn
     //players -> AI/Human in array form

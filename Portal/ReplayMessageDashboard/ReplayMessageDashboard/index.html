@@ -33,8 +33,9 @@
 
     <div ng-controller="SimpleController as c">
 
-        <div class="screen-size">
 
+
+        <div class="screen-size" >
             <div class="top-half">
                 <div class="top-half-left-container">
 
@@ -66,37 +67,37 @@
                         </div>
                     </div>
 
-                    <div class="currentTurn"> Current Turn:  {{c.game.turnIndex}}</div>
+                    <div class="currentTurn"> Current Turn: {{c.game.turnIndex}}</div>
 
                     <md-button ng-click="c.startGame()" class="md-raised md-warn">
                         New Game
                     </md-button>
 
-                    <md-button ng-click="c.nextTurn()" class="md-raised md-warn">
+                    <md-button ng-click="c.nextTurn()" ng-disabled="!c.inTurn()" class="md-raised md-warn">
                         Next Turn
                     </md-button>
 
-                    <md-button onclick="myFunction()" class="md-raised md-warn">
+                    <md-button onclick="myFunction()" ng-disabled="!c.inTurn()" class="md-raised md-warn">
                         Pickup RouteCard
                     </md-button>
                     <div class="cardsRemaining">
-                        <i>30 Cards Left</i>
+                        <i>TODO Cards Left</i>
                     </div>
-                    <md-button onclick="myFunction()" class="md-raised md-warn">
+                    <md-button onclick="myFunction()" ng-disabled="!c.inTurn()" class="md-raised md-warn">
                         From Pile
                     </md-button>
                     <div class="cardsRemaining">
-                        <i>30 Cards Left</i>
+                        <i>TODO Cards Left</i>
                     </div>
-                        <div class="train-card-pile">
-                            <ul class="train-deck">
-                                <li ng-repeat="traincard in c.game.trainDeck track by $index">
-                                    <md-button ng-click="c.faceupCardSelected($index)" class="md-raised md-warn {{traincard}}">
-                                        {{traincard}}
-                                    </md-button>
-                                </li>
-                            </ul>
-                        </div>
+                    <div class="train-card-pile">
+                        <ul class="train-deck">
+                            <li ng-repeat="traincard in c.game.trainDeck track by $index">
+                                <md-button ng-click="c.faceupCardSelected($index)" ng-disabled="!c.inTurn()" class="md-raised md-warn {{traincard}}">
+                                    {{traincard}}
+                                </md-button>
+                            </li>
+                        </ul>
+                    </div>
 
                 </div>
                 <div class="top-half-right-container">
@@ -106,7 +107,17 @@
 
 
             <div class="bottom-half">
-                <div class="player-cards">
+                <div ng-hide="c.inTurn()">
+                    End of turn, press the button below to continue
+                    <!-- This actually just hides this panel and shows the other hehehe -->
+                    <md-button ng-click="c.hideNextTurnPanel()" class="md-raised md-warn">
+                        Continue
+                    </md-button>
+
+                </div>
+                
+
+                <div class="player-cards" ng-show="c.inTurn()">
                     <div class="player-route-cards">
 
                         <ul class="unstyled">

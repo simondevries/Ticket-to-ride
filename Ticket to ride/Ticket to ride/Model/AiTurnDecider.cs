@@ -19,7 +19,7 @@ namespace Ticket_to_ride.Model
             _routeCardPicker = new AiRouteCardPicker();
         }
 
-        public PlayerTrainHand PerformTurn(PlayerRouteHand finishdRouteCards, Map riskMap, PlayerTrainHand playerTrainHand, AiPlayerPersonalities aiPlayerPersonality, Ai ai, PlayerRouteHand playerRouteHand, List<int> numberOfTrainsOtherPlayersHave, Logger logger, RouteCardDeck routeCardDeck)
+        public PlayerTrainHand PerformTurn(PlayerRouteHand finishdRouteCards, Map riskMap, PlayerTrainHand playerTrainHand, AiPlayerPersonalities aiPlayerPersonality, Ai ai, PlayerRouteHand playerRouteHand, List<int> numberOfTrainsOtherPlayersHave, Logger logger, RouteCardDeck routeCardDeck, TrainDeck trainDeck)
         {
             _trainCardPicker = new AiTrainCardPicker();
             _aiUndefindRouteCardSelector = new AiUndefindRouteCardSelector(playerTrainHand);
@@ -38,7 +38,7 @@ namespace Ticket_to_ride.Model
                 connection => ConnectionColourComparer.GetCardTypeFromConnectionColour(connection._colour));
 
             _aiUndefindRouteCardSelector.SetPreferredCardTypes(preferredCardTypes);
-            bool successfullyPlacedTrain = CanSuccessfullyPlaceTrain(riskMap, playerTrainHand, ai, preferredConnections);
+            bool successfullyPlacedTrain = CanSuccessfullyPlaceTrain(riskMap, playerTrainHand, ai, preferredConnections, trainDeck);
 
             if (!successfullyPlacedTrain)
             {
@@ -68,7 +68,7 @@ namespace Ticket_to_ride.Model
         }
 
 
-        public bool CanSuccessfullyPlaceTrain(Map riskMap, PlayerTrainHand hand, Ai ai, List<Connection> urgentActionCards )
+        public bool CanSuccessfullyPlaceTrain(Map riskMap, PlayerTrainHand hand, Ai ai, List<Connection> urgentActionCards, TrainDeck trainDeck )
         {
             //Order
             //Get top three and remove dups
@@ -82,7 +82,7 @@ namespace Ticket_to_ride.Model
             //Try and place any card of the same risk value
             foreach (Connection urgentActionCard in urgentActionCards)
             {
-                if (TrianPlacer.CanSuccessfullyPlaceTrain(urgentActionCard, riskMap, ai, _aiUndefindRouteCardSelector))
+                if (TrianPlacer.CanSuccessfullyPlaceTrain(urgentActionCard, riskMap, ai, _aiUndefindRouteCardSelector, trainDeck))
                 {
                     return true;
                 }

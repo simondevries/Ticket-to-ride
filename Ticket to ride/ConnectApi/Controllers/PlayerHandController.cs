@@ -24,7 +24,9 @@ namespace ConnectApi.Controllers
 
             PlayerTrainHandDto playerTrainHandDto = game.GetPlayersHand(id).MapToDto();
             _logger.AddLog("Get player hand controller called, result: " + playerTrainHandDto.cards.Aggregate("", (s, i) => ""+i));
-         
+
+            playerTrainHandDto.cards.Sort();
+
             return Request.CreateResponse(HttpStatusCode.OK, playerTrainHandDto);
 //                "{\"_trainDeck\":{\"FaceUpCards\":[2,0,3,5,4],\"CardsRemaining\":45},\"_cards\":[5,1,0,4,4]}");
                 // JsonConvert.SerializeObject(game.GetPlayersHand(id))); 

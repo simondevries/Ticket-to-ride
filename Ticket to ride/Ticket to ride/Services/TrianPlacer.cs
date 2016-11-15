@@ -9,12 +9,12 @@ namespace Ticket_to_ride.Services
     {
         public const int Inf = 10000;
 
-        public static bool CanSuccessfullyPlaceTrain(Connection connection, Map map, Player owner, AiUndefindRouteCardSelector aiUndefindRouteCardSelector){
+        public static bool CanSuccessfullyPlaceTrain(Connection connection, Map map, Player owner, AiUndefindRouteCardSelector aiUndefindRouteCardSelector, TrainDeck trainDeck){
             try
             {
                 
                 if (owner._availableTrains > connection.Weight &&
-                    owner._playerTrainHand.SpendCardsIfPossible(connection, owner._playerType, aiUndefindRouteCardSelector) ||
+                    owner._playerTrainHand.SpendCardsIfPossible(connection, owner._playerType, aiUndefindRouteCardSelector, trainDeck) ||
                     (Settings.PlayersCanAffordAnything))
                 {
                     owner.UseTrains(connection.Weight);

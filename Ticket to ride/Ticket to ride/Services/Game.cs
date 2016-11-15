@@ -124,7 +124,7 @@ namespace Ticket_to_ride.Services
             {
                return "It is not a humans turn";
             }
-            bool canPlaceTrain = currentTurnPlayer.PerformTurn(_map, connection, _turnCoordinator, _players, _turnCoordinator, _routeCardDeck);
+            bool canPlaceTrain = currentTurnPlayer.PerformTurn(_map, connection, _turnCoordinator, _players, _turnCoordinator, _routeCardDeck, _trainDeck);
             if (!canPlaceTrain)
             {
                 return "Cannot place train there";
@@ -162,7 +162,7 @@ namespace Ticket_to_ride.Services
 
         public void NextTurn()
         {
-            _turnCoordinator.NextTurn(_players, _gameLog, _routeCardDeck, _map, true);
+            _turnCoordinator.NextTurn(_players, _gameLog, _routeCardDeck, _map, true, _trainDeck);
             _gameRepository.CacheSave(this);
         }
 
@@ -178,7 +178,7 @@ namespace Ticket_to_ride.Services
             }
 
 
-            a.PerformTurn(_map, numberOfTrainsOtherPlayersHave, _gameLog, _players, _turnCoordinator, _routeCardDeck);
+            a.PerformTurn(_map, numberOfTrainsOtherPlayersHave, _gameLog, _players, _turnCoordinator, _routeCardDeck, _trainDeck);
             _gameRepository.CacheSave(this);
         }
 
@@ -202,7 +202,7 @@ namespace Ticket_to_ride.Services
             bool tryPickFromTopSucceeds = _turnCoordinator.GetCurrentTurnPlayer(_players)._playerTrainHand.TryPickFromTop(_trainDeck);
             if (tryPickFromTopSucceeds)
             {
-                _turnCoordinator.DecrementMoveAndTryProgressTurn(_players, _routeCardDeck, _map);
+                _turnCoordinator.DecrementMoveAndTryProgressTurn(_players, _routeCardDeck, _map, _trainDeck);
             }
             Console.WriteLine("No cards in Deck");
             _gameRepository.CacheSave(this);
@@ -212,7 +212,7 @@ namespace Ticket_to_ride.Services
         {
 
             _turnCoordinator.GetCurrentTurnPlayer(_players)._playerRouteHand.AddRoutes(_routeCardDeck.PullNonStartingFourRouteCardsForHuman());
-            _turnCoordinator.NextTurn(_players, _gameLog, _routeCardDeck, _map, false);
+            _turnCoordinator.NextTurn(_players, _gameLog, _routeCardDeck, _map, false, _trainDeck);
             _gameRepository.CacheSave(this);
         }
 
@@ -221,11 +221,11 @@ namespace Ticket_to_ride.Services
         /// </summary>
         public bool PickFaceUpCard(int index)
         {
-            bool tryPickFaceUpCard = _turnCoordinator.GetCurrentTurnPlayer(_players)._playerTrainHand.TryPickFaceUpCard(index);
+            bool tryPickFaceUpCard = _turnCoordinator.GetCurrentTurnPlayer(_players)._playerTrainHand.TryPickFaceUpCard(index, _trainDeck);
             bool didProgressTurn =false;
             if (tryPickFaceUpCard)
             {
-                didProgressTurn = _turnCoordinator.DecrementMoveAndTryProgressTurn(_players, _routeCardDeck, _map);
+                didProgressTurn = _turnCoordinator.DecrementMoveAndTryProgressTurn(_players, _routeCardDeck, _map, _trainDeck);
             }
             _gameRepository.CacheSave(this);
             return didProgressTurn;

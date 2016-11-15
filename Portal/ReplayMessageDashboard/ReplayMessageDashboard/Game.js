@@ -7,6 +7,7 @@ var Game = (function () {
         this.playerRouteHand = [];
         this.trainDeck = [];
         this.zoom = 0.8;
+        this.inTurn = true;
     }
     //current turn
     //players -> AI/Human in array form

@@ -166,6 +166,7 @@ var BabylonMapLoader = (function () {
                     self.trainSelector.selectTrain(evt.meshUnderPointer.name).then(function (resp) {
                         if (resp) {
                             _this.gameLoader.load();
+                            _this.game.inTurn = false;
                         }
                     });
                 }));

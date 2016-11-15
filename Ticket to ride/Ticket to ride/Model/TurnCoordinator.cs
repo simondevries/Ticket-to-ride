@@ -62,7 +62,7 @@ namespace Ticket_to_ride.Model
             _currentTurn = players[0]._playerType;
         }
 
-        public void NextTurn(List<Player> players, Logger gameLog, RouteCardDeck routeCardDeck, Map map, bool performAiTurn)
+        public void NextTurn(List<Player> players, Logger gameLog, RouteCardDeck routeCardDeck, Map map, bool performAiTurn, TrainDeck trainDeck)
         {
             //todo clean up game log
             _gameLog = gameLog;
@@ -74,12 +74,12 @@ namespace Ticket_to_ride.Model
             _currentTurn = players[_turn]._playerType;
             if (performAiTurn)
             {
-                CheckIfNeedToPlayAiTurn(players, routeCardDeck, map);
+                CheckIfNeedToPlayAiTurn(players, routeCardDeck, map, trainDeck);
             }
 
         }
 
-        private void CheckIfNeedToPlayAiTurn(List<Player> players, RouteCardDeck routeCardDeck, Map map )
+        private void CheckIfNeedToPlayAiTurn(List<Player> players, RouteCardDeck routeCardDeck, Map map, TrainDeck trainDeck )
         {
             if (_currentTurn == PlayerType.Ai)
             {
@@ -87,7 +87,7 @@ namespace Ticket_to_ride.Model
 
                 List<int> numberOfTrainsOtherPlayersHave = GetNumberOfTrainsOtherPlayersHave(players);
 
-                ai.PerformTurn(map, numberOfTrainsOtherPlayersHave, _gameLog, players, this, routeCardDeck);
+                ai.PerformTurn(map, numberOfTrainsOtherPlayersHave, _gameLog, players, this, routeCardDeck, trainDeck);
             }
         }
 
@@ -137,12 +137,12 @@ namespace Ticket_to_ride.Model
             return false;
         }
 
-        public bool DecrementMoveAndTryProgressTurn(List<Player> players, RouteCardDeck routeCardDeck, Map map)
+        public bool DecrementMoveAndTryProgressTurn(List<Player> players, RouteCardDeck routeCardDeck, Map map, TrainDeck trainDeck)
         {
             DecrementMove();
             if (_movesLeftInTurn <= 0)
             {
-                NextTurn(players, _gameLog, routeCardDeck, map, false);
+                NextTurn(players, _gameLog, routeCardDeck, map, false, trainDeck);
                 return true;
             }
             return false;   

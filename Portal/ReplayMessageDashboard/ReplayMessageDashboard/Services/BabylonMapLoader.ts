@@ -184,6 +184,23 @@
         station.position.x = x;
         station.position.y = y * -1;
         station.position.z = 0;
+
+
+        var canvas = new BABYLON.ScreenSpaceCanvas2D(this.scene, {
+            x: 10,
+            y: 10,
+            id: "ScreenCanvas",
+            size: new BABYLON.Size(100, 30),
+            backgroundFill: "#4040408F",
+            backgroundRoundRadius: 1,
+            children: [
+                new BABYLON.Text2D("Hello World!", {
+                    id: "text",
+                    marginAlignment: "h: center, v:center",
+                    fontName: "10pt Arial"
+                })
+            ]
+        });
     }
 
 
@@ -222,6 +239,7 @@
                         self.trainSelector.selectTrain(evt.meshUnderPointer.name).then((resp) => {
                             if (resp) {
                                 this.gameLoader.load();
+                                this.game.inTurn = false;
                                 //todo possible infinite recursion here?
                             }
                         });

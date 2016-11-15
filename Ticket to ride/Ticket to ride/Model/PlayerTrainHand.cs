@@ -8,20 +8,16 @@ namespace Ticket_to_ride.Model
 {
     public class PlayerTrainHand
     {
-        public TrainDeck _trainDeck;
         public List<CardType> _cards;
-
-        [JsonConstructor]
-        public PlayerTrainHand(TrainDeck trainDeck, List<CardType> cards)
-        {
-            _cards = cards;
-            _trainDeck = trainDeck;
-        }
-
-        public PlayerTrainHand(TrainDeck trainDeck)
+        
+        public PlayerTrainHand()
         {
             _cards = new List<CardType>();
-            _trainDeck = trainDeck;
+        }
+
+        public PlayerTrainHand(List<CardType> cards)
+        {
+            _cards = cards;
         }
 
         public void AddCard(CardType card)
@@ -70,7 +66,7 @@ namespace Ticket_to_ride.Model
             }   
         }
 
-        public bool SpendCardsIfPossible(Connection connection, PlayerType playerType, AiUndefindRouteCardSelector aiUndefindRouteCardSelector)
+        public bool SpendCardsIfPossible(Connection connection, PlayerType playerType, AiUndefindRouteCardSelector aiUndefindRouteCardSelector, TrainDeck trainDeck)
         {
             //todo this is only temoporary for testing
             //            if (_owner._playerType == PlayerType.Ai)
@@ -96,7 +92,7 @@ namespace Ticket_to_ride.Model
                         for (int i = 0; i < connection.Weight; i++)
                         {
                             _cards.Remove(cardSelector.Result);
-                            _trainDeck.AddToDiscardPile(cardSelector.Result);
+                            trainDeck.AddToDiscardPile(cardSelector.Result);
                         }
                     }
                     else
@@ -110,7 +106,7 @@ namespace Ticket_to_ride.Model
                         for (int i = 0; i < connection.Weight; i++)
                         {
                             _cards.Remove(selectedCard);
-                            _trainDeck.AddToDiscardPile(selectedCard);
+                            trainDeck.AddToDiscardPile(selectedCard);
                         }
                     }
 
@@ -121,7 +117,7 @@ namespace Ticket_to_ride.Model
                 for (int i = 0; i < connection.Weight; i++)
                 {
                     _cards.Remove(sortedCard[i]);
-                    _trainDeck.AddToDiscardPile(sortedCard[i]);
+                    trainDeck.AddToDiscardPile(sortedCard[i]);
                 }
                 return true;
             }
@@ -129,11 +125,11 @@ namespace Ticket_to_ride.Model
             return false;
         }
 
-        public bool TryPickFaceUpCard(int index)
+        public bool TryPickFaceUpCard(int index, TrainDeck trainDeck)
         {
             try
             {
-                CardType faceUpCardAtIndex = _trainDeck.PickFaceUpCard(index);
+                CardType faceUpCardAtIndex = trainDeck.PickFaceUpCard(index);
                 if (faceUpCardAtIndex == CardType.Empty)
                 {
                     return false;
@@ -154,7 +150,6 @@ namespace Ticket_to_ride.Model
         {
             return new PlayerTrainHandDto()
             {
-                TrainDeckDto = _trainDeck.Map(),
                 cards = _cards.Select(card => (int)card).ToList()
             };
         }

@@ -3,7 +3,7 @@
 class SimpleController {
     // Dependency injection via construstor
     constructor(
-        private game:Game,
+        private game: Game,
         public gameLoader: GameLoader,
         private trainDeckRepository: TrainDeckRepository,
         private nextTurnRepository: NextTurnRepository,
@@ -19,14 +19,20 @@ class SimpleController {
     }
 
     public startGame(): void {
-        var ai = prompt("Please enter number of Ai in the new game", "AI");
+        var ai = prompt("Please enter number of AI in the new game", "AI");
         var humans = prompt("Please enter number of Humans in the new game", "Humans");
         this.startRepository.startGame(ai, humans).finally(() => {
-        this.gameLoader.load();
-            
+            this.gameLoader.load();
+
         });
 
 
+    }
+    public hideNextTurnPanel() {
+        this.game.inTurn = true;
+    }
+    public inTurn () : boolean {
+        return this.game.inTurn;
     }
 
     public nextTurn(): void {
@@ -39,11 +45,13 @@ class SimpleController {
 
     public faceupCardSelected(cardIndex: any) {
         this.cardSelectorRespository.sendCardPickedUp(cardIndex).then((resp) => {
-                this.gameLoader.load();
+            this.gameLoader.load();
+            // if progressed turn
+            if (resp) {
+                this.game.inTurn = false;
+            }
         });
     }
-
-    public 
 
 } angular.module('myApp').controller(
     'SimpleController', SimpleController);

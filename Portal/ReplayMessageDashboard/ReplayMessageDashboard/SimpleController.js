@@ -16,11 +16,17 @@ var SimpleController = (function () {
     }
     SimpleController.prototype.startGame = function () {
         var _this = this;
-        var ai = prompt("Please enter number of Ai in the new game", "AI");
+        var ai = prompt("Please enter number of AI in the new game", "AI");
         var humans = prompt("Please enter number of Humans in the new game", "Humans");
         this.startRepository.startGame(ai, humans).finally(function () {
             _this.gameLoader.load();
         });
+    };
+    SimpleController.prototype.hideNextTurnPanel = function () {
+        this.game.inTurn = true;
+    };
+    SimpleController.prototype.inTurn = function () {
+        return this.game.inTurn;
     };
     SimpleController.prototype.nextTurn = function () {
         var _this = this;
@@ -33,6 +39,10 @@ var SimpleController = (function () {
         var _this = this;
         this.cardSelectorRespository.sendCardPickedUp(cardIndex).then(function (resp) {
             _this.gameLoader.load();
+            // if progressed turn
+            if (resp) {
+                _this.game.inTurn = false;
+            }
         });
     };
     return SimpleController;

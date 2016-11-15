@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Ticket_to_ride.Model;
 using Ticket_to_ride.Services;
 
@@ -13,9 +14,8 @@ namespace Ticket_to_ride.Repository
             RouteCardDeck cachedRouteDeckRepository = new CachedRouteDeckRepository().Load();
             List<Player> cachedPlayersRepository = new CachedPlayersRepository().Load();
             TurnCoordinator cachedTurnRepository = new CachedTurnRepository().Load();
-
             Game game = new Game(cachedTurnRepository, cachedPlayersRepository, cachedTrainDeckRepository, cachedMapRepository, cachedRouteDeckRepository);
-
+            
             return game;
         }
 

@@ -28,7 +28,7 @@ namespace Ticket_to_ride.Model
             _playerType = PlayerType.Human;
             _id = id;
             _colour = colour;
-            _playerTrainHand = new PlayerTrainHand(trainDeck);
+            _playerTrainHand = new PlayerTrainHand();
             _availableTrains = NUMBER_OF_TRAINS_AT_START;
 
         }
@@ -43,13 +43,13 @@ namespace Ticket_to_ride.Model
             _availableTrains = availableTrains;
         }
 
-        public bool PerformTurn(Map map, Connection trainPlacement, TurnCoordinator turn, List<Player> players, TurnCoordinator turnCoordinator, RouteCardDeck routeCardDeck)
+        public bool PerformTurn(Map map, Connection trainPlacement, TurnCoordinator turn, List<Player> players, TurnCoordinator turnCoordinator, RouteCardDeck routeCardDeck, TrainDeck trainDeck)
         {
             //TODO sdv validate cards here instead
-            if (TrianPlacer.CanSuccessfullyPlaceTrain(trainPlacement, map, this, null))
+            if (TrianPlacer.CanSuccessfullyPlaceTrain(trainPlacement, map, this, null, trainDeck))
             {
                 //todo clean up logger
-                turn.NextTurn(players, new Logger(), routeCardDeck, map, false);
+                turn.NextTurn(players, new Logger(), routeCardDeck, map, false, trainDeck);
                 return true;
             }
             return false;
