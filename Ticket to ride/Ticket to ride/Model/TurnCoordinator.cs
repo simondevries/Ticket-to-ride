@@ -62,24 +62,18 @@ namespace Ticket_to_ride.Model
             _currentTurn = players[0]._playerType;
         }
 
-        public void NextTurn(List<Player> players, Logger gameLog, RouteCardDeck routeCardDeck, Map map, bool performAiTurn, TrainDeck trainDeck)
+        public void NextTurn(List<Player> players, Logger gameLog, RouteCardDeck routeCardDeck, Map map, TrainDeck trainDeck)
         {
             //todo clean up game log
             _gameLog = gameLog;
-            //MessageBox.Show("Next Turn");
 
             CheckIfLastTurn(players);
             IncrementTurn(players);
             _movesLeftInTurn = 2;
             _currentTurn = players[_turn]._playerType;
-            if (performAiTurn)
-            {
-                CheckIfNeedToPlayAiTurn(players, routeCardDeck, map, trainDeck);
-            }
-
         }
 
-        private void CheckIfNeedToPlayAiTurn(List<Player> players, RouteCardDeck routeCardDeck, Map map, TrainDeck trainDeck )
+        public TurnInformationDto CheckIfNeedToPlayAiTurn(List<Player> players, RouteCardDeck routeCardDeck, Map map, TrainDeck trainDeck )
         {
             if (_currentTurn == PlayerType.Ai)
             {
@@ -87,8 +81,13 @@ namespace Ticket_to_ride.Model
 
                 List<int> numberOfTrainsOtherPlayersHave = GetNumberOfTrainsOtherPlayersHave(players);
 
-                ai.PerformTurn(map, numberOfTrainsOtherPlayersHave, _gameLog, players, this, routeCardDeck, trainDeck);
+                return ai.PerformTurn(map, numberOfTrainsOtherPlayersHave, _gameLog, players, this, routeCardDeck, trainDeck);
             }
+
+            return new TurnInformationDto
+            {
+                PlacementFailedMessage = "Not Ai turn"
+            };
         }
 
         private List<int> GetNumberOfTrainsOtherPlayersHave(List<Player> players)
@@ -137,15 +136,14 @@ namespace Ticket_to_ride.Model
             return false;
         }
 
-        public bool DecrementMoveAndTryProgressTurn(List<Player> players, RouteCardDeck routeCardDeck, Map map, TrainDeck trainDeck)
+        public bool DecrementMovesIndicateNeedToProgressTurn(List<Player> players, RouteCardDeck routeCardDeck, Map map, TrainDeck trainDeck)
         {
             DecrementMove();
             if (_movesLeftInTurn <= 0)
             {
-                NextTurn(players, _gameLog, routeCardDeck, map, false, trainDeck);
                 return true;
             }
-            return false;   
+            return false;
         }
 
         private void IncrementTurn(List<Player> players)

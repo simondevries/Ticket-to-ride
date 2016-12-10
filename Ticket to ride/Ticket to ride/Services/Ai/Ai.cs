@@ -70,24 +70,20 @@ namespace Ticket_to_ride.Services.Ai
         }
 
         //todo I shouldn't be passing players around here
-        public void PerformTurn(Map map, List<int> numberOfTrainsOtherPlayersHave, Logger gameLog, List<Player> players, TurnCoordinator turnCoordinator, RouteCardDeck routeCardDeck, TrainDeck trainDeck)
+        public TurnInformationDto PerformTurn(Map map, List<int> numberOfTrainsOtherPlayersHave, Logger gameLog, List<Player> players, TurnCoordinator turnCoordinator, RouteCardDeck routeCardDeck, TrainDeck trainDeck)
         {
-
-            //your sample code
+            
             Route choosenRoute = _aiRouteCoordinator.GenerateRoute(map, _id, _playerRouteHand.GetAllLocations(), gameLog);
-
 
             Console.WriteLine(choosenRoute.ToString());
 
-
             RiskMapGenerator riskMapGenerator = new RiskMapGenerator(map);
+
             riskMapGenerator.GetConnectionWithGreatestRisk(_playerRouteHand, choosenRoute, _id);
 
-            _playerTrainHand = _aiTurnDecider.PerformTurn(_finishdRouteCards, map, _playerTrainHand, _aiPlayerPersonality, this, _playerRouteHand, numberOfTrainsOtherPlayersHave, gameLog, routeCardDeck, trainDeck);
+            TurnInformationDto resultDto = _aiTurnDecider.PerformTurn(_finishdRouteCards, map, _playerTrainHand, _aiPlayerPersonality, this, _playerRouteHand, numberOfTrainsOtherPlayersHave, gameLog, routeCardDeck, trainDeck);
 
-
-            turnCoordinator.NextTurn(players, gameLog, routeCardDeck, map, true, trainDeck);
-
+            return resultDto;
         }
 
         public PlayerRouteHand GetFinishedRouteHand

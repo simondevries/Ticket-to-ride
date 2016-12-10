@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
@@ -35,12 +34,11 @@ namespace ConnectApi.Controllers
             value = value.Replace("\"", "");
             Game game = new GameRepository().Build();
 
-            string response = game.SendTrainPlacement(value);
+            TurnInformationDto response = game.SendTrainPlacement(value);
 
             _logger.AddLog("Placing train at " + value + " the response is " + response);
 
             return Request.CreateResponse(HttpStatusCode.OK, response);
         }
-
     }
 }

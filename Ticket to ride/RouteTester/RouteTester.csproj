@@ -59,6 +59,10 @@
       <Project>{9f149a44-cbeb-48e4-98b6-537700d819de}</Project>
       <Name>Ticket to ride</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TTRCommon\TTRCommon.csproj">
+      <Project>{699ebd1d-9f84-4b54-bb57-c9e391ea4175}</Project>
+      <Name>TTRCommon</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Builder\" />

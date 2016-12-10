@@ -19,7 +19,7 @@ namespace Ticket_to_ride.Model
             _routeCardPicker = new AiRouteCardPicker();
         }
 
-        public PlayerTrainHand PerformTurn(PlayerRouteHand finishdRouteCards, Map riskMap, PlayerTrainHand playerTrainHand, AiPlayerPersonalities aiPlayerPersonality, Ai ai, PlayerRouteHand playerRouteHand, List<int> numberOfTrainsOtherPlayersHave, Logger logger, RouteCardDeck routeCardDeck, TrainDeck trainDeck)
+        public TurnInformationDto PerformTurn(PlayerRouteHand finishdRouteCards, Map riskMap, PlayerTrainHand playerTrainHand, AiPlayerPersonalities aiPlayerPersonality, Ai ai, PlayerRouteHand playerRouteHand, List<int> numberOfTrainsOtherPlayersHave, Logger logger, RouteCardDeck routeCardDeck, TrainDeck trainDeck)
         {
             _trainCardPicker = new AiTrainCardPicker();
             _aiUndefindRouteCardSelector = new AiUndefindRouteCardSelector(playerTrainHand);
@@ -28,7 +28,7 @@ namespace Ticket_to_ride.Model
             if (pickedUpRouteCards)
             {
                 //end turn
-                return playerTrainHand;
+                return new TurnInformationDto {PlacementFailedMessage = "Ai picked up route card"};
             }
 
 
@@ -38,18 +38,23 @@ namespace Ticket_to_ride.Model
                 connection => ConnectionColourComparer.GetCardTypeFromConnectionColour(connection._colour));
 
             _aiUndefindRouteCardSelector.SetPreferredCardTypes(preferredCardTypes);
-            bool successfullyPlacedTrain = CanSuccessfullyPlaceTrain(riskMap, playerTrainHand, ai, preferredConnections, trainDeck);
+            Connection placedConnection = CanSuccessfullyPlaceTrain(riskMap, playerTrainHand, ai, preferredConnections, trainDeck);
 
-            if (!successfullyPlacedTrain)
+            if (placedConnection.Equals(Connection.Empty()))
             {
-                _trainCardPicker.PickCard(preferredConnections, playerTrainHand);
+                _trainCardPicker.PickCard(preferredConnections, playerTrainHand, trainDeck);
+                return new TurnInformationDto { PlacementFailedMessage = "Ai picked a card train card"};
             }
-            return playerTrainHand;
+
+            return new TurnInformationDto
+            {
+                Connection = placedConnection.Map()
+            };
         }
 
         private bool PickRouteCardsIfNecessairy(PlayerRouteHand finishdRouteCards, Map riskMap, AiPlayerPersonalities aiPlayerPersonality, Ai ai, PlayerRouteHand playerRouteHand, List<int> numberOfTrainsOtherPlayersHave, Logger logger, RouteCardDeck routeCardDeck)
         {
-//PickupRouteCards
+            //PickupRouteCards
             if (riskMap.getConnections().OrderByDescending(conn => conn.Risk).FirstOrDefault().Risk == 0)
             {
 
@@ -68,7 +73,7 @@ namespace Ticket_to_ride.Model
         }
 
 
-        public bool CanSuccessfullyPlaceTrain(Map riskMap, PlayerTrainHand hand, Ai ai, List<Connection> urgentActionCards, TrainDeck trainDeck )
+        public Connection CanSuccessfullyPlaceTrain(Map riskMap, PlayerTrainHand hand, Ai ai, List<Connection> urgentActionCards, TrainDeck trainDeck)
         {
             //Order
             //Get top three and remove dups
@@ -80,20 +85,20 @@ namespace Ticket_to_ride.Model
 
 
             //Try and place any card of the same risk value
-            foreach (Connection urgentActionCard in urgentActionCards)
+            foreach (Connection desiredConnection in urgentActionCards)
             {
-                if (TrianPlacer.CanSuccessfullyPlaceTrain(urgentActionCard, riskMap, ai, _aiUndefindRouteCardSelector, trainDeck))
+                if (TrianPlacer.CanSuccessfullyPlaceTrain(desiredConnection, riskMap, ai, _aiUndefindRouteCardSelector, trainDeck))
                 {
-                    return true;
+                    return desiredConnection;
                 }
             }
 
-            return false;
+            return Connection.Empty();
         }
 
         public List<Connection> GetPreferredRoutes(Map riskMap, AiPlayerPersonalities aiPlayerPersonality)
         {
-//cases
+            //cases
             //High, High, High, High => 4th High excluded
             //High, Low, Low, Low -> 1st only
             //High, Med, Low, None -> All
@@ -105,7 +110,7 @@ namespace Ticket_to_ride.Model
             //todo: bug when there a an inf connecton and an inf connection with weight two
 
             //Always add the first card
-            urgentActionCards = new List<Connection> {connections[0]};
+            urgentActionCards = new List<Connection> { connections[0] };
 
             //if there is a difference in risk between two cards then add it to urgent
             for (int i = 1; i < connections.Count; i++)

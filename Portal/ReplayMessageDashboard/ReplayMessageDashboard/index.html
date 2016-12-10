@@ -73,10 +73,6 @@
                         New Game
                     </md-button>
 
-                    <md-button ng-click="c.nextTurn()" ng-disabled="!c.inTurn()" class="md-raised md-warn">
-                        Next Turn
-                    </md-button>
-
                     <md-button onclick="myFunction()" ng-disabled="!c.inTurn()" class="md-raised md-warn">
                         Pickup RouteCard
                     </md-button>
@@ -110,7 +106,7 @@
                 <div ng-hide="c.inTurn()">
                     End of turn, press the button below to continue
                     <!-- This actually just hides this panel and shows the other hehehe -->
-                    <md-button ng-click="c.hideNextTurnPanel()" class="md-raised md-warn">
+                    <md-button ng-click="c.continueTurn()" class="md-raised md-warn">
                         Continue
                     </md-button>
 
@@ -148,6 +144,11 @@
                                 </li>
                             </ul>
                         </div>
+                    </div>
+                    
+                    <div ng-show="c.isAiLoading">
+                        Please wait for ai to complete turn
+                        <md-progress-circular md-mode="indeterminate" ></md-progress-circular>
                     </div>
                 </div>
             </div>

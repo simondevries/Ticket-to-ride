@@ -48,8 +48,8 @@ namespace Ticket_to_ride.Model
             //TODO sdv validate cards here instead
             if (TrianPlacer.CanSuccessfullyPlaceTrain(trainPlacement, map, this, null, trainDeck))
             {
-                //todo clean up logger
-                turn.NextTurn(players, new Logger(), routeCardDeck, map, false, trainDeck);
+                //I dont think we do not want to progress turn automnatically
+                //turn.NextTurn(players, new Logger(), routeCardDeck, map, trainDeck);
                 return true;
             }
             return false;

@@ -18,35 +18,44 @@ class SimpleController {
         this.mapLoader.downloadAndUpdateMap();
     }
 
+    public isAiLoading: boolean;
+
     public startGame(): void {
         var ai = prompt("Please enter number of AI in the new game", "AI");
         var humans = prompt("Please enter number of Humans in the new game", "Humans");
         this.startRepository.startGame(ai, humans).finally(() => {
             this.gameLoader.load();
-
+            this.babylonMapLoader.initScene();
         });
-
-
     }
-    public hideNextTurnPanel() {
-        this.game.inTurn = true;
+
+    public continueTurn() {
+        this.isAiLoading = true;
+        this.nextTurn().then(() => {
+            this.isAiLoading = false;
+            this.game.inTurn = true;
+        });
     }
+
     public inTurn () : boolean {
         return this.game.inTurn;
     }
 
-    public nextTurn(): void {
+    private nextTurn(): ng.IPromise<any> {
 
-        this.nextTurnRepository.nextTurn().then(() => {
+        return this.nextTurnRepository.nextTurn().then((resp) => {
+           if(resp !== null)
+            this.babylonMapLoader.buildConnection(resp);
             this.gameLoader.load();
-            this.mapLoader.downloadAndUpdateMap();
+          //  this.mapLoader.downloadAndUpdateMap();
         });
     }
 
     public faceupCardSelected(cardIndex: any) {
+        //todo spinner on card select
         this.cardSelectorRespository.sendCardPickedUp(cardIndex).then((resp) => {
             this.gameLoader.load();
-            // if progressed turn
+            // if I need to progress a turn
             if (resp) {
                 this.game.inTurn = false;
             }

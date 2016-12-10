@@ -8,28 +8,35 @@
         private playersRepository: PlayersRepository,
         public game: Game) { }
 
-    public load() {
+    public load(): ng.IPromise<any> {
 
-        this.loadTrainDeck();
+        //todo is this onkay, can the train deck load at the same time seperately?
+        ;
 
-        this.turnRepository.getTurnIndex().then((resp: any) => {
-            this.game.turnIndex = resp;
+        return this.loadTrainDeck()
+            .then(() => {
+                this.turnRepository.getTurnIndex()
+                    .then((resp: any) => {
+                        this.game.turnIndex = resp;
 
-            this.loadPlayerTrainCards();
+                        this.loadPlayerTrainCards();
 
-            this.playerRouteHandRepository.getPlayerRouteHand(this.game.turnIndex).then((resp: any) => {
-                this.game.playerRouteHand = resp;
+                        this.playerRouteHandRepository.getPlayerRouteHand(this.game.turnIndex)
+                            .then((resp: any) => {
+                                this.game.playerRouteHand = resp;
+                            });
+
+                        this.playersRepository.getHumans()
+                            .then((resp: any) => {
+                                this.game.humanPlayers = resp;
+                            });
+
+                        this.playersRepository.getAi()
+                            .then((resp: any) => {
+                                this.game.aiPlayers = resp;
+                            });
+                    });
             });
-
-            this.playersRepository.getHumans().then((resp: any) => {
-                this.game.humanPlayers = resp;
-            });
-
-            this.playersRepository.getAi().then((resp: any) => {
-                this.game.aiPlayers = resp;
-            });
-        });
-
     }
 
 
@@ -53,5 +60,5 @@
 
 angular.module('myApp').service(
     'gameLoader', GameLoader);
-  
+
 

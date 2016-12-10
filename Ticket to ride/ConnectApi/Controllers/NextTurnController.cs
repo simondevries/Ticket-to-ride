@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Net;
+using System.Net.Http;
 using System.Web.Http;
+using Ticket_to_ride.Model;
 using Ticket_to_ride.Repository;
 using Ticket_to_ride.Services;
 
@@ -14,15 +17,15 @@ namespace ConnectApi.Controllers
             _logger = logger;
         }
 
-        // POST api/values
-        public void Post([FromBody]string value)
+        // POST train placement
+        [HttpPost]
+        public HttpResponseMessage Post([FromBody]string value)
         {
             Game game = new GameRepository().Build();
+            
+            TurnInformationDto turnInformationDto = game.TryPlayAiTurn();
 
-            _logger.AddLog("Next turn controller called");
-
-            game.NextTurn();
+            return Request.CreateResponse(HttpStatusCode.OK, turnInformationDto);
         }
-
     }
 }

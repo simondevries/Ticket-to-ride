@@ -38,6 +38,7 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="app.ts" />
+    <TypeScriptCompile Include="Repositories\RouteDeckRespository.ts" />
     <TypeScriptCompile Include="Repositories\StartRepository.ts" />
     <TypeScriptCompile Include="Repositories\PlayersRepository.ts" />
     <TypeScriptCompile Include="Repositories\NextTurnRepository.ts" />

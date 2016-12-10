@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using Ticket_to_ride.Services;
+using Ticket_to_ride.Model;
 
-namespace Ticket_to_ride.Model
+namespace Ticket_to_ride.Services
 {
     class RiskMapGenerator
     {

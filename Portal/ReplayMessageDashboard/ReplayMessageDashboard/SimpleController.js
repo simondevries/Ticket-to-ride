@@ -20,26 +20,35 @@ var SimpleController = (function () {
         var humans = prompt("Please enter number of Humans in the new game", "Humans");
         this.startRepository.startGame(ai, humans).finally(function () {
             _this.gameLoader.load();
+            _this.babylonMapLoader.initScene();
         });
     };
-    SimpleController.prototype.hideNextTurnPanel = function () {
-        this.game.inTurn = true;
+    SimpleController.prototype.continueTurn = function () {
+        var _this = this;
+        this.isAiLoading = true;
+        this.nextTurn().then(function () {
+            _this.isAiLoading = false;
+            _this.game.inTurn = true;
+        });
     };
     SimpleController.prototype.inTurn = function () {
         return this.game.inTurn;
     };
     SimpleController.prototype.nextTurn = function () {
         var _this = this;
-        this.nextTurnRepository.nextTurn().then(function () {
+        return this.nextTurnRepository.nextTurn().then(function (resp) {
+            if (resp !== null)
+                _this.babylonMapLoader.buildConnection(resp);
             _this.gameLoader.load();
-            _this.mapLoader.downloadAndUpdateMap();
+            //  this.mapLoader.downloadAndUpdateMap();
         });
     };
     SimpleController.prototype.faceupCardSelected = function (cardIndex) {
         var _this = this;
+        //todo spinner on card select
         this.cardSelectorRespository.sendCardPickedUp(cardIndex).then(function (resp) {
             _this.gameLoader.load();
-            // if progressed turn
+            // if I need to progress a turn
             if (resp) {
                 _this.game.inTurn = false;
             }

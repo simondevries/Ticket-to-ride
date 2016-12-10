@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using ConnectApi.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Ticket_to_ride.Model;
 using Ticket_to_ride.Services;
+using TTRCommon;
 
 namespace RouteTester
 {

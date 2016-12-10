@@ -18,7 +18,7 @@ namespace Ticket_to_ride.Services.Ai
             _aiRouteCoordinator = new AiRouteCoordinator();
             _fourRouteCardCombinations = new List<List<int>>
             {
-                new List<int>{0,1,2,3}, 
+                new List<int>{0,1,2,3},
                 new List<int>{0,1,2},
                 new List<int>{0,1,3},
                 new List<int>{0,2,3},
@@ -36,7 +36,7 @@ namespace Ticket_to_ride.Services.Ai
             throw new NotImplementedException();
         }
 
-        public PlayerRouteHand PickFourRouteCards(Map riskMap,RouteCardDeck routeCardDeck, int aiId, List<int> numberOfTrainsOtherPlayersHave, AiPlayerPersonalities currentAiPersonality, Logger logger)
+        public PlayerRouteHand PickFourRouteCards(Map riskMap, RouteCardDeck routeCardDeck, int aiId, List<int> numberOfTrainsOtherPlayersHave, AiPlayerPersonalities currentAiPersonality, Logger logger)
         {
 
             List<RouteCard> cardsPulledFromTop = routeCardDeck.PullCardsFromTop(NumberOfRouteCardsToChooseFrom);
@@ -51,8 +51,6 @@ namespace Ticket_to_ride.Services.Ai
                 // ie 1234, 1243, ..
                 possibleSolutionRoute.Add(_aiRouteCoordinator.GenerateRoute(riskMap, aiId, possibleSolution, logger));
             }
-
-
 
             //Pick the cheapest combination
             //todo choose more cards if time allows.
@@ -80,10 +78,6 @@ namespace Ticket_to_ride.Services.Ai
             }
 
 
-            //            int numberOfCardsToPickup =
-            //_aiNumberOfCardsToPickUpDecider.ShouldPickUpMoreCards(numberOfTrainsOtherPlayersHave,
-            //currentAiPersonality) - 1;
-            //wants a list of routeCards to be made froma  list of locations
             logger.Log(
                 string.Format("Player {0} selected the following routecards", aiId), LogType.Debug);
             PlayerRouteHand routeCard = new PlayerRouteHand();

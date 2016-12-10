@@ -202,6 +202,7 @@
     <Compile Include="Controllers\PlayerHandController.cs" />
     <Compile Include="Controllers\StartController.cs" />
     <Compile Include="Controllers\TrainDeckController.cs" />
+    <Compile Include="Controllers\RouteCardController.cs" />
     <Compile Include="Controllers\TurnController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -321,6 +322,10 @@
     <ProjectReference Include="..\Ticket to ride\Ticket to ride.csproj">
       <Project>{9F149A44-CBEB-48E4-98B6-537700D819DE}</Project>
       <Name>Ticket to ride</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TTRCommon\TTRCommon.csproj">
+      <Project>{699ebd1d-9f84-4b54-bb57-c9e391ea4175}</Project>
+      <Name>TTRCommon</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

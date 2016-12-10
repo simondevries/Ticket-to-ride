@@ -143,8 +143,7 @@ var BabylonMapLoader = (function () {
                 }
             });
             if (!breakLoop) {
-                var color = _this.convertToBabylonColour(connection.Color);
-                _this.buildConnection(connection, color);
+                _this.buildConnection(connection);
                 processedConnection.push(connection);
             }
             breakLoop = false;
@@ -163,8 +162,9 @@ var BabylonMapLoader = (function () {
         materialPlane.backFaceCulling = false; //Allways show the front and the back of an element
         this.plane.material = materialPlane;
     };
-    BabylonMapLoader.prototype.buildConnection = function (connection, color) {
+    BabylonMapLoader.prototype.buildConnection = function (connection) {
         var _this = this;
+        var color = this.convertToBabylonColour(connection.Color);
         var self = this;
         var x1 = connection.A.X / 10;
         var x2 = connection.B.X / 10;
@@ -186,9 +186,14 @@ var BabylonMapLoader = (function () {
                 tube.material = materialSphere2;
                 tube.actionManager = new BABYLON.ActionManager(this.scene);
                 tube.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickTrigger, function (evt) {
+                    //todo (sdv) not critical convert from Connection DTO to connection domain
                     self.trainSelector.selectTrain(evt.meshUnderPointer.name).then(function (resp) {
-                        if (resp) {
-                            _this.gameLoader.load();
+                        //todo (sdv) test what happens when resp returns null connection   
+                        //does this run when a trainc annot be placed? 
+                        if (resp != null) {
+                            //dont think this is necessairy
+                            // this.gameLoader.load();
+                            _this.buildConnection(resp);
                             _this.game.inTurn = false;
                         }
                     });

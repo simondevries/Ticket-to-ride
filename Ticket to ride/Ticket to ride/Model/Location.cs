@@ -1,23 +1,18 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 namespace Ticket_to_ride.Model
 {
-    //this dto is used for Connection -> location
-    public class LocationDto
-    {
-        public string Identifier { get; set; }
-        public int X { get; set; }
-        public int Y { get; set; }
-        
-        public Location Map(List<Location> locations)
-        {
-            return locations.First(loc => loc.Identifier == Identifier);
-        }
-    }
-
     public class Location
     {
+        public static Location Empty()
+        {
+            Location location = new Location();
+            location.x = -1;
+            location.y = -1;
+            location._identifier = "-1";
+
+            return location;
+        }
 
         int x, y;
         string _identifier;
@@ -65,25 +60,9 @@ namespace Ticket_to_ride.Model
             set { x = value; }
         }
 
-
         public LocationDto Map()
         {
-            return new LocationDto {Identifier = Identifier, X =  x, Y = y};
-        }
-    }
-    class LocationEqualityComparer : IEqualityComparer<Location>
-    {
-
-
-        public bool Equals(Location x, Location y)
-        {
-            return x.Identifier == y.Identifier;
-        }
-
-        public int GetHashCode(Location obj)
-        {
-            int hash = obj.X ^ obj.Y;
-            return hash.GetHashCode();
+            return new LocationDto { Identifier = Identifier, X = x, Y = y };
         }
     }
 }

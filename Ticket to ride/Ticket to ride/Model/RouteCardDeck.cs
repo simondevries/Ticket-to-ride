@@ -87,14 +87,14 @@ namespace Ticket_to_ride.Model
             return routeTaskSelectorForm.SelectedRouteCards;
         }
 
-        public List<RouteCard> PullNonStartingFourRouteCardsForHuman()
+        public List<RouteCardDto> PullNonStartingFourRouteCardsForHuman()
         {
-            List<RouteCard> routeCards = PullCardsFromTop(3);
-
-            RouteTaskSelectorForm routeTaskSelectorForm = new RouteTaskSelectorForm(routeCards[0], routeCards[1], routeCards[2], null, false, RouteCardSelectorState.InGamePickup);
-            routeTaskSelectorForm.ShowDialog();
-
-            return routeTaskSelectorForm.SelectedRouteCards;
+            List<RouteCardDto> routeCards = PullCardsFromTop(3).Select(card => card.Map()).ToList();
+            
+//            RouteTaskSelectorForm routeTaskSelectorForm = new RouteTaskSelectorForm(routeCards[0], routeCards[1], routeCards[2], null, false, RouteCardSelectorState.InGamePickup);
+//            routeTaskSelectorForm.ShowDialog();
+//
+            return routeCards;
         }
 
         public List<RouteCard> PullCardsFromTop(int numberOfCards)

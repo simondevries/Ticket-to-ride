@@ -47,6 +47,7 @@
 
         return foundColour;
     }
+    
 
 }
     angular.module('myApp').service(

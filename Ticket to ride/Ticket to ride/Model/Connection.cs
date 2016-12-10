@@ -44,7 +44,10 @@ namespace Ticket_to_ride.Model
         public Player _owner;
         public ConnectionColour _colour;
 
-
+        public static Connection Empty()
+        {
+            return new Connection(Location.Empty(), Location.Empty(), -1, ConnectionColour.Undefined);
+        }
         public Player Owner
         {
             get { return _owner; }
@@ -107,6 +110,17 @@ namespace Ticket_to_ride.Model
         {
             get { return _originalWeight; }
             set { _originalWeight = value; }
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Connection)
+            {
+                Connection conn = (Connection) obj;
+                return conn.Identity.Equals(this.Identity);
+            }
+
+            return base.Equals(obj);
         }
 
         public ConnectionDto Map()

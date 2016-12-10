@@ -7,31 +7,9 @@ using Ticket_to_ride.Services.Ai;
 
 namespace Ticket_to_ride.Services
 {
-    public interface IGame
-    {
-        IGame Start(int numberOfAi, int numberOfHumans);
-        string SendTrainPlacement(string connectionIdentity);
-        Map GetMap();
-        TrainDeck GetDeck();
-        PlayerTrainHand GetPlayersHand(int playerId);
-        PlayerRouteHand GetPlayersRouteHand(int playerId);
-        void NextTurn();
-        void PerformAiTurn();
-        PlayerType GetTurn();
-        PlayerType GetTurnPlayerType();
-        int GetPlayerIdForCurrentTurn();
-        void PlayerPickedFromTop();
-        void PickRouteCards();
-        bool PickFaceUpCard(int index);
-        int TrainsRemaining();
-        string GetScoreBoard();
-        Logger getLog();
-    }
-
     //todo separate game from game coordinator
     public class Game : IGame
     {
-
         public TurnCoordinator _turnCoordinator;
         public List<Player> _players;
         public TrainDeck _trainDeck;
@@ -77,7 +55,7 @@ namespace Ticket_to_ride.Services
 
             _scoreCalculator = new ScoreCalculator(_map, numberOfHumans + numberOfAi);
             _turnCoordinator = new TurnCoordinator(_map, _scoreCalculator, _gameLog);
-            PlayersBuilder playersBuilder = new PlayersBuilder(_trainDeck,_map, _gameLog);
+            PlayersBuilder playersBuilder = new PlayersBuilder(_trainDeck, _map, _gameLog);
             _players = playersBuilder.WithAi(numberOfAi).WithHumans(numberOfHumans).Build(_routeCardDeck);
             _turnCoordinator.SetPlayers(_players);
             _gameRepository.CacheSave(this);
@@ -91,7 +69,7 @@ namespace Ticket_to_ride.Services
             {
                 if (player._playerType == PlayerType.Ai)
                 {
-                    Ai.Ai aiToAdd = (Ai.Ai) player;
+                    Ai.Ai aiToAdd = (Ai.Ai)player;
                     aisPlayers.Add(aiToAdd.Map());
                 }
             }
@@ -112,25 +90,39 @@ namespace Ticket_to_ride.Services
             return humanPlayers;
         }
 
-        public string SendTrainPlacement(string connectionIdentity)
+        public TurnInformationDto SendTrainPlacement(string connectionIdentity)
         {
             Connection connection = _map.GetConnectionByIdentity(connectionIdentity);
             Human currentTurnPlayer;
             try
             {
-                currentTurnPlayer = (Human) _turnCoordinator.GetCurrentTurnPlayer(_players);
+                currentTurnPlayer = (Human)_turnCoordinator.GetCurrentTurnPlayer(_players);
             }
             catch (InvalidCastException ex)
             {
-               return "It is not a humans turn";
+                return new TurnInformationDto { PlacementFailedMessage = "It is not a humans turn" };
             }
+
             bool canPlaceTrain = currentTurnPlayer.PerformTurn(_map, connection, _turnCoordinator, _players, _turnCoordinator, _routeCardDeck, _trainDeck);
             if (!canPlaceTrain)
             {
-                return "Cannot place train there";
+                return new TurnInformationDto { PlacementFailedMessage = "Cannot place train there" };
             }
             _gameRepository.CacheSave(this);
-            return ""; //success
+
+
+
+            return new TurnInformationDto { Connection = connection.Map() };  //success
+        }
+
+        public TurnInformationDto TryPlayAiTurn()
+        {
+            TurnInformationDto checkIfNeedToPlayAiTurn = _turnCoordinator.CheckIfNeedToPlayAiTurn(_players, _routeCardDeck, _map, _trainDeck);
+           
+            //save taskes place in here
+            NextTurn();
+
+            return checkIfNeedToPlayAiTurn;
         }
 
         public Map GetMap()
@@ -160,9 +152,9 @@ namespace Ticket_to_ride.Services
                 .FirstOrDefault();
         }
 
-        public void NextTurn()
+        private void NextTurn()
         {
-            _turnCoordinator.NextTurn(_players, _gameLog, _routeCardDeck, _map, true, _trainDeck);
+            _turnCoordinator.NextTurn(_players, _gameLog, _routeCardDeck, _map, _trainDeck);
             _gameRepository.CacheSave(this);
         }
 
@@ -196,25 +188,30 @@ namespace Ticket_to_ride.Services
         {
             return _turnCoordinator.GetCurrentTurnPlayer(_players)._id;
         }
+// todo sdv delete?
+//        public void PlayerPickedFromTop()
+//        {
+//            bool tryPickFromTopSucceeds = _turnCoordinator.GetCurrentTurnPlayer(_players)._playerTrainHand.TryPickFromTop(_trainDeck);
+//            if (tryPickFromTopSucceeds)
+//            {
+//                _turnCoordinator.DecrementMovesIndicateNeedToProgressTurn(_players, _routeCardDeck, _map, _trainDeck);
+//            }
+//            Console.WriteLine("No cards in Deck");
+//            _gameRepository.CacheSave(this);
+//        }
 
-        public void PlayerPickedFromTop()
+        public List<RouteCardDto> PullFourRouteCards()
         {
-            bool tryPickFromTopSucceeds = _turnCoordinator.GetCurrentTurnPlayer(_players)._playerTrainHand.TryPickFromTop(_trainDeck);
-            if (tryPickFromTopSucceeds)
-            {
-                _turnCoordinator.DecrementMoveAndTryProgressTurn(_players, _routeCardDeck, _map, _trainDeck);
-            }
-            Console.WriteLine("No cards in Deck");
-            _gameRepository.CacheSave(this);
+           return  _routeCardDeck.PullNonStartingFourRouteCardsForHuman();
         }
 
-        public void PickRouteCards()
-        {
-
-            _turnCoordinator.GetCurrentTurnPlayer(_players)._playerRouteHand.AddRoutes(_routeCardDeck.PullNonStartingFourRouteCardsForHuman());
-            _turnCoordinator.NextTurn(_players, _gameLog, _routeCardDeck, _map, false, _trainDeck);
-            _gameRepository.CacheSave(this);
-        }
+//        public void PickRouteCards()
+//        {
+//            
+//            _turnCoordinator.GetCurrentTurnPlayer(_players)._playerRouteHand.AddRoutes(_routeCardDeck.PullNonStartingFourRouteCardsForHuman());
+////            _turnCoordinator.NextTurn(_players, _gameLog, _routeCardDeck, _map, _trainDeck);
+//            _gameRepository.CacheSave(this);
+//        }
 
         /// <summary>
         /// Returns if the turn has progressed
@@ -222,13 +219,13 @@ namespace Ticket_to_ride.Services
         public bool PickFaceUpCard(int index)
         {
             bool tryPickFaceUpCard = _turnCoordinator.GetCurrentTurnPlayer(_players)._playerTrainHand.TryPickFaceUpCard(index, _trainDeck);
-            bool didProgressTurn =false;
+            bool needsToProgressTurn = false;
             if (tryPickFaceUpCard)
             {
-                didProgressTurn = _turnCoordinator.DecrementMoveAndTryProgressTurn(_players, _routeCardDeck, _map, _trainDeck);
+                needsToProgressTurn = _turnCoordinator.DecrementMovesIndicateNeedToProgressTurn(_players, _routeCardDeck, _map, _trainDeck);
             }
             _gameRepository.CacheSave(this);
-            return didProgressTurn;
+            return needsToProgressTurn;
         }
 
         public int TrainsRemaining()
@@ -257,5 +254,15 @@ namespace Ticket_to_ride.Services
             new GameRepository().Save(this);
         }
 
+        public void SendPlayersSelectedRouteCards(PlayersSelectedRouteCards selectedCards)
+        {
+            if (selectedCards.PlayerId < _players.Count)
+            {
+                List<RouteCard> routeCards =
+                    selectedCards.SelectedRoutesResponse.Select(routeCard => routeCard.Route.Map()).ToList();
+
+                _players[selectedCards.PlayerId]._playerRouteHand.AddRoutes(routeCards);
+            }
+        }
     }
 }

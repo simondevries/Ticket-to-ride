@@ -34,7 +34,7 @@
     //}
 
 
-    private initScene(): void {
+    public initScene(): void {
         var self = this;
         this.canvas = document.getElementById("renderCanvas");
 
@@ -106,8 +106,7 @@
                         }
                     });
                 if (!breakLoop) {
-                    var color = this.convertToBabylonColour(connection.Color);
-                    this.buildConnection(connection, color);
+                    this.buildConnection(connection);
                     processedConnection.push(connection);
                 }
                 breakLoop = false;
@@ -213,7 +212,8 @@
     }
 
 
-    private buildConnection(connection: server.Connection, color: BABYLON.Color3) {
+    public buildConnection(connection: server.Connection) {
+        var color = this.convertToBabylonColour(connection.Color);
         var self = this;
         var x1 = connection.A.X / 10;
         var x2 = connection.B.X / 10;
@@ -245,9 +245,14 @@
                 tube.actionManager = new BABYLON.ActionManager(this.scene);
                 tube.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickTrigger,
                     evt => {
-                        self.trainSelector.selectTrain(evt.meshUnderPointer.name).then((resp) => {
-                            if (resp) {
-                                this.gameLoader.load();
+                        //todo (sdv) not critical convert from Connection DTO to connection domain
+                        self.trainSelector.selectTrain(evt.meshUnderPointer.name).then((resp: any) => {
+                            //todo (sdv) test what happens when resp returns null connection   
+                            //does this run when a trainc annot be placed? 
+                            if (resp != null) {
+                                //dont think this is necessairy
+                                // this.gameLoader.load();
+                                this.buildConnection(resp);
                                 this.game.inTurn = false;
                                 //todo possible infinite recursion here?
                             }
@@ -268,6 +273,7 @@
         }
 
     }
+    
 }
 
 

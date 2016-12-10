@@ -10,9 +10,19 @@ class NextTurnRepository {
         this.http = $http;
     }
 
+    //todo create type
+    //tries to play Ai turn
+    public nextTurn(): ng.IPromise<any> {
 
-    public nextTurn(): ng.IPromise<number> {
-        return this.http.post("http://localhost:52850/api/NextTurn");
+        var req = {
+            method: 'POST',
+            url: 'http://localhost:52850/api/NextTurn',
+            'Content-Type': 'application/json'
+        }
+        return this.http(req).then((resp) => {
+            return resp.data.Connection;
+        });
+
     };
 }
 

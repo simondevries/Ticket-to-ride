@@ -242,7 +242,8 @@ namespace Ticket_to_ride
         private void button1_Click(object sender, EventArgs e)
         {
             Game game = _gameRepository.Build();
-            game.NextTurn();
+            throw new NotImplementedException();
+            // game.NextTurn();
             PaintGui();
         }
 
@@ -284,14 +285,16 @@ namespace Ticket_to_ride
         private void fromTop_Click(object sender, EventArgs e)
         {
             Game game = _gameRepository.Build();
-            game.PlayerPickedFromTop();
+            throw new NotImplementedException();
+           // game.PlayerPickedFromTop();
             PaintGui();
         }
 
         private void BtnPickRouteCard_Click(object sender, EventArgs e)
         {
             Game game = _gameRepository.Build();
-            game.PickRouteCards();
+            throw new NotImplementedException();
+            //game.PickRouteCards();
             PaintGui();
         }
 

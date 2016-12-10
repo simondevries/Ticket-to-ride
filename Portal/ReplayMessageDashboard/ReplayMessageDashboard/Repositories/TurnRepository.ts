@@ -8,7 +8,6 @@ class TurnRepository {
         this.http = $http;
     }
 
-
     public getTurnIndex(): ng.IPromise<number> {
         return this.http.get("http://localhost:52850/api/Turn").then(
             response => {

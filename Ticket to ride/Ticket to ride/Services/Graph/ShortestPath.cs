@@ -103,4 +103,17 @@ namespace Ticket_to_ride.Services
             return _shortestPaths;
         }
     }
+    class LocationEqualityComparer : IEqualityComparer<Location>
+    {
+        public bool Equals(Location x, Location y)
+        {
+            return x.Identifier == y.Identifier;
+        }
+
+        public int GetHashCode(Location obj)
+        {
+            int hash = obj.X ^ obj.Y;
+            return hash.GetHashCode();
+        }
+    }
 }

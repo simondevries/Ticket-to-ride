@@ -12,9 +12,8 @@ namespace Ticket_to_ride.Services.Ai
             _trainDeckRepository = new TrainDeckRepository();
         }
 
-        public void PickCard(List<Connection> connectionsOverRiskTollerance, PlayerTrainHand hand)
+        public void PickCard(List<Connection> connectionsOverRiskTollerance, PlayerTrainHand hand, TrainDeck trainDeck)
         {
-            TrainDeck trainDeck = _trainDeckRepository.Load();
             int moves = 0;
             List<Connection> cardsToRemove = new List<Connection>();
             foreach (Connection connection in connectionsOverRiskTollerance)
