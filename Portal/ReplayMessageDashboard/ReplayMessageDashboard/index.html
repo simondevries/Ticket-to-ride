@@ -20,6 +20,9 @@
     <script src="Repositories/TurnRepository.js"></script>
     <script src="Repositories/PlayersRepository.js"></script>
     <script src="Repositories/TrainDeckRepository.js"></script>
+    <script src="Model/PlayerSelectedRouteCards.js"></script>
+    <script src="Model/Route.js"></script>
+    <script src="Repositories/RouteDeckRepository.js"></script>
     <script src="Repositories/NextTurnRepository.js"></script>
     <script src="Repositories/MapRepository.js"></script>
     <script src="Scripts/babylon.js"></script>
@@ -73,7 +76,7 @@
                         New Game
                     </md-button>
 
-                    <md-button onclick="myFunction()" ng-disabled="!c.inTurn()" class="md-raised md-warn">
+                    <md-button ng-click="c.selectRouteCard()" ng-disabled="!c.inTurn()" class="md-raised md-warn">
                         Pickup RouteCard
                     </md-button>
                     <div class="cardsRemaining">

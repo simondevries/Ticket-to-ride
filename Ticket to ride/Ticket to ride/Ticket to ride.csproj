@@ -259,6 +259,9 @@
     <TypeScriptCompile Include="Model\PlayerTrainHandDto.cs.d.ts">
       <DependentUpon>PlayerTrainHandDto.cs</DependentUpon>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Model\RouteCardDto.cs.d.ts">
+      <DependentUpon>RouteCardDto.cs</DependentUpon>
+    </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

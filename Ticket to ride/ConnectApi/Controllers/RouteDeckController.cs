@@ -8,12 +8,8 @@ using Ticket_to_ride.Services;
 
 namespace ConnectApi.Controllers
 {
-    public class RouteCardController : ApiController
+    public class RouteDeckController : ApiController
     {
-
-        public RouteCardController()
-        {
-        }
 
         public HttpResponseMessage Get()
         {

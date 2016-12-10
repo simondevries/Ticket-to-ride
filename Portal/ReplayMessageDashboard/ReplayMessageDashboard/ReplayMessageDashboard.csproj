@@ -38,7 +38,9 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="app.ts" />
-    <TypeScriptCompile Include="Repositories\RouteDeckRespository.ts" />
+    <TypeScriptCompile Include="Model\Route.ts" />
+    <TypeScriptCompile Include="Model\PlayerSelectedRouteCards.ts" />
+    <TypeScriptCompile Include="Repositories\RouteDeckRepository.ts" />
     <TypeScriptCompile Include="Repositories\StartRepository.ts" />
     <TypeScriptCompile Include="Repositories\PlayersRepository.ts" />
     <TypeScriptCompile Include="Repositories\NextTurnRepository.ts" />
@@ -47,6 +49,7 @@
     <TypeScriptCompile Include="Repositories\TrainPlacementRepository.ts" />
     <TypeScriptCompile Include="Scripts\Ai.d.ts" />
     <TypeScriptCompile Include="Scripts\babylon.d.ts" />
+    <TypeScriptCompile Include="Scripts\PlayerSelectedRouteCards.d.ts" />
     <TypeScriptCompile Include="Services\BabylonMapLoader.ts" />
     <TypeScriptCompile Include="Scripts\Human.d.ts" />
     <TypeScriptCompile Include="Scripts\PlayerTrainHand.ts" />
@@ -89,6 +92,7 @@
   <ItemGroup>
     <TypeScriptCompile Include="Scripts\PlayerRouteHand.d.ts" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">12.0</VisualStudioVersion>
   </PropertyGroup>

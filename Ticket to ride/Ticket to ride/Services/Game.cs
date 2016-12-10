@@ -259,7 +259,7 @@ namespace Ticket_to_ride.Services
             if (selectedCards.PlayerId < _players.Count)
             {
                 List<RouteCard> routeCards =
-                    selectedCards.SelectedRoutesResponse.Select(routeCard => routeCard.Route.Map()).ToList();
+                    selectedCards.SelectedRoutesResponse.Select(routeCard => routeCard.Map()).ToList();
 
                 _players[selectedCards.PlayerId]._playerRouteHand.AddRoutes(routeCards);
             }

@@ -202,7 +202,7 @@
     <Compile Include="Controllers\PlayerHandController.cs" />
     <Compile Include="Controllers\StartController.cs" />
     <Compile Include="Controllers\TrainDeckController.cs" />
-    <Compile Include="Controllers\RouteCardController.cs" />
+    <Compile Include="Controllers\RouteDeckController.cs" />
     <Compile Include="Controllers\TurnController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

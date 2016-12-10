@@ -12,7 +12,8 @@ class SimpleController {
         private mapLoader: MapLoader,
         private babylonMapLoader: BabylonMapLoader,
         private cardSelectorRespository: CardSelectorRespository,
-        private startRepository: StartRepository
+        private startRepository: StartRepository,
+        private routeDeckRepository: RouteDeckRepository
     ) {
         gameLoader.load();
         this.mapLoader.downloadAndUpdateMap();
@@ -35,6 +36,14 @@ class SimpleController {
             this.isAiLoading = false;
             this.game.inTurn = true;
         });
+    }
+
+    public selectRouteCard(): void {
+        this.routeDeckRepository.pullFourRouteCardsFromDeck()
+            .then((resp: server.RouteCard[]) => {
+                var selectedRouteCards: server.PlayerSelectedRouteCards = new PlayerSelectedRouteCards(1, resp);
+                this.routeDeckRepository.sendRouteCardsForPlayer(selectedRouteCards);
+            });
     }
 
     public inTurn () : boolean {

@@ -6,6 +6,6 @@ namespace Ticket_to_ride.Model
     {
 
         public int PlayerId { get; set; }
-        public List<SelectedRoutesResponse> SelectedRoutesResponse { get; set; }
+        public List<RouteCardDto> SelectedRoutesResponse { get; set; }
     }
 }

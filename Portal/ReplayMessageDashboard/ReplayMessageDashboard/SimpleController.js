@@ -1,6 +1,6 @@
 var SimpleController = (function () {
     // Dependency injection via construstor
-    function SimpleController(game, gameLoader, trainDeckRepository, nextTurnRepository, playerTrainHandRepository, turnRepository, mapLoader, babylonMapLoader, cardSelectorRespository, startRepository) {
+    function SimpleController(game, gameLoader, trainDeckRepository, nextTurnRepository, playerTrainHandRepository, turnRepository, mapLoader, babylonMapLoader, cardSelectorRespository, startRepository, routeDeckRepository) {
         this.game = game;
         this.gameLoader = gameLoader;
         this.trainDeckRepository = trainDeckRepository;
@@ -11,6 +11,7 @@ var SimpleController = (function () {
         this.babylonMapLoader = babylonMapLoader;
         this.cardSelectorRespository = cardSelectorRespository;
         this.startRepository = startRepository;
+        this.routeDeckRepository = routeDeckRepository;
         gameLoader.load();
         this.mapLoader.downloadAndUpdateMap();
     }
@@ -29,6 +30,14 @@ var SimpleController = (function () {
         this.nextTurn().then(function () {
             _this.isAiLoading = false;
             _this.game.inTurn = true;
+        });
+    };
+    SimpleController.prototype.selectRouteCard = function () {
+        var _this = this;
+        this.routeDeckRepository.pullFourRouteCardsFromDeck()
+            .then(function (resp) {
+            var selectedRouteCards = new PlayerSelectedRouteCards(1, resp);
+            _this.routeDeckRepository.sendRouteCardsForPlayer(selectedRouteCards);
         });
     };
     SimpleController.prototype.inTurn = function () {
