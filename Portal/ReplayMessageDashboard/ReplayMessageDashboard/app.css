@@ -69,7 +69,8 @@ body {
 
 
 .screen-size {
-    height: 740px
+    /*height: 740px*/
+    height: 950px
 }
 
 .action-button {

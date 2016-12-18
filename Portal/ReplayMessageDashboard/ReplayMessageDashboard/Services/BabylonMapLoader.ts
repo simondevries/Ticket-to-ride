@@ -123,9 +123,12 @@
 
 
         this.plane = BABYLON.Mesh.CreatePlane("plane", 100, this.scene);
+        this.plane.scaling.x = 1.3;
+        this.plane.scaling.y = 0.7;
+
         this.plane.position.z = 2;
-        this.plane.position.x = 50;
-        this.plane.position.y = -50;
+        this.plane.position.x = 63;
+        this.plane.position.y = -33;
 
 
         this.plane.onclick = function () { alert("Chicken Sauce!"); }
