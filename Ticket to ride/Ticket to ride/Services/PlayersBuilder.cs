@@ -31,9 +31,8 @@ namespace Ticket_to_ride.Services
             int playerId = 0;
             for (int i = 0; i < _numberOfHumans; i++)
             {
-                PlayerRouteHand routeCardsForPlayer = new PlayerRouteHand(routeCardDeck.PullStartingFourRouteCardsForHuman());
+                PlayerRouteHand routeCardsForPlayer = new PlayerRouteHand();
                 players.Add(new Human(routeCardsForPlayer, playerId++, colorBuilder. GetNextColour(), _trainDeck));
-
             }
 
             for (int i = 0; i < _numberOfAi; i++)

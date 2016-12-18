@@ -117,10 +117,11 @@ namespace Ticket_to_ride.Services
 
         public TurnInformationDto TryPlayAiTurn()
         {
+            _turnCoordinator.NextTurn(_players, _gameLog, _routeCardDeck, _map, _trainDeck);
             TurnInformationDto checkIfNeedToPlayAiTurn = _turnCoordinator.CheckIfNeedToPlayAiTurn(_players, _routeCardDeck, _map, _trainDeck);
-           
-            //save taskes place in here
-            NextTurn();
+
+
+            _gameRepository.CacheSave(this);
 
             return checkIfNeedToPlayAiTurn;
         }
@@ -151,12 +152,7 @@ namespace Ticket_to_ride.Services
                 .Select(player => player._playerRouteHand)
                 .FirstOrDefault();
         }
-
-        private void NextTurn()
-        {
-            _turnCoordinator.NextTurn(_players, _gameLog, _routeCardDeck, _map, _trainDeck);
-            _gameRepository.CacheSave(this);
-        }
+        
 
 
         public void PerformAiTurn()
@@ -262,6 +258,8 @@ namespace Ticket_to_ride.Services
                     selectedCards.SelectedRoutesResponse.Select(routeCard => routeCard.Map()).ToList();
 
                 _players[selectedCards.PlayerId]._playerRouteHand.AddRoutes(routeCards);
+
+                _gameRepository.CacheSave(this);
             }
         }
     }

@@ -13,7 +13,8 @@ class SimpleController {
         private babylonMapLoader: BabylonMapLoader,
         private cardSelectorRespository: CardSelectorRespository,
         private startRepository: StartRepository,
-        private routeDeckRepository: RouteDeckRepository
+        private routeCardPicker: RouteCardPicker,
+        private $q: ng.IQService,
     ) {
         gameLoader.load();
         this.mapLoader.downloadAndUpdateMap();
@@ -22,48 +23,69 @@ class SimpleController {
     public isAiLoading: boolean;
 
     public startGame(): void {
+        this.game.isLoading = true;
         var ai = prompt("Please enter number of AI in the new game", "AI");
         var humans = prompt("Please enter number of Humans in the new game", "Humans");
         this.startRepository.startGame(ai, humans).finally(() => {
+            this.pickRoutePlayerHands();
             this.gameLoader.load();
             this.babylonMapLoader.initScene();
+        });
+    }
+
+    private pickRoutePlayerHands() {
+        this.game.humanPlayers.forEach((player: server.Human) => {
+            this.routeCardPicker.pickRouteCard(player.Id).then(() => {
+                //Update route cards
+                this.gameLoader.load();
+            });
         });
     }
 
     public continueTurn() {
         this.isAiLoading = true;
         this.nextTurn().then(() => {
-            this.isAiLoading = false;
-            this.game.inTurn = true;
+            if (!this.game.isAiTurn) {
+                this.isAiLoading = false;
+                this.game.inTurn = true;
+            }
         });
     }
 
     public selectRouteCard(): void {
-        this.routeDeckRepository.pullFourRouteCardsFromDeck()
-            .then((resp: server.RouteCard[]) => {
-                var selectedRouteCards: server.PlayerSelectedRouteCards = new PlayerSelectedRouteCards(1, resp);
-                this.routeDeckRepository.sendRouteCardsForPlayer(selectedRouteCards);
+        //Assumption is that Humans are first. Is this correct
+        if (this.game.turnIndex < this.game.humanPlayers.length) {
+            this.routeCardPicker.pickRouteCard(this.game.turnIndex).then((success: boolean) => {
+                if (success) {
+                    this.game.inTurn = false;
+                }
             });
+        } else {
+            prompt("It is not a humans turn");
+        }
     }
 
-    public inTurn () : boolean {
+    public inTurn(): boolean {
         return this.game.inTurn;
     }
 
-    private nextTurn(): ng.IPromise<any> {
+    public isLoading(): boolean {
+        return this.game.isLoading;
+    }
 
+    private nextTurn(): ng.IPromise<any> {
         return this.nextTurnRepository.nextTurn().then((resp) => {
-           if(resp !== null)
-            this.babylonMapLoader.buildConnection(resp);
-            this.gameLoader.load();
-          //  this.mapLoader.downloadAndUpdateMap();
+            if (resp !== null)
+                this.babylonMapLoader.buildConnection(resp);
+            return this.gameLoader.load();
+            //  this.mapLoader.downloadAndUpdateMap();
         });
     }
 
     public faceupCardSelected(cardIndex: any) {
         //todo spinner on card select
         this.cardSelectorRespository.sendCardPickedUp(cardIndex).then((resp) => {
-            this.gameLoader.load();
+            this.gameLoader.faceupCardSelectedLoad();
             // if I need to progress a turn
             if (resp) {
                 this.game.inTurn = false;

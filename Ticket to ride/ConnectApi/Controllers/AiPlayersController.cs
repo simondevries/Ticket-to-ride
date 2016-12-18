@@ -20,7 +20,7 @@ namespace ConnectApi.Controllers
         {
             Game game = new GameRepository().Build();
 
-            _logger.AddLog("AiPlayersControllerCalled, Result " + game.GetAiPlayers());
+            //_logger.AddLog("AiPlayersControllerCalled, Result " + game.GetAiPlayers());
 
             return Request.CreateResponse(HttpStatusCode.OK, game.GetAiPlayers());
         }

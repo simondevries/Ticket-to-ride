@@ -6,13 +6,13 @@ var PlayersRepository = (function () {
         this.http = $http;
     }
     PlayersRepository.prototype.getAi = function () {
-        return this.http.get("http://localhost:52850/api/HumanPlayers").then(function (response) {
+        return this.http.get("http://localhost:52850/api/AiPlayers").then(function (response) {
             angular.forEach(response.data, function (resp) {
                 if (resp.PlayerType === 0) {
-                    resp.PlayerType = 'Human';
+                    resp.PlayerType = 'Ai';
                 }
                 else {
-                    resp.PlayerType = 'Ai';
+                    resp.PlayerType = 'Human';
                 }
             });
             return response.data;
@@ -20,13 +20,13 @@ var PlayersRepository = (function () {
     };
     ;
     PlayersRepository.prototype.getHumans = function () {
-        return this.http.get("http://localhost:52850/api/AiPlayers").then(function (response) {
+        return this.http.get("http://localhost:52850/api/HumanPlayers").then(function (response) {
             angular.forEach(response.data, function (resp) {
                 if (resp.PlayerType === 0) {
-                    resp.PlayerType = 'Human';
+                    resp.PlayerType = 'Ai';
                 }
                 else {
-                    resp.PlayerType = 'Ai';
+                    resp.PlayerType = 'Human';
                 }
             });
             return response.data;

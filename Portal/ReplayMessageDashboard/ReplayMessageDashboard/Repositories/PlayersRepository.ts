@@ -10,32 +10,30 @@ class PlayersRepository {
 
 
     public getAi(): ng.IPromise<number> {
-        return this.http.get("http://localhost:52850/api/HumanPlayers").then(
+        return this.http.get("http://localhost:52850/api/AiPlayers").then(
             response => {
                 angular.forEach(response.data, (resp) => {
                     if (resp.PlayerType === 0) {
-                        resp.PlayerType = 'Human';
-                    } else {
                         resp.PlayerType = 'Ai';
+                    } else {
+                        resp.PlayerType = 'Human';
                     }
                 });
-
 
                 return response.data;
             });
     };
 
     public getHumans(): ng.IPromise<number> {
-        return this.http.get("http://localhost:52850/api/AiPlayers").then(
+        return this.http.get("http://localhost:52850/api/HumanPlayers").then(
             response => {
                 angular.forEach(response.data, (resp) => {
                     if (resp.PlayerType === 0) {
-                        resp.PlayerType = 'Human';
-                    } else {
                         resp.PlayerType = 'Ai';
+                    } else {
+                        resp.PlayerType = 'Human';
                     }
                 });
-
 
                 return response.data;
             });

@@ -26,8 +26,8 @@ namespace ConnectApi.Controllers
             Game game = new GameRepository().Build();
 
             game.SendPlayersSelectedRouteCards(selectedCards);
-
-            return Request.CreateResponse(HttpStatusCode.OK, "");
+            //dont change string success
+            return Request.CreateResponse(HttpStatusCode.OK, "success");
         }
     }
 

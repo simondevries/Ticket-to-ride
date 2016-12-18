@@ -23,6 +23,7 @@
     <script src="Model/PlayerSelectedRouteCards.js"></script>
     <script src="Model/Route.js"></script>
     <script src="Repositories/RouteDeckRepository.js"></script>
+    <script src="Services/RouteCardPicker.js"></script>
     <script src="Repositories/NextTurnRepository.js"></script>
     <script src="Repositories/MapRepository.js"></script>
     <script src="Scripts/babylon.js"></script>
@@ -38,17 +39,18 @@
 
 
 
-        <div class="screen-size" >
+        <div class="screen-size">
+            <div class="overlay" ng-show="c.isLoading()">
+                <md-progress-circular class="loading-spinner md-warn md-hue-1" md-mode="indeterminate"></md-progress-circular>
+                <div class="overlay-background"></div>
+            </div>
             <div class="top-half">
                 <div class="top-half-left-container">
-
-
-
 
                     <div class="other-player">
                         <div class="train-card-pile">
                             <ul class="train-deck">
-                                Human Players
+                                Ai Players
                                 <li ng-repeat="humanPlayer in c.game.humanPlayers track by $index">
                                     <div class="other-player-content">Type:{{c.getPlayerTypeStringFromEnum(humanPlayer.PlayerType)}}</div>
                                     <div class="other-player-content">Id{{humanPlayer.Id}}</div>
@@ -59,7 +61,7 @@
 
 
                             <ul class="train-deck">
-                                Ai Players
+                                Human Players
                                 <li ng-repeat="aiPlayer in c.game.aiPlayers track by $index">
                                     <div class="other-player-content">T: {{aiPlayer.PlayerType}}</div>
                                     <div class="other-player-content">Id:{{aiPlayer.Id}}</div>
@@ -106,7 +108,7 @@
 
 
             <div class="bottom-half">
-                <div ng-hide="c.inTurn()">
+                <div ng-if="!c.inTurn()">
                     End of turn, press the button below to continue
                     <!-- This actually just hides this panel and shows the other hehehe -->
                     <md-button ng-click="c.continueTurn()" class="md-raised md-warn">
@@ -114,9 +116,9 @@
                     </md-button>
 
                 </div>
-                
 
-                <div class="player-cards" ng-show="c.inTurn()">
+
+                <div class="player-cards" ng-if="c.inTurn()">
                     <div class="player-route-cards">
 
                         <ul class="unstyled">
@@ -148,10 +150,10 @@
                             </ul>
                         </div>
                     </div>
-                    
+
                     <div ng-show="c.isAiLoading">
                         Please wait for ai to complete turn
-                        <md-progress-circular md-mode="indeterminate" ></md-progress-circular>
+                        <md-progress-circular md-mode="indeterminate"></md-progress-circular>
                     </div>
                 </div>
             </div>

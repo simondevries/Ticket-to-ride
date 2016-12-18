@@ -12,9 +12,11 @@
     public connectionIdMap: string[][];
     public zoom: number = 0.8;
     public inTurn: boolean = true;
-
+    public isLoading: boolean = false;
+    public isAiTurn: boolean = false;
     //current turn
     //players -> AI/Human in array form
+    
 
     public updateConnectionOwner(identifier: string, colour: string) {
         var foundConnection: server.Connection;

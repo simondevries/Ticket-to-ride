@@ -108,8 +108,10 @@ var BabylonMapLoader = (function () {
         this.canvas = document.getElementById("renderCanvas");
         this.engine = new BABYLON.Engine(this.canvas, true);
         this.scene = new BABYLON.Scene(this.engine);
+        // 0,0,50
         // Create the camera
-        var camera = new BABYLON.ArcRotateCamera("Camera", 50, 35, 60, BABYLON.Vector3.Zero(), this.scene);
+        var camera = new BABYLON.ArcRotateCamera("Camera", 150, 0, 0, BABYLON.Vector3.Zero(), this.scene);
+        camera.setPosition(new BABYLON.Vector3(0, 0, -60));
         // This targets the camera to scene origin
         camera.setTarget(new BABYLON.Vector3(50, -35, 0));
         // This attaches the camera to the canvas

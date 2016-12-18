@@ -8,6 +8,8 @@ var Game = (function () {
         this.trainDeck = [];
         this.zoom = 0.8;
         this.inTurn = true;
+        this.isLoading = false;
+        this.isAiTurn = false;
     }
     //current turn
     //players -> AI/Human in array form

@@ -23,8 +23,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app.css" />
+    <Content Include="selectRouteCardDialogue.html" />
     <Content Include="index.html" />
-    <Content Include="LiDARPositions.png" />
+    <Resource Include="LiDARPositions.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Content Include="Scripts\angular-animate.min.js" />
     <Content Include="Scripts\angular-aria.min.js" />
     <Content Include="Scripts\angular-material.min.css" />
@@ -48,12 +51,14 @@
     <TypeScriptCompile Include="Repositories\TurnRepository.ts" />
     <TypeScriptCompile Include="Repositories\TrainPlacementRepository.ts" />
     <TypeScriptCompile Include="Scripts\Ai.d.ts" />
+    <TypeScriptCompile Include="Scripts\angular-material.d.ts" />
     <TypeScriptCompile Include="Scripts\babylon.d.ts" />
     <TypeScriptCompile Include="Scripts\PlayerSelectedRouteCards.d.ts" />
     <TypeScriptCompile Include="Services\BabylonMapLoader.ts" />
     <TypeScriptCompile Include="Scripts\Human.d.ts" />
     <TypeScriptCompile Include="Scripts\PlayerTrainHand.ts" />
     <TypeScriptCompile Include="Scripts\RouteCard.d.ts" />
+    <TypeScriptCompile Include="Services\RouteCardPicker.ts" />
     <TypeScriptCompile Include="Services\TrainSelector.ts" />
     <TypeScriptCompile Include="Services\MapLoader.ts" />
     <TypeScriptCompile Include="Services\GameLoader.ts" />

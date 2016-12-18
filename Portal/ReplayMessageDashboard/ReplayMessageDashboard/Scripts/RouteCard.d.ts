@@ -1,20 +1,20 @@
 ﻿declare module server {
 	interface RouteCard {
-		startLocation: {
-			associatedConnections: string[];
-			identifier: string;
-			width: number;
-			y: number;
-			x: number;
+		StartLocation: {
+			AssociatedConnections: string[];
+			Identifier: string;
+			Width: number;
+			Y: number;
+			X: number;
 		};
-		endLocation: {
-			associatedConnections: string[];
-			identifier: string;
-			width: number;
-			y: number;
-			x: number;
+		EndLocation: {
+			AssociatedConnections: string[];
+			Identifier: string;
+			Width: number;
+			Y: number;
+			X: number;
 		};
-		required: boolean;
-		points: number;
+		Required: boolean;
+		Points: number;
 	}
 }

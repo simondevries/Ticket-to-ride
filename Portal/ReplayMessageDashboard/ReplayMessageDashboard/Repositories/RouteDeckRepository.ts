@@ -14,7 +14,7 @@ class RouteDeckRepository {
         });
     };
 
-    public sendRouteCardsForPlayer(playerSelectedRouteCards: server.PlayerSelectedRouteCards): ng.IPromise<server.RouteCard> {
+    public sendRouteCardsForPlayer(playerSelectedRouteCards: server.PlayerSelectedRouteCards): ng.IPromise<string> {
 
         var req = {
             method: 'POST',
@@ -26,7 +26,6 @@ class RouteDeckRepository {
             return resp.data;
         });
     };
-
 }
 
 angular.module('myApp').service(
